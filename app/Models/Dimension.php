@@ -1,0 +1,50 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+use Spatie\Translatable\HasTranslations;
+
+class Dimension extends Model
+{
+    use HasTranslations;
+
+    protected $guarded = ['id'];
+    public array $translatable = ['name', 'description'];
+    protected $casts = ['for' => 'array'];
+
+    public function datasets(): BelongsToMany
+    {
+        return $this->belongsToMany(Dataset::class);
+    }
+
+    public function values()
+    {
+        if ($this->table_exists) {
+            return DB::table($this->table_name)->get();
+        }
+        return false;
+    }
+
+    public function getTableExistsAttribute(): bool
+    {
+        return Schema::hasTable($this->table_name);
+    }
+
+    public function getIsCompleteAttribute(): bool
+    {
+        if ($this->table_exists) {
+            return DB::table($this->table_name)->where('code', '_T')->exists();
+        }
+        return false;
+    }
+    public function datasetDimension()
+    {
+        return $this->hasMany(DatasetDimension::class);
+    }
+
+
+}

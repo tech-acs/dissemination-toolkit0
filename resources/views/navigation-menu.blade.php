@@ -1,35 +1,97 @@
 <nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
     <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
-                <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
-                        <x-application-mark class="block h-9 w-auto" />
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="{{ route('landing') }}">
+                        <img class="h-12" title="{{ $org?->name }}" alt="{{ $org?->name }}" src="{{ asset($org?->logo_path) }}">
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex items-center">
+                    <x-nav-link href="{{ route('manage.visualization.index') }}" :active="request()->routeIs('manage.visualization.*')">{{ __('Visualizations') }}</x-nav-link>
+                    <x-nav-link href="{{ route('manage.story.index') }}" :active="request()->routeIs('manage.story.*')" class="whitespace-nowrap">{{ __('Data stories') }}</x-nav-link>
+                    <x-nav-link href="{{ route('manage.topic.index') }}" :active="request()->routeIs('manage.topic.*')">{{ __('Topics') }}</x-nav-link>
+                    <x-nav-link href="{{ route('manage.indicator.index') }}" :active="request()->routeIs('manage.indicator.*')">{{ __('Indicators') }}</x-nav-link>
+                    <x-nav-link href="{{ route('manage.dimension.index') }}" :active="request()->routeIs('manage.dimension.*')">{{ __('Dimensions') }}</x-nav-link>
+                    <x-nav-link href="{{ route('manage.year.index') }}" :active="request()->routeIs('manage.year.*')">{{ __('Years') }}</x-nav-link>
+                    <x-nav-link href="{{ route('manage.dataset.index') }}" :active="request()->routeIs('manage.dataset.*')">{{ __('Datasets') }}</x-nav-link>
+                    <x-nav-link href="{{ route('manage.census-table.index') }}" :active="request()->routeIs('manage.census-table.*')">{{ __('Census tables') }}</x-nav-link>
                 </div>
             </div>
 
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
+            <div class="hidden sm:flex sm:items-center sm:ml-6">
+                <div class="flex space-x-4">
+                    <x-dropdown align="right" width="w-96" contentClasses="py-0 bg-white overflow-hidden">
+                        <x-slot name="trigger">
+                            <livewire:notification-bell />
+                        </x-slot>
+                        <x-slot name="content" class="overflow-hidden py-0">
+                            <livewire:notification-dropdown />
+                        </x-slot>
+                    </x-dropdown>
+
+                    <livewire:language-switcher />
+
+                    @can('Super Admin')
+                        <x-dropdown align="right" width="60">
+                            <x-slot name="trigger">
+                                <x-round-button title="{{ __('Manage') }}">
+                                    <x-icon.wrench />
+                                </x-round-button>
+                            </x-slot>
+
+                            <x-slot name="content">
+                                <div class="w-48">
+                                    <div class="block px-4 py-2 text-xs text-gray-400">{{ __('Access Control') }}</div>
+                                    <x-dropdown-link class="px-6" href="{{ route('manage.user.index') }}">{{ __('Users') }}</x-dropdown-link>
+                                    <x-dropdown-link class="px-6" href="{{ route('manage.role.index') }}">{{ __('Roles') }}</x-dropdown-link>
+                                    <div class="border-t border-gray-100"></div>
+                                    <div class="block px-4 py-2 text-xs text-gray-400">{{ __('Core Configuration') }}</div>
+                                    {{--<x-dropdown-link class="px-6" href="{{route('developer.source.index')}}">{{ __('Sources') }}</x-dropdown-link>
+                                    <x-dropdown-link class="px-6" href="{{route('developer.area-hierarchy.index')}}">{{ __('Area Hierarchy') }}</x-dropdown-link>
+                                    <x-dropdown-link class="px-6" href="{{ route('developer.area.index') }}">{{ __('Areas') }}</x-dropdown-link>--}}
+                                    <div class="border-t border-gray-100"></div>
+                                    {{--<div class="block px-4 py-2 text-xs text-gray-400">{{ __('Data') }}</div>
+                                    <x-dropdown-link class="px-6" href="{{ route('manage.topic.index') }}">{{ __('Topics') }}</x-dropdown-link>
+                                    --}}{{--<x-dropdown-link class="px-6" href="{{ route('manage.subtopic.index') }}">{{ __('Subtopics') }}</x-dropdown-link>--}}{{--
+                                    <x-dropdown-link class="px-6" href="{{ route('manage.indicator.index') }}">{{ __('Indicators') }}</x-dropdown-link>
+                                    <x-dropdown-link class="px-6" href="{{ route('manage.dimension.index') }}">{{ __('Dimensions') }}</x-dropdown-link>
+                                    <x-dropdown-link class="px-6" href="{{ route('manage.year.index') }}">{{ __('Years') }}</x-dropdown-link>
+                                    <x-dropdown-link class="px-6" href="{{ route('manage.dataset.index') }}">{{ __('Datasets') }}</x-dropdown-link>
+                                    <div class="border-t border-gray-100"></div>--}}
+                                    <div class="block px-4 py-2 text-xs text-gray-400">{{ __('Dissemination') }}</div>
+                                    <x-dropdown-link class="px-6" href="{{ route('manage.organization.edit') }}">{{ __('Organization') }}</x-dropdown-link>
+                                    <x-dropdown-link class="px-6" href="{{ route('manage.tag.index') }}">{{ __('Tags') }}</x-dropdown-link>
+                                    <div class="border-t border-gray-100"></div>
+                                    <div class="block px-4 py-2 text-xs text-gray-400">{{ __('Templates') }}</div>
+                                    <x-dropdown-link class="px-6" href="{{ route('manage.templates.visualization.index') }}">{{ __('Visualizations') }}</x-dropdown-link>
+                                    <x-dropdown-link class="px-6" href="{{ route('manage.templates.story.index') }}">{{ __('Stories') }}</x-dropdown-link>
+                                    {{-- <x-dropdown-link class="px-6" href="{{ route('manage.story.index') }}">{{ __('Stories Store') }}</x-dropdown-link> --}}
+                                    <div class="border-t border-gray-100"></div>
+                                    <x-dropdown-link href="{{route('manage.announcement.index')}}">{{ __('Announcements') }}</x-dropdown-link>
+                                    {{--<x-dropdown-link href="{{route('usage_stats')}}">{{ __('Usage Stats') }}</x-dropdown-link>
+                                    <x-dropdown-link href="{{route('analytics.index')}}">{{ __('Query Analytics') }}</x-dropdown-link>--}}
+                                </div>
+                            </x-slot>
+                        </x-dropdown>
+                    @endcan
+                </div>
+
                 <!-- Teams Dropdown -->
                 @if (Laravel\Jetstream\Jetstream::hasTeamFeatures())
-                    <div class="ms-3 relative">
+                    <div class="ml-3 relative">
                         <x-dropdown align="right" width="60">
                             <x-slot name="trigger">
                                 <span class="inline-flex rounded-md">
-                                    <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150">
+                                    <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:bg-gray-50 hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition">
                                         {{ Auth::user()->currentTeam->name }}
 
-                                        <svg class="ms-2 -me-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
+                                        <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
                                         </svg>
                                     </button>
                                 </span>
@@ -53,18 +115,16 @@
                                         </x-dropdown-link>
                                     @endcan
 
+                                    <div class="border-t border-gray-100"></div>
+
                                     <!-- Team Switcher -->
-                                    @if (Auth::user()->allTeams()->count() > 1)
-                                        <div class="border-t border-gray-200"></div>
+                                    <div class="block px-4 py-2 text-xs text-gray-400">
+                                        {{ __('Switch Teams') }}
+                                    </div>
 
-                                        <div class="block px-4 py-2 text-xs text-gray-400">
-                                            {{ __('Switch Teams') }}
-                                        </div>
-
-                                        @foreach (Auth::user()->allTeams() as $team)
-                                            <x-switchable-team :team="$team" />
-                                        @endforeach
-                                    @endif
+                                    @foreach (Auth::user()->allTeams() as $team)
+                                        <x-switchable-team :team="$team" />
+                                    @endforeach
                                 </div>
                             </x-slot>
                         </x-dropdown>
@@ -72,20 +132,24 @@
                 @endif
 
                 <!-- Settings Dropdown -->
-                <div class="ms-3 relative">
+                <div class="ml-3 relative">
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
                             @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
-                                <button class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
-                                    <img class="h-8 w-8 rounded-full object-cover" src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" />
+                                <button class="flex items-center text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
+                                    <img class="h-8 w-8 rounded-full object-cover" src="{{ Auth::user()->profile_photo_url }}" />
+                                    <span class="hidden ml-3 text-gray-700 text-sm font-medium lg:block">{{Auth::user()->name}}</span>
+                                    <svg class="hidden flex-shrink-0 ml-1 h-5 w-5 text-gray-400 lg:block" x-description="Heroicon name: solid/chevron-down" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                    </svg>
                                 </button>
                             @else
                                 <span class="inline-flex rounded-md">
-                                    <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150">
+                                    <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition">
                                         {{ Auth::user()->name }}
 
-                                        <svg class="ms-2 -me-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                        <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                                         </svg>
                                     </button>
                                 </span>
@@ -108,14 +172,15 @@
                                 </x-dropdown-link>
                             @endif
 
-                            <div class="border-t border-gray-200"></div>
+                            <div class="border-t border-gray-100"></div>
 
                             <!-- Authentication -->
-                            <form method="POST" action="{{ route('logout') }}" x-data>
+                            <form method="POST" action="{{ route('logout') }}">
                                 @csrf
 
                                 <x-dropdown-link href="{{ route('logout') }}"
-                                         @click.prevent="$root.submit();">
+                                         onclick="event.preventDefault();
+                                                this.closest('form').submit();">
                                     {{ __('Log Out') }}
                                 </x-dropdown-link>
                             </form>
@@ -125,8 +190,13 @@
             </div>
 
             <!-- Hamburger -->
-            <div class="-me-2 flex items-center sm:hidden">
-                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
+            <div class="-mr-2 flex items-center sm:hidden">
+                <div class="mr-4 flex items-center space-x-4">
+                    {{--<div class="-mt-2"><livewire:command-palette /></div>--}}
+                    <a href="{{ route('notification.index') }}"><livewire:notification-bell /></a>
+                    <livewire:language-switcher />
+                </div>
+                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                         <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -137,18 +207,32 @@
     </div>
 
     <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
+    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden h-96 overflow-y-auto">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
+            {{--<x-responsive-nav-link href="{{ route('home') }}" :active="request()->routeIs('home')">
+                {{ __('Home') }}
+            </x-responsive-nav-link>--}}
+
+            @can('Super User')
+                <div class="border-t border-gray-200"></div>
+                <x-responsive-nav-link href="{{ route('manage.user.index') }}">{{ __('Users') }}</x-responsive-nav-link>
+                <x-responsive-nav-link href="{{ route('manage.role.index') }}">{{ __('Roles') }}</x-responsive-nav-link>
+                <div class="border-t border-gray-200 border-dotted mx-4"></div>
+                {{--<x-responsive-nav-link href="{{ route('developer.source.index') }}">{{ __('Sources') }}</x-responsive-nav-link>
+                <x-responsive-nav-link href="{{ route('developer.area-hierarchy.index') }}" >{{ __('Area Hierarchy') }}</x-responsive-nav-link>
+                <x-responsive-nav-link href="{{ route('developer.area.index') }}">{{ __('Areas') }}</x-responsive-nav-link>--}}
+                <div class="border-t border-gray-200 border-dotted mx-4"></div>
+                <x-responsive-nav-link href="{{ route('manage.announcement.index') }}">{{ __('Announcements') }}</x-responsive-nav-link>
+                {{--<x-responsive-nav-link href="{{ route('usage_stats') }}">{{ __('Usage Stats') }}</x-responsive-nav-link>
+                <x-responsive-nav-link href="{{ route('analytics.index') }}">{{ __('Query Analytics') }}</x-responsive-nav-link>--}}
+            @endcan
         </div>
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="flex items-center px-4">
                 @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
-                    <div class="shrink-0 me-3">
+                    <div class="flex-shrink-0 mr-3">
                         <img class="h-10 w-10 rounded-full object-cover" src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" />
                     </div>
                 @endif
@@ -172,15 +256,15 @@
                 @endif
 
                 <!-- Authentication -->
-                <form method="POST" action="{{ route('logout') }}" x-data>
+                <form method="POST" action="{{ route('logout') }}">
                     @csrf
 
                     <x-responsive-nav-link href="{{ route('logout') }}"
-                                   @click.prevent="$root.submit();">
+                                   onclick="event.preventDefault();
+                                    this.closest('form').submit();">
                         {{ __('Log Out') }}
                     </x-responsive-nav-link>
                 </form>
-
                 <!-- Team Management -->
                 @if (Laravel\Jetstream\Jetstream::hasTeamFeatures())
                     <div class="border-t border-gray-200"></div>
@@ -200,18 +284,16 @@
                         </x-responsive-nav-link>
                     @endcan
 
+                    <div class="border-t border-gray-200"></div>
+
                     <!-- Team Switcher -->
-                    @if (Auth::user()->allTeams()->count() > 1)
-                        <div class="border-t border-gray-200"></div>
+                    <div class="block px-4 py-2 text-xs text-gray-400">
+                        {{ __('Switch Teams') }}
+                    </div>
 
-                        <div class="block px-4 py-2 text-xs text-gray-400">
-                            {{ __('Switch Teams') }}
-                        </div>
-
-                        @foreach (Auth::user()->allTeams() as $team)
-                            <x-switchable-team :team="$team" component="responsive-nav-link" />
-                        @endforeach
-                    @endif
+                    @foreach (Auth::user()->allTeams() as $team)
+                        <x-switchable-team :team="$team" component="responsive-nav-link" />
+                    @endforeach
                 @endif
             </div>
         </div>

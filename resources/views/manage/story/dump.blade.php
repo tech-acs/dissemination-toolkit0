@@ -1,0 +1,3 @@
+<div>
+    {!! $story->html !!}
+</div>
