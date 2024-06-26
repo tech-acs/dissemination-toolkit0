@@ -21,7 +21,7 @@
         </button>
     </h2>
 
-    <div x-show="expanded" x-collapse>
+    <div x-show="expanded" x-collapse x-cloak>
         <div class="px-6 pb-4 pl-8">
             @if(! empty($pivotableDimensions))
                 <div class="flex flex-col space-y-4">

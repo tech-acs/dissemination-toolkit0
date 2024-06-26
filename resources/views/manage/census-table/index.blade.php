@@ -64,7 +64,7 @@
                     <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg"
                          x-data="confirmedDeletion">
 
-                        <x-scaffold::delete-confirmation/>
+                        <x-delete-confirmation/>
 
                         <table class="min-w-full divide-y divide-gray-300">
                             <thead class="bg-gray-50">
@@ -100,21 +100,20 @@
                                         </a>
                                     </td>
                                     <td class="px-3 py-4 whitespace-normal text-sm text-gray-500">
-                                        <x-dataset-type-badge :text="$record->dataset_type"
-                                                              class="{{\App\Enums\CensusTableTypeEnum::getTypeClass($record->dataset_type)}}"/>
+                                        <x-dataset-type-badge :text="$record->dataset_type" class="{{\App\Enums\CensusTableTypeEnum::getTypeClass($record->dataset_type)}}"/>
                                     </td>
                                     <td class="px-3 py-4 whitespace-normal text-sm text-gray-500">{{ $record->publisher }}</td>
                                     <td class="px-6 py-4 whitespace-normal text-sm text-gray-500 text-center">
                                         {{ $record->user->name }}
                                     </td>
                                     <td class="py-4 whitespace-nowrap text-sm text-gray-500 text-center">
-                                        <x-scaffold::yes-no value="{{$record->published}}"/>
+                                        <x-yes-no value="{{$record->published}}"/>
                                     </td>
                                     <td class="py-4 whitespace-nowrap text-sm text-gray-500 text-right">
                                         {{$record->updated_at->diffForHumans()}}
                                     </td>
                                     <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                        <div class="flex justify-center items-center">
+                                        <div class="flex justify-center items-center gap-x-2">
                                             <a href="{{route('census-table.show', $record->id)}}"
                                                class="text-gray-600 hover:text-gray-900 hover:scale-110">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -125,7 +124,7 @@
                                                           d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                                 </svg>
                                             </a>
-                                            <span class="text-gray-400 px-0.5">|</span>
+
                                             <a href="{{route('manage.census-table.edit', $record->id)}}"
                                                class="text-indigo-600 hover:text-indigo-900 hover:scale-110">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -134,7 +133,7 @@
                                                           d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"/>
                                                 </svg>
                                             </a>
-                                            <span class="text-gray-400 px-0.5">|</span>
+
                                             <a href="{{ route('manage.census-table.destroy', $record->id) }}"
                                                x-on:click.prevent="confirmThenDelete($el)"
                                                class="text-red-600 hover:scale-110">

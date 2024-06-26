@@ -8,11 +8,11 @@
             </div>
             <div class="mt-1">
                 <x-label for="title" value="{{ __('Title') }} *" />
-                <x-scaffold::multi-lang-input id="title" name="title" value="{{ old('title', $visualization->title ?? null) }}" />
+                <x-multi-lang-input id="title" name="title" value="{{ old('title', $visualization->title ?? null) }}" />
                 <x-input-error for="title" class="mt-2" />
             </div>
             <div>
-                <x-label for="description" value="{{ __('Description') }} *" class="inline" /><x-scaffold::locale-display />
+                <x-label for="description" value="{{ __('Description') }} *" class="inline" /><x-locale-display />
                 <textarea name="description" rows="3" class='w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm'>{{old('description', $visualization->description ?? null)}}</textarea>
                 <x-input-error for="description" class="mt-2" />
             </div>

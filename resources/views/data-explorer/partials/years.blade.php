@@ -20,7 +20,7 @@
         </button>
     </h2>
 
-    <div x-show="expanded" x-collapse>
+    <div x-show="expanded" x-collapse x-cloak>
         <div class="px-6 pb-4">
             @if($years)
                 @foreach($years ?? [] as $id => $year)

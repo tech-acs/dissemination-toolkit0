@@ -1,6 +1,6 @@
 <?php
 
-namespace Uneca\Scaffold\Http\Livewire;
+namespace App\Livewire;
 
 use Uneca\Scaffold\Mail\InvitationMail;
 use Uneca\Scaffold\Models\Invitation;

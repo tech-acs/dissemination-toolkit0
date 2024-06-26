@@ -6,7 +6,7 @@
                 <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center">
                     <a href="{{ route('landing') }}">
-                        <img class="h-12" title="{{ $org?->name }}" alt="{{ $org?->name }}" src="{{ asset($org?->logo_path) }}">
+                        <img class="h-12" title="{{ $org?->name }}" alt="{{ $org?->name }}" src="{{ asset(empty($org?->logo_path) ? 'images/placeholder-logo.png' : $org->logo_path) }}">
                     </a>
                 </div>
 

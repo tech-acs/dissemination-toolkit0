@@ -15,12 +15,12 @@
         >
             <label class="block text-lg font-medium leading-6 text-gray-900">{{ __('Geography') }}</label>
             <x-animation.bouncing-left-pointer :class="$nextSelection === 'geography' ? '' : 'hidden'" />
-            <span x-show="expanded" aria-hidden="true" class="ml-4">&minus;</span>
+            <span x-show="expanded" aria-hidden="true" class="ml-4" x-cloak>&minus;</span>
             <span x-show="!expanded" aria-hidden="true" class="ml-4">&plus;</span>
         </button>
     </h2>
 
-    <div x-show="expanded" x-collapse>
+    <div x-show="expanded" x-collapse x-cloak>
         <div class="px-6 pb-4">
 
             @if($geographyLevels)
@@ -60,7 +60,7 @@
                                 <input
                                     id="geography-{{ $loop->index }}"
                                     wire:model="selectedGeographies"
-                                    wire:click="resetFetchGeographicalChildren()"
+
                                     value="{{ $id }}"
                                     type="checkbox"
                                     class="h-4 w-4 mt-1 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
@@ -71,7 +71,7 @@
                             There are no values to display
                         @endforelse
                     </div>
-                    <div class="flex justify-end mt-6">
+                    {{--<div class="flex justify-end mt-6">
                         @if($this->showFetchGeographicalChildren)
                             <div class="flex items-start">
                                 <input
@@ -82,7 +82,7 @@
                                 >
                                 <label for="fetchGeographicalChildren" class="text-gray-900 ml-2 leading-6">{{ __('Fetch geographical heirachical area children') }}</label>
                             </div>
-                        @endif
+                        @endif--}}
                 </div>
             @else
                 <div class="text-gray-500 mt-2 border rounded-md p-4 py-2">{{ __('Select dataset to see available geographies') }}</div>

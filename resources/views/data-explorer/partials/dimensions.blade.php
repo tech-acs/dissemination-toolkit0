@@ -15,12 +15,12 @@
         >
             <label class="block text-lg font-medium leading-6 text-gray-900">{{ __('Dimensions') }}</label>
             <x-animation.bouncing-left-pointer :class="$nextSelection === 'dimension' ? '' : 'hidden'" />
-            <span x-show="expanded" aria-hidden="true" class="ml-4">&minus;</span>
+            <span x-show="expanded" aria-hidden="true" class="ml-4" x-cloak>&minus;</span>
             <span x-show="!expanded" aria-hidden="true" class="ml-4">&plus;</span>
         </button>
     </h2>
 
-    <div x-show="expanded" x-collapse>
+    <div x-show="expanded" x-collapse x-cloak>
         <div class="px-6 pb-4 space-y-5 mt-2 text-sm">
             @forelse($dimensions as $dimension)
                 <div class="flex flex-col" x-data="{ showValues: false }" :key="dimension.{{ $loop->index }}">

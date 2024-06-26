@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Spatie\SimpleExcel\SimpleExcelReader;
-use Uneca\Scaffold\Models\Area;
+use App\Models\Area;
 
 class DatasetImportController extends Controller
 {

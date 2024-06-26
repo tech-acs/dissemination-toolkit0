@@ -1,10 +1,10 @@
 <?php
 
-namespace Uneca\Scaffold\Http\Livewire;
+namespace App\Livewire;
 
-use Uneca\Scaffold\Models\MapIndicator;
-use Uneca\Scaffold\Models\Page;
-use Uneca\Scaffold\Models\Report;
+use App\Models\MapIndicator;
+use App\Models\Page;
+use App\Models\Report;
 use Livewire\Component;
 use Spatie\Permission\Models\Permission;
 use Uneca\Scaffold\Models\Scorecard;

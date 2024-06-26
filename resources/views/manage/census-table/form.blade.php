@@ -38,9 +38,9 @@
                     <x-label for="title" value="{{ __('Type') }} *"/>
                     <fieldset class="mt-4">
                         <legend class="sr-only">Dataset type</legend>
-                        <div class="space-y-4 sm:flex sm:items-center sm:space-x-10 sm:space-y-0">
+                        <div class="space-y-4 sm:flex sm:items-center sm:space-x-10 sm:space-y-0 border rounded-md">
                             @foreach($types as $type)
-                                <div class="flex items-center p-3 border border-indigo-100">
+                                <div class="flex items-center p-3 ">
                                     <input id="type-{{ $type->id }}" name="dataset_type" value="{{ $type->id }}"
                                            type="radio"
                                            class="w-4 h-4 p-2.5 text-indigo-600 border-gray-300 focus:ring-indigo-600"
@@ -59,34 +59,35 @@
         <div class="grid grid-cols-1 gap-6">
             <div>
                 <x-label for="title" value="{{ __('Title') }} *"/>
-                <x-scaffold::multi-lang-input id="title" name="title" type="text"
+                <x-multi-lang-input id="title" name="title" type="text"
                                               value="{{old('title', $censusTable->title ?? null)}}"/>
                 <x-input-error for="title" class="mt-2"/>
             </div>
             <div>
                 <x-label for="description" value="{{ __('Description') }}" class="inline"/>
-                <x-scaffold::locale-display/>
-                <x-scaffold::textarea id="description" name="description"
-                                      rows="3">{{old('description', $censusTable->description ?? null)}}</x-scaffold::textarea>
+                <x-locale-display/>
+                <x-textarea id="description" name="description"
+                                      rows="3">{{old('description', $censusTable->description ?? null)}}</x-textarea>
                 <x-input-error for="description" class="mt-2"/>
             </div>
         </div>
         <div class="grid grid-cols-2 gap-6">
             <div>
                 <x-label for="data_source" value="{{ __('Data source') }} *"/>
-                <x-scaffold::multi-lang-input id="data_source" name="data_source" type="text"
+                <x-multi-lang-input id="data_source" name="data_source" type="text"
                                               value="{{old('data_source', $censusTable->data_source ?? null)}}"/>
                 <x-input-error for="data_source" class="mt-2"/>
             </div>
             <div>
-                <x-label for="producer" value="{{ __('Producer') }} "/>
-                <x-scaffold::multi-lang-input id="producer" name="producer" type="text"
+                <x-label for="producer" value="{{ __('Producer') }} *" />
+                <x-multi-lang-input id="producer" name="producer" type="text"
                                               value="{{old('producer', $censusTable->producer ?? null)}}"/>
                 <x-input-error for="producer" class="mt-2"/>
             </div>
+
             <div>
-                <x-label for="publisher" value="{{ __('Publisher') }} *"/>
-                <x-scaffold::multi-lang-input id="publisher" name="publisher" type="text"
+                <x-label for="publisher" value="{{ __('Publisher') }} *" />
+                <x-multi-lang-input id="publisher" name="publisher" type="text"
                                               value="{{old('publisher', $censusTable->publisher ?? null)}}"/>
                 <x-input-error for="publisher" class="mt-2"/>
             </div>
@@ -98,21 +99,20 @@
                         value="{{ old('published_date', $censusTable->published_date ?? '') }}"/>
                 <x-input-error for="published_date" class="mt-2"/>
             </div>
-            <div>
-                <div>
-                    <label for="topic">{{ __('Topic') }} *</label>
-                    <select id="topic" name="topics[]" multiple>
-                        @foreach($topics ?? [] as $topic)
-                            <option value="{{ $topic->id }}" {{ in_array($topic->id, $selectedTopics ?? []) ? 'selected' : '' }}>
-                                {{ $topic->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
 
+            <div class="flex flex-col">
+                <label for="topic">{{ __('Topic') }} *</label>
+                <select id="topic" size="6" name="topics[]" multiple class="text-sm border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                    @foreach($topics ?? [] as $topic)
+                        <option value="{{ $topic->id }}" {{ in_array($topic->id, $selectedTopics ?? []) ? 'selected' : '' }}>
+                            {{ $topic->name }}
+                        </option>
+                    @endforeach
+                </select>
                 <x-input-error for="topics" class="mt-2"/>
             </div>
-            <div class="col-span-full">
+
+            <div class="">
                 <x-label for="tags" value="{{ __('Tags') }}"/>
                 @if(isset($censusTable))
                     <x-tags :value="\App\Models\Tag::tagsToJsArray($censusTable->tags())" class="mt-1"/>
@@ -121,35 +121,35 @@
                 @endif
                 <x-input-error for="tags" class="mt-2"/>
             </div>
-            <div class="grid grid-cols-4 col-span-2 gap-4">
-                <div class="col-span-3">
-                    <x-label for="comment" value="{{ __('Comment') }}" class="inline"/>
-                    <x-scaffold::textarea id="comment" name="comment"
-                                          rows="3">{{old('comment', $censusTable->comment ?? null)}}</x-scaffold::textarea>
-                    <x-input-error for="comment" class="mt-2"/>
-                </div>
-                <div class="col-span-1">
-                    <x-label for="published" value="{{ __('Status') }}"/>
-                    <div class="flex items-center mt-3 ml-3"
-                         x-data="{enabled: @json($censusTable->published ?? false) }" x-cloak>
-                        <label for="status">
-                            <span class="text-sm text-gray-500">{{ __('Draft') }}</span>
-                        </label>
-                        <input type="hidden" id="status" name="published" :value="enabled">
-                        <button
-                                x-on:click="enabled = ! enabled"
-                                :class="enabled ? 'bg-indigo-600' : 'bg-gray-200'"
-                                type="button"
-                                class="relative inline-flex flex-shrink-0 h-6 ml-3 transition-colors duration-200 ease-in-out border-2 border-transparent rounded-full cursor-pointer w-11 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                role="switch"
-                                id="published">
-                        <span aria-hidden="true" :class="enabled ? 'translate-x-5' : 'translate-x-0'"
-                              class="inline-block w-5 h-5 transition duration-200 ease-in-out transform bg-white rounded-full shadow pointer-events-none ring-0"></span>
-                        </button>
-                        <label for="status" class="ml-3">
-                            <span class="text-sm text-gray-900">{{ __('Published') }}</span>
-                        </label>
-                    </div>
+
+            <div class="col-span-2">
+                <x-label for="comment" value="{{ __('Comment') }}" class="inline"/>
+                <x-textarea id="comment" name="comment"
+                                      rows="2">{{old('comment', $censusTable->comment ?? null)}}</x-textarea>
+                <x-input-error for="comment" class="mt-2"/>
+            </div>
+
+            <div class="">
+                <x-label for="published" value="{{ __('Status') }}"/>
+                <div class="flex items-center mt-3 ml-3"
+                     x-data="{enabled: @json($censusTable->published ?? false) }" x-cloak>
+                    <label for="status">
+                        <span class="text-sm text-gray-500">{{ __('Draft') }}</span>
+                    </label>
+                    <input type="hidden" id="status" name="published" :value="enabled">
+                    <button
+                            x-on:click="enabled = ! enabled"
+                            :class="enabled ? 'bg-indigo-600' : 'bg-gray-200'"
+                            type="button"
+                            class="relative inline-flex flex-shrink-0 h-6 ml-3 transition-colors duration-200 ease-in-out border-2 border-transparent rounded-full cursor-pointer w-11 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            role="switch"
+                            id="published">
+                    <span aria-hidden="true" :class="enabled ? 'translate-x-5' : 'translate-x-0'"
+                          class="inline-block w-5 h-5 transition duration-200 ease-in-out transform bg-white rounded-full shadow pointer-events-none ring-0"></span>
+                    </button>
+                    <label for="status" class="ml-3">
+                        <span class="text-sm text-gray-900">{{ __('Published') }}</span>
+                    </label>
                 </div>
             </div>
 

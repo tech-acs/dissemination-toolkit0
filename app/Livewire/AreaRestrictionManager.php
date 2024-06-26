@@ -1,6 +1,6 @@
 <?php
 
-namespace Uneca\Scaffold\Http\Livewire;
+namespace App\Livewire;
 
 use Uneca\Scaffold\Models\AreaRestriction;
 use Uneca\Scaffold\Models\User;

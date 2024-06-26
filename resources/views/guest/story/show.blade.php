@@ -1,3 +1,6 @@
+@push('styles')
+    @vite(['resources/css/content-styles.css'])
+@endpush
 <x-guest-layout>
     <div class="container mx-auto flex-grow">
         @include('partials.nav')
@@ -6,13 +9,12 @@
             </style>
         <article class="py-5 border-t border-b">
             <x-guest-header :data="$story" :show-pdf="true" :show-embed="false"/>
-            <div class="pt-10">
-            
+            <div class="pt-10 ck-content">
+
                 {!! Blade::render($story->html) !!}
 
             </div>
         </article>
-        <x-coming-soon-popover/>
     </div>
     <div class="container mx-auto">
         @include('partials.footer')

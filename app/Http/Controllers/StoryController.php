@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoryRequest;
 use App\Models\Tag;
 use App\Models\Topic;
-use App\Service\StoryHtmlDumper;
-use App\Service\TemplateStores\StoryTemplateStore;
 use Illuminate\Http\Request;
 use App\Models\Story;
 use Illuminate\Support\Facades\Auth;
@@ -57,7 +55,7 @@ class StoryController extends Controller
         $story->update($request->only(['title', 'description', 'published', 'featured', 'featured_image', 'topic_id']));
         $updatedTags = Tag::prepareForSync($request->get('tags'));
         $story->tags()->sync($updatedTags->pluck('id'));
-        StoryHtmlDumper::write($story);
+        //StoryHtmlDumper::write($story);
         return redirect()->route('manage.story.index')->withMessage('Story updated');
     }
 

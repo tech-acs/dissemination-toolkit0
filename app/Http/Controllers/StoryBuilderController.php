@@ -16,25 +16,24 @@ class StoryBuilderController extends Controller
     public function edit(Story $story)
     {
         $baseUrl = config('app.url');
-        //$indicators = Indicator::all();
-        $indicators = collect([
+        $indicators = Indicator::all();
+        /*$indicators = collect([
             [
                 'id' => 5,
                 'title' => 'Indicator One',
                 'data' => ['x' => [1, 2, 3, 4, 5], 'y' => [1, 2, 4, 8, 16]],
                 'layout' => []
             ]
-        ]);
+        ]);*/
         return view('manage.story.builder', compact('story', 'indicators', 'baseUrl'));
     }
 
     public function update(Request $request, $id)
     {
         $story = Story::find($id);
-        $story->update(['html' => html_entity_decode($request->get('data')[0]['story_html'])]);
-        $story->update(['gjs_project_data' => html_entity_decode($request->get('data')[1]['story_project_data']), 'css' => $request->get('data')[2]['story_css']]);
-        StoryHtmlDumper::write($story);
-        return view('manage.story.builder', compact('story'));
+        $succeeded = $story->update(['html' => html_entity_decode($request->get('storyHtml'))]);
+        abort_unless($succeeded, 400);
+        return response('Success', 200);
     }
 
     public function uploadImage(Request $request)

@@ -102,7 +102,6 @@
             @endforeach
         </section>
 
-
         @include('partials.footer')
     </div>
     @include('partials.footer-end')

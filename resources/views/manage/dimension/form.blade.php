@@ -3,15 +3,15 @@
         <div class="grid grid-cols-1 gap-6">
             <div>
                 <x-label for="name" value="{{ __('Name') }} *"/>
-                <x-scaffold::multi-lang-input id="name" name="name" type="text"
+                <x-multi-lang-input id="name" name="name" type="text"
                                               value="{{ old('name', $dimension->name ?? null) }}"/>
                 <x-input-error for="name" class="mt-2"/>
             </div>
             <div>
                 <x-label for="description" value="{{ __('Description') }}" class="inline"/>
-                <x-scaffold::locale-display/>
-                <x-scaffold::textarea name="description"
-                                      rows="3">{{ old('description', $dimension->description ?? null) }}</x-scaffold::textarea>
+                <x-locale-display/>
+                <x-textarea name="description"
+                                      rows="3">{{ old('description', $dimension->description ?? null) }}</x-textarea>
                 <x-input-error for="description" class="mt-2"/>
             </div>
             <div>
@@ -31,7 +31,7 @@
                 <x-label for="sorting_type" value="{{ __('Value sorting type') }}"/>
                 <select id="sorting_type" name="sorting_type"
                         class="mt-1 pr-10 space-y-1 text-base p-1 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm">
-                    @foreach(\App\Service\SortingTypeEnum::cases() ?? [] as $sortingType)
+                    @foreach(\App\Enums\SortingTypeEnum::cases() ?? [] as $sortingType)
                         <option class="p-2 rounded-md" value="{{ $sortingType->value }}"
                         @if($dimension ?? null)
                             @selected($dimension->sorting_type == $sortingType->value)

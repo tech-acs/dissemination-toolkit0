@@ -44,12 +44,16 @@ Route::middleware(['web'])->group(function () {
         Route::get('visualization-deriver', \App\Http\Controllers\VisualizationDeriverController::class)->name('visualization-deriver');
         Route::get('story/{story}/duplicate', \App\Http\Controllers\StoryDuplicationController::class)->name('story.duplicate');
         Route::resource('story', \App\Http\Controllers\StoryController::class);
-        Route::get('story/builder/{story}/edit', [\App\Http\Controllers\StoryBuilderController::class, 'edit'])->name('story.builder.edit');
+
+        Route::resource('story-builder', \App\Http\Controllers\StoryBuilderController::class)->parameters(['story-builder' => 'story'])->only(['edit', 'update']);
+
+        /*Route::get('story/builder/{story}/edit', [\App\Http\Controllers\StoryBuilderController::class, 'edit'])->name('story.builder.edit');
         Route::patch('story/builder/{id}', [\App\Http\Controllers\StoryBuilderController::class, 'update'])->name('story.builder.update');
         Route::post('story/builder/upload/image', [\App\Http\Controllers\StoryBuilderController::class, 'uploadImage'])->name('story.builder.upload.image');
         Route::post('story/builder/upload/file', [\App\Http\Controllers\StoryBuilderController::class, 'uploadFile'])->name('story.builder.upload.file');
         Route::get('story/builder/artifacts/{topic_id}', [\App\Http\Controllers\StoryBuilderController::class, 'getArtifacts'])->name('story.builder.artifacts');
-        Route::get('story/builder/topics', [\App\Http\Controllers\StoryBuilderController::class, 'getTopics'])->name('story.builder.topics');
+        Route::get('story/builder/topics', [\App\Http\Controllers\StoryBuilderController::class, 'getTopics'])->name('story.builder.topics');*/
+
         Route::resource('announcement', AnnouncementController::class)->only(['index', 'create', 'store']);
         //Route::get('usage_stats', UsageStatsController::class)->name('usage_stats');
 

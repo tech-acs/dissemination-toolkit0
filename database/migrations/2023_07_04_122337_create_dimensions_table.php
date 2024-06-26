@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('table_name')->unique();
             $table->timestamp('table_created_at')->nullable();
             $table->json('for')->default('{}');
+            $table->tinyInteger('sorting_type')->default(0);
             $table->timestamps();
         });
     }

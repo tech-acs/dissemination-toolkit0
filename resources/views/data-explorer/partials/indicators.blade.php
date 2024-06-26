@@ -20,7 +20,7 @@
         </button>
     </h2>
 
-    <div x-show="expanded" x-collapse>
+    <div x-show="expanded" x-collapse x-cloak>
         <div class="px-6 pb-4">
             @if($indicators)
                 <select wire:model.live="selectedIndicator" size="4" class="bg-none scrollbar block w-full appearance-none rounded-md border-1 border-gray-300 py-2 pl-3 text-gray-900 focus:ring-1 focus:ring-indigo-300 sm:text-sm sm:leading-6">

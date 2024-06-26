@@ -70,12 +70,12 @@ class Visualization extends Model
         );
     }
 
-    public function isFilterable(): Attribute
+    /*public function isFilterable(): Attribute
     {
         return new Attribute(
             get: fn () => $this->options['extra']['filterable'] ?? false,
         );
-    }
+    }*/
 
     protected function component(): Attribute
     {

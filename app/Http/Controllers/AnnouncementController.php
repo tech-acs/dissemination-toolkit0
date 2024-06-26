@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Uneca\Scaffold\Http\Requests\AnnouncementRequest;
-use Uneca\Scaffold\Models\Announcement;
+use App\Http\Requests\AnnouncementRequest;
+use App\Models\Announcement;
 
-use Uneca\Scaffold\Notifications\BroadcastMessageNotification;
+use App\Notifications\BroadcastMessageNotification;
 use Illuminate\Support\Facades\Notification;
 use Spatie\Permission\Models\Role;
 

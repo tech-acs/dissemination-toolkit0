@@ -8,18 +8,28 @@ use App\Models\CensusTable;
 use App\Models\Indicator;
 use App\Models\Tag;
 use App\Models\Topic;
-use App\Service\StorageService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class CensusTableController extends Controller
 {
-    protected StorageService $storageService;
-    public function __construct(StorageService $storageService)
+    public function uploadCensusFile($request, string $disk, string $directory): array
     {
-        $this->storageService = $storageService;
+        if ($request->hasFile('file') && $request->file('file')->isValid()) {
+            if ($request->has('file_path')) {
+                Storage::disk($disk)->delete($request->get('file_path'));
+            }
+        }
+        $file_path = $request->file('file')->store($directory, $disk);
+
+        return [
+            'file_path' => $file_path,
+            'file_name' => $request->file('file')->getClientOriginalName(),
+            'file_size' => $request->file('file')->getSize(),
+            'file_type' => $request->file('file')->getClientOriginalExtension(),
+        ];
     }
+
     public function index()
     {
         $records = auth()->user()->censusTables()->orderByDesc('updated_at')->get();
@@ -39,7 +49,7 @@ class CensusTableController extends Controller
         if (!($request->hasFile('file') && $request->file('file')->isValid())) {
             return redirect()->back()->withErrors(['file' => 'File is required']);
         }
-        $fileInfo = $this->storageService->uploadCensusFile($request, 'public', 'census-tables');
+        $fileInfo = $this->uploadCensusFile($request, 'public', 'census-tables');
 
         $request->merge($fileInfo);
         $request->merge(['user_id' => Auth::id()]);
@@ -79,7 +89,7 @@ class CensusTableController extends Controller
             'comment',
             'dataset_type']);
         if ($request->hasFile('file') && $request->file('file')->isValid()) {
-            $fileInfo = $this->storageService->uploadCensusFile($request, 'public', 'census-tables');
+            $fileInfo = $this->uploadCensusFile($request, 'public', 'census-tables');
             $requestUpdate = array_merge($requestUpdate, $fileInfo);
         }
 
@@ -90,7 +100,7 @@ class CensusTableController extends Controller
         $updatedTags = Tag::prepareForSync($request->get('tags', ''));
         $censusTable->tags()->sync($updatedTags->pluck('id'));
 
-        return redirect()->route('manage.census-table.index', $censusTable)->withMessage('Census Table updated');
+        return redirect()->route('manage.census-table.index', $censusTable)->withMessage('Census table updated');
     }
 
     public function destroy(CensusTable $censusTable)

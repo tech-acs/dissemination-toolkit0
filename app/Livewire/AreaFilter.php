@@ -2,8 +2,8 @@
 
 namespace App\Livewire;
 
-use Uneca\Scaffold\Services\AreaTree;
-use Uneca\Scaffold\Traits\ChecksumSafetyTrait;
+use App\Services\AreaTree;
+use App\Traits\ChecksumSafetyTrait;
 use Livewire\Component;
 
 class AreaFilter extends Component

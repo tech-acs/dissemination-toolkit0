@@ -5,3 +5,6 @@ window.PlotlyChart = PlotlyChart;
 
 import ClassicEditor from './CKEditor';
 window.ClassicEditor = ClassicEditor;
+
+import AgGridTable from "./AgGridTable";
+window.AgGridTable = AgGridTable;

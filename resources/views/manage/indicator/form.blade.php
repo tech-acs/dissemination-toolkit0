@@ -3,12 +3,12 @@
         <div class="grid grid-cols-1 gap-6">
             <div>
                 <x-label for="name" value="{{ __('Name') }} *" />
-                <x-scaffold::multi-lang-input id="name" name="name" type="text" value="{{old('name', $indicator->name ?? null)}}" />
+                <x-multi-lang-input id="name" name="name" type="text" value="{{old('name', $indicator->name ?? null)}}" />
                 <x-input-error for="name" class="mt-2" />
             </div>
             <div>
-                <x-label for="description" value="{{ __('Description') }}" class="inline" /><x-scaffold::locale-display />
-                <x-scaffold::textarea name="description" rows="3">{{old('description', $indicator->description ?? null)}}</x-scaffold::textarea>
+                <x-label for="description" value="{{ __('Description') }}" class="inline" /><x-locale-display />
+                <x-textarea name="description" rows="3">{{old('description', $indicator->description ?? null)}}</x-textarea>
                 <x-input-error for="description" class="mt-2" />
             </div>
             {{--<div>
@@ -22,7 +22,7 @@
                     <option value="">{{ __('Select topic') }}</option>
                     @foreach($topics ?? [] as $topic)
                         <option class="p-2 rounded-md" value="{{ $topic?->id }}"
-                            @if($indicator ?? null) @selected($topic->id == $indicator->topic->id) @endif
+                            @if($indicator->topic ?? null) @selected($topic?->id == $indicator->topic->id) @endif
                         >
                             {{ $topic->name }}
                         </option>

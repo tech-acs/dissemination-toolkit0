@@ -6,8 +6,8 @@ use App\Http\Requests\DatasetRequest;
 use App\Models\Dataset;
 use App\Models\Indicator;
 use App\Models\Year;
+use App\Services\AreaTree;
 use Illuminate\Http\Request;
-use Uneca\Scaffold\Services\AreaTree;
 
 class DatasetController extends Controller
 {

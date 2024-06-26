@@ -4,10 +4,11 @@
 
         <main class="py-5 border-t border-b">
             <x-guest-header :data="$visualization" :show-embed="true" :show-pdf="false"/>
-            @if($visualization->isFilterable)
+            {{--@if($visualization->isFilterable)
                 <livewire:geographical-area-filter :dataParams="$visualization->data_params" />
-            @endif
-            <livewire:visualizer :visualization="$visualization"/>
+            @endif--}}
+
+            @livewire($visualization->livewire_component, ['vizId' => $visualization->id])
 
         </main>
 

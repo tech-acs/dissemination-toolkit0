@@ -11,7 +11,7 @@
         </div>
         <div class="flex justify-end mt-6">
             <x-animation.bouncing-right-pointer :class="$nextSelection === 'apply' ? '' : 'hidden'" />
-            <x-button wire:click="apply()">Fetch</x-button>
+            <x-button wire:click="apply()" wire:loading.attr="disabled">Fetch</x-button>
             <x-secondary-button class="ml-4" wire:click="resetFilter()">Reset</x-secondary-button>
         </div>
     </div>

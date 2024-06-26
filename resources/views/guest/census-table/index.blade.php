@@ -4,14 +4,11 @@
 
         <main class="max-w-2xl px-4 py-8 mx-auto sm:px-6 lg:max-w-7xl lg:px-8">
             <div class="pb-6 border-b border-gray-200">
-                <h1 class="text-5xl font-bold tracking-tight text-indigo-800">CENSUS TABLES</h1>
+                <h1 class="text-3xl font-bold tracking-tight text-indigo-800">Census Tables</h1>
                 <p class="mt-4 text-sm text-left text-gray-500">
                     Census tables are published in the form of a large collection of Excel files. These tables are
-                    listed here by Census year, organized by series. To a large extent, census tables maintain a same
-                    design over time to foster comparability of census outputs. Census tables are published in the form
-                    of a large collection of Excel files. These tables are listed here by Census year, organized by
-                    series. To a large extent, census tables maintain a same design over time to foster comparability of
-                    census outputs.
+                    listed here by Census year, organized by series. To a large extent, census tables maintain the same
+                    design over time to foster comparability of census outputs.
                 </p>
             </div>
 
@@ -23,22 +20,17 @@
                             <div>
                                 <fieldset>
                                     <div class="pt-2 space-y-2">
-                                        <legend for="dataset_type"
-                                                class="block text-sm font-medium text-gray-900">{{ __('Type') }}</legend>
+                                        <legend for="dataset_type" class="block text-sm font-medium text-gray-900">{{ __('Type') }}</legend>
                                         <div class="flex flex-col gap-1 pt-2 overflow-y-scroll border border-gray-200"
                                              x-data>
                                             @foreach($types ?? [] as $type)
                                                 <div class="flex items-center gap-1 ">
-                                                    <input id="type-{{ $type->id }}" name="dataset_type"
-                                                           value="{{ $type->id }}" type="radio"
+                                                    <input id="type-{{ $type->id }}" name="dataset_type" value="{{ $type->id }}" type="radio"
                                                            class="h-4 ml-8 p-1.5 text-indigo-600 border-gray-300 focus:ring-indigo-600"
                                                            x-on:change="$event.target.form.submit()"
-                                                           @if($type->id == request()->get('dataset_type', 'all'))
-                                                               checked
-                                                        @endif
+                                                        @checked($type->id == request()->get('dataset_type', 'all'))
                                                     >
-                                                    <label for="type-{{ $type->id }}"
-                                                           class="block m-1 font-medium text-gray-900">{{ $type->name }}</label>
+                                                    <label for="type-{{ $type->id }}" class="block m-1 font-medium text-gray-900">{{ $type->name }}</label>
                                                 </div>
                                             @endforeach
                                         </div>
@@ -48,8 +40,7 @@
                             <div>
                                 <fieldset>
                                     <div class="pt-2 space-y-2">
-                                        <label for="fromYear" class="block text-sm font-medium leading-6 text-gray-900">From
-                                            year</label>
+                                        <label for="fromYear" class="block text-sm font-medium leading-6 text-gray-900">From year</label>
                                         <div>
                                             <label for="fromYear" class="sr-only">Year</label>
                                             <select id="fromYear" name="fromYear" autocomplete="fromYear-name" x-data
@@ -57,8 +48,7 @@
                                                     class="relative block w-full rounded-none rounded-r-md border-0 bg-transparent py-1.5 pt-2 text-gray-700 ring-1 ring-inset ring-indigo-300 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-8">
                                                 <option value></option>
                                                 @foreach($censusYears ?? [] as $censusYear)
-                                                    <option class="p-2 rounded-md"
-                                                            value="{{ $censusYear?->id }}" @selected($censusYear->id == request()->get('fromYear')) >
+                                                    <option class="p-2 rounded-md" value="{{ $censusYear?->id }}" @selected($censusYear->id == request()->get('fromYear')) >
                                                         {{ $censusYear->name }}
                                                     </option>
                                                 @endforeach
@@ -66,8 +56,7 @@
                                         </div>
                                     </div>
                                     <div class="pt-2 space-y-2">
-                                        <label for="toYear" class="block text-sm font-medium leading-6 text-gray-900">To
-                                            year</label>
+                                        <label for="toYear" class="block text-sm font-medium leading-6 text-gray-900">To year</label>
                                         <div>
                                             <label for="toYear" class="sr-only">Year</label>
                                             <select id="toYear" name="toYear" autocomplete="toYear-name" x-data
@@ -75,8 +64,7 @@
                                                     class="relative block w-full rounded-none rounded-r-md border-0 bg-transparent py-1.5 pt-2 text-gray-700 ring-1 ring-inset focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-8">
                                                 <option value></option>
                                                 @foreach($censusYears ?? [] as $censusYear)
-                                                    <option class="p-2 rounded-md"
-                                                            value="{{ $censusYear?->id }}" @selected($censusYear->id == request()->get('toYear')) >
+                                                    <option class="p-2 rounded-md" value="{{ $censusYear?->id }}" @selected($censusYear->id == request()->get('toYear')) >
                                                         {{ $censusYear->name }}
                                                     </option>
                                                 @endforeach
@@ -106,8 +94,7 @@
                                                            x-on:change="$event.target.form.submit()"
                                                            @if(is_array(request()->get('tags')) && in_array($tag->id, request()->get('tags'))) checked @endif
                                                     >
-                                                    <label for="tag-{{ $tag->id }}"
-                                                           class="ml-3 text-sm text-gray-600">{{ $tag->name  }}
+                                                    <label for="tag-{{ $tag->id }}" class="ml-3 text-sm text-gray-600">{{ $tag->name  }}
                                                         ({{$tag->census_tables_count}})</label>
                                                 </div>
                                             @endforeach
@@ -142,8 +129,7 @@
                                                 autocomplete="sort"
                                                 class="relative block w-full rounded-none rounded-r-md border-0 bg-transparent py-1.5 pt-2 text-gray-700 ring-1 ring-inset ring-indigo-300 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-8">
                                             @foreach($sortOptions as $key => $value)
-                                                <option
-                                                    value="{{ $key }}" {{ request()->get('sort') == $key ? 'selected' : '' }}>{{ $value }}</option>
+                                                <option value="{{ $key }}" {{ request()->get('sort') == $key ? 'selected' : '' }}>{{ $value }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -158,7 +144,6 @@
                                     <div class="p-4 py-3 mt-4 mb-4 border border-blue-300 rounded-md bg-blue-50">
                                         <div class="flex">
                                             <div class="flex-shrink-0">
-                                                <!-- Heroicon name: solid/information-circle -->
                                                 <svg class="w-5 h-5 text-blue-400" xmlns="http://www.w3.org/2000/svg"
                                                      viewBox="0 0 20 20"
                                                      fill="currentColor" aria-hidden="true">
@@ -270,7 +255,7 @@
                                                                           d="M12 2.25a.75.75 0 01.75.75v11.69l3.22-3.22a.75.75 0 111.06 1.06l-4.5 4.5a.75.75 0 01-1.06 0l-4.5-4.5a.75.75 0 111.06-1.06l3.22 3.22V3a.75.75 0 01.75-.75zm-9 13.5a.75.75 0 01.75.75v2.25a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5V16.5a.75.75 0 011.5 0v2.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V16.5a.75.75 0 01.75-.75z"
                                                                           clip-rule="evenodd"/>
                                                                 </svg>
-                                                                <span class="text-xs uppercase">{{$record->file_type}} ({{ fileSizeFormat($record->file_size) }})</span>
+                                                                <span class="text-xs uppercase">{{$record->file_type}} ({{ \Illuminate\Support\Number::fileSize($record->file_size) }})</span>
                                                             </a>
                                                         </div>
                                                     </div>

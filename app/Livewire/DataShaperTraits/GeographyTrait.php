@@ -2,20 +2,20 @@
 
 namespace App\Livewire\DataShaperTraits;
 
-use Uneca\Scaffold\Models\Area;
-use Uneca\Scaffold\Services\AreaTree;
+use App\Models\Area;
+use App\Services\AreaTree;
 use Livewire\Attributes\Computed;
 
 trait GeographyTrait
 {
-    public int $max_area_level = 0;
+    //public int $max_area_level = 0;
     public array $geographyLevels = [];
     public int $selectedGeographyLevel = 0;
 
     public array $geographies = [];
     public array $selectedGeographies = [];
 
-    public bool $fetchGeographicalChildren = false;
+    /*public bool $fetchGeographicalChildren = false;
 
     #[Computed]
     public function showFetchGeographicalChildren(): bool
@@ -25,13 +25,13 @@ trait GeographyTrait
     public function resetFetchGeographicalChildren(): void
     {
         unset($this->fetchGeographicalChildren);
-    }
+    }*/
     public function updatedSelectedGeographyLevel(int $level): void
     {
         $this->geographies = Area::ofLevel($level)->pluck('name', 'id')->all();
         $this->reset('selectedGeographies');
         $this->nextSelection = 'year';
-        unset($this->showfetchGeographicalChildren);
+        //unset($this->showfetchGeographicalChildren);
         $this->dispatch('selectionMade', $this->makeReadableDataParams('geography', (new AreaTree)->hierarchies[$level]));
     }
 

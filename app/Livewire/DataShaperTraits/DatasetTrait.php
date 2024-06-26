@@ -3,8 +3,8 @@
 namespace App\Livewire\DataShaperTraits;
 
 use App\Models\Dataset;
-use Uneca\Scaffold\Models\Area;
-use Uneca\Scaffold\Services\AreaTree;
+use App\Models\Area;
+use App\Services\AreaTree;
 
 trait DatasetTrait
 {
@@ -32,8 +32,9 @@ trait DatasetTrait
         $dataset = Dataset::with('dimensions')->find($datasetId);
 
         $allLevels = (new AreaTree())->hierarchies;
-        $this->max_area_level = $dataset->max_area_level;
-        $this->geographyLevels = $dataset ? array_slice($allLevels, 0, $dataset->max_area_level + 1) : $allLevels;
+        $this->geographyLevels = $dataset ? array_slice($allLevels, 0,$dataset->max_area_level + 1) : $allLevels;
+        /*$this->max_area_level = $dataset->max_area_level;
+        $this->geographyLevels = $dataset ? array_slice($allLevels, 0, $dataset->max_area_level + 1) : $allLevels;*/
         $this->geographies = Area::ofLevel(0)->pluck('name', 'id')->all();
 
         $this->years = $dataset->years->pluck('name', 'id')->all();

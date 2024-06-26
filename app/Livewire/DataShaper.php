@@ -13,9 +13,9 @@ use App\Models\Dataset;
 use App\Models\Dimension;
 use App\Models\Indicator;
 use App\Models\Topic;
-use App\Service\DataParam;
-use App\Service\QueryBuilder;
-use App\Service\Sorter;
+use App\Services\DataParam;
+use App\Services\QueryBuilder;
+use App\Services\Sorter;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Stringable;
 use Livewire\Attributes\Url;
@@ -83,12 +83,12 @@ class DataShaper extends Component
             ->toString();
     }
 
-    private function makeDataParam(): DataParam
+    private function makeDataParam(): array
     {
-        return new DataParam(
+        /*return new DataParam(
             dataset: $this->selectedDataset,
             geographies: [$this->selectedGeographyLevel => $this->selectedGeographies],
-            fetchGeographicalChildren: $this->showFetchGeographicalChildren()?$this->fetchGeographicalChildren:false,
+            //fetchGeographicalChildren: $this->showFetchGeographicalChildren()?$this->fetchGeographicalChildren:false,
             years: $this->selectedYears,
             dimensions: collect($this->selectedDimensions)
                 ->mapWithKeys(fn ($dimensionId) => [$dimensionId => $this->selectedDimensionValues[$dimensionId]])
@@ -96,7 +96,19 @@ class DataShaper extends Component
             pivotColumn: $this->pivotColumn,
             pivotRow: $this->pivotRow,
             nestingPivotColumn: $this->nestingPivotColumn,
-        );
+        );*/
+
+        return [
+            'dataset' => $this->selectedDataset,
+            'geographies' => [$this->selectedGeographyLevel => $this->selectedGeographies],
+            'years' => $this->selectedYears,
+            'dimensions' => collect($this->selectedDimensions)
+                ->mapWithKeys(fn ($dimensionId) => [$dimensionId => $this->selectedDimensionValues[$dimensionId]])
+                ->all(),
+            'pivotColumn' => $this->pivotColumn,
+            'pivotRow' => $this->pivotRow,
+            'nestingPivotColumn' => $this->nestingPivotColumn,
+        ];
     }
 
     private function makeReadableDataParams(string $field, string $value): array
@@ -127,7 +139,16 @@ class DataShaper extends Component
                     'label' => $dimension->name,
                 ];
             });
-        $this->pivotableDimensions = [
+        if ($dimensions->isNotEmpty()) {
+            $this->pivotableDimensions = [
+                ...$dimensions,
+                [
+                    'id' => 0,
+                    'label' => 'Geography',
+                ],
+            ];
+        }
+        /*$this->pivotableDimensions = [
             ...$dimensions,
             [
                 'id' => 0,
@@ -137,7 +158,7 @@ class DataShaper extends Component
                 'id' => -1,
                 'label' => 'Year',
             ],
-        ];
+        ];*/
     }
 
     public function apply(): void
@@ -165,14 +186,13 @@ class DataShaper extends Component
                 $this->dispatch('notify', content: $error, type: 'error');
             }
         } else {
-
             $queryParameters = $this->makeDataParam();
             $query = new QueryBuilder($queryParameters);
             $this->dispatch(
-                "dataChanged",
+                "changeOccurred",
                 data: Sorter::sort($query->get()),
                 indicatorName: $this->makeIndicatorName(),
-                dataParams: $queryParameters->toArray()
+                dataParams: $queryParameters
             );
         }
         $this->nextSelection = '';

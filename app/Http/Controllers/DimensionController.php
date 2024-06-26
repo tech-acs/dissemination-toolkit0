@@ -21,7 +21,7 @@ class DimensionController extends Controller
 
     public function create()
     {
-        $factTables = config('dissemination.fact_tables');
+        $factTables = config('dissemination.fact_tables', []);
         return view('manage.dimension.create', compact('factTables'));
     }
 
