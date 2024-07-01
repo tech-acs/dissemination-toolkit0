@@ -53,6 +53,6 @@ trait DatasetTrait
             ->all();
         $this->nextSelection = 'geography';
 
-        $this->dispatch('selectionMade', $this->makeReadableDataParams('dataset', $dataset->name));
+        $this->dispatch('dataShaperSelectionMade', $this->makeReadableDataParams('dataset', $dataset->name));
     }
 }

@@ -148,6 +148,6 @@ class AreaSpreadsheetImporter extends Component
 
     public function render()
     {
-        return view('scaffold::livewire.area-spreadsheet-importer');
+        return view('livewire.area-spreadsheet-importer');
     }
 }

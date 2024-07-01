@@ -6,11 +6,8 @@ export default class ChartEmbedUI extends Plugin {
     init() {
         const editor = this.editor;
         const t = editor.t;
-        const chartList = [
-            {name: 'Avg household size', id: 43},
-            {name: 'Pop dist by broad age group', id: 48},
-            {name: 'Population pyramid', id: 45}
-        ];
+
+        const chartList = this.editor.config.get('chartList')
 
         editor.ui.componentFactory.add( 'chartEmbed', locale => {
             const dropdownView = createDropdown( locale )
@@ -43,8 +40,9 @@ function getDropdownItemsDefinitions( charts ) {
         const definition = {
             type: 'button',
             model: new ViewModel( {
-                commandParam: chart.id,
-                label: chart.name,
+                //commandParam: chart.id,
+                commandParam: chart,
+                label: `${chart.name} (${chart.type})`,
                 withText: true
             } )
         };

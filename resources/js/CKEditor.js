@@ -125,6 +125,7 @@ ClassicEditor.defaultConfig = {
                 hasChanged: false
             };
         }
-    }
+    },
+    chartList: []
 };
 

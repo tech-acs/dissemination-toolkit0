@@ -2,7 +2,7 @@ import { Command } from '@ckeditor/ckeditor5-core';
 
 export default class ChartEmbedCommand extends Command {
     execute(commandParam) {
-        console.log({commandParam})
+        //console.log({commandParam})
         const editor = this.editor;
         const selection = editor.model.document.selection;
 
@@ -10,7 +10,9 @@ export default class ChartEmbedCommand extends Command {
             const externalWidget = writer.createElement(
                 'chartEmbedElement', {
                     ...Object.fromEntries( selection.getAttributes() ),
-                    'indicator-id': commandParam.value
+                    'id': `viz-${commandParam.value.id}`,
+                    'viz-id': commandParam.value.id,
+                    'type': commandParam.value.type
                 }
             );
 

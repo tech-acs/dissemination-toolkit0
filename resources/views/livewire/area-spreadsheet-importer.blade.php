@@ -34,10 +34,10 @@
                         </label>
                         <input type="file" id="spreadsheet" name="spreadsheet" wire:model="spreadsheet" onchange="document.getElementById('file_label').innerText=this.files[0].name;" class="hidden">
                         @if ($fileAccepted)
-                            <x-scaffold::icon.accepted />
+                            <x-icon.accepted />
                         @endif
                         @if($errors->has('spreadsheet'))
-                            <x-scaffold::icon.rejected />
+                            <x-icon.rejected />
                         @endif
                     </div>
                 </div>

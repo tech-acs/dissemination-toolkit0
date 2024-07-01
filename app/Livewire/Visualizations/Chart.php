@@ -3,7 +3,8 @@
 namespace App\Livewire\Visualizations;
 
 use App\Livewire\Visualization;
-use Livewire\Attributes\Computed;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Livewire\Attributes\On;
 
 class Chart extends Visualization
@@ -13,36 +14,54 @@ class Chart extends Visualization
         'displaylogo' => false,
         'modeBarButtonsToRemove' => ['select2d', 'lasso2d', 'autoScale2d', 'hoverClosestCartesian', 'hoverCompareCartesian'],
     ];
-    public array $traces = [];
+    public array $config;
 
-    public function makeTraces(): array
+    public function mount(): void
     {
-
+        parent::mount();
+        $this->config = $this->makeConfig();
     }
 
-    #[Computed]
-    public function config(): array
+    public function makeTraces(Collection $rawData): array
     {
-        $dynamicOptions = ['toImageButtonOptions' => ['filename' => $this->htmlId . ' (' . now()->toDayDateTimeString() . ')'], 'locale' => app()->getLocale(),];
+        $traces = $this->data;
+        $data = toDataFrame($rawData);
+        //logger('dump', ['traces' => $traces, 'df' => $data]);
+        if ($data->isNotEmpty()) {
+            foreach ($traces as $index => $trace) {
+                $columnNames = Arr::get($trace, 'meta.columnNames', null);
+                if ($columnNames) {
+                    $traces[$index]['x'] = $data[$columnNames['x']] ?? null;
+                    $traces[$index]['y'] = $data[$columnNames['y']] ?? null;
+                }
+            }
+        } else {
+            $traces = [];
+        }
+        return $traces;
+    }
+
+    public function makeConfig(): array
+    {
+        $dynamicOptions = ['toImageButtonOptions' => ['filename' => $this->htmlId . ' (' . now()->toDayDateTimeString() . ')'], 'locale' => app()->getLocale()];
         return array_merge(self::DEFAULT_CONFIG, $dynamicOptions);
     }
 
-    #[On('changeOccurred')]
-    public function reactToChanges($data, $indicatorName, $dataParams): void
+    public function preparePayload(array $rawData = []): void
     {
-        $this->data = $data;
-        $this->options = array_replace_recursive($this::DEFAULT_OPTIONS, $this->options, []);
-        $this->preparePayload();
-        $this->dispatch("updateChart.$this->htmlId", $this->traces, $this->options);
+        $this->data = $this->makeTraces(collect($rawData));
+    }
+
+    #[On('changeOccurred')]
+    public function reactToChanges(array $rawData, string $indicatorName, array $dataParams): void
+    {
+        //$this->layout = array_replace_recursive($this::DEFAULT_OPTIONS, $this->layout, []);
+        $this->preparePayload($rawData);
+        $this->dispatch("updateChart.$this->htmlId", $this->data, $this->layout);
     }
 
     public function render()
     {
         return view('livewire.visualizations.chart');
-    }
-
-    public function preparePayload(): void
-    {
-        // TODO: Implement preparePayload() method.
     }
 }

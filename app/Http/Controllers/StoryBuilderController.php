@@ -6,8 +6,6 @@ use App\Models\Indicator;
 use App\Models\Story;
 use App\Models\Visualization;
 use App\Models\Topic;
-use App\Service\StoryHtmlDumper;
-use App\Service\VisualizationTypeEnum;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -16,16 +14,17 @@ class StoryBuilderController extends Controller
     public function edit(Story $story)
     {
         $baseUrl = config('app.url');
-        $indicators = Indicator::all();
-        /*$indicators = collect([
-            [
-                'id' => 5,
-                'title' => 'Indicator One',
-                'data' => ['x' => [1, 2, 3, 4, 5], 'y' => [1, 2, 4, 8, 16]],
-                'layout' => []
-            ]
-        ]);*/
-        return view('manage.story.builder', compact('story', 'indicators', 'baseUrl'));
+        $visualizations = Visualization::orderBy('livewire_component')
+            ->published()
+            ->get()
+            ->map(function (Visualization $visualization) {
+                return [
+                    'id' => $visualization->id,
+                    'name' => $visualization->title,
+                    'type' => $visualization->type,
+                ];
+            })->all();
+        return view('manage.story.builder', compact('story', 'visualizations', 'baseUrl'));
     }
 
     public function update(Request $request, $id)

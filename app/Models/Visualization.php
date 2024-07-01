@@ -18,9 +18,10 @@ class Visualization extends Model
     protected $guarded = ['id'];
     public array $translatable = ['title', 'description'];
     protected $casts = [
-        //'published' => 'boolean',
         'data_params' => 'array',
-        'options' => 'array'
+        'data' => 'array',
+        'layout' => 'array',
+        'options' => 'array',
     ];
 
     public function embedCode()
@@ -51,10 +52,18 @@ class Visualization extends Model
         return $this->belongsTo(User::class);
     }
 
+    protected function type(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => class_basename($this->livewire_component),
+        );
+    }
+
     public function getIsOwnerAttribute()
     {
         return $this->user()->is(auth()->user());
     }
+
     public function scopePublished($query)
     {
         return $query->where('published', true);

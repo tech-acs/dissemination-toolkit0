@@ -1,8 +1,8 @@
 <?php
 
-namespace Uneca\Scaffold\Http\Livewire;
+namespace App\Livewire;
 
-use Uneca\Scaffold\Jobs\BulkInvitationJob;
+use App\Jobs\BulkInvitationJob;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -67,6 +67,6 @@ class BulkInviter extends Component
 
     public function render()
     {
-        return view('scaffold::livewire.bulk-inviter');
+        return view('livewire.bulk-inviter');
     }
 }

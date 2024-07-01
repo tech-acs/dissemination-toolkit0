@@ -32,7 +32,7 @@ trait GeographyTrait
         $this->reset('selectedGeographies');
         $this->nextSelection = 'year';
         //unset($this->showfetchGeographicalChildren);
-        $this->dispatch('selectionMade', $this->makeReadableDataParams('geography', (new AreaTree)->hierarchies[$level]));
+        $this->dispatch('dataShaperSelectionMade', $this->makeReadableDataParams('geography', (new AreaTree)->hierarchies[$level]));
     }
 
     public function updatedSelectedGeographies($geographyId): void

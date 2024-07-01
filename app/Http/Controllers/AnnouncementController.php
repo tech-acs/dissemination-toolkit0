@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Http\Requests\AnnouncementRequest;
 use App\Models\Announcement;
@@ -15,8 +14,8 @@ class AnnouncementController extends Controller
 {
     public function index()
     {
-        $records = Announcement::paginate(config('scaffold.records_per_page'));
-        return view('scaffold::announcement.index', compact('records'));
+        $records = Announcement::paginate(config('dissemination.records_per_page'));
+        return view('announcement.index', compact('records'));
     }
 
     private function recipientsList()
@@ -31,7 +30,7 @@ class AnnouncementController extends Controller
     public function create()
     {
         $recipients = $this->recipientsList();
-        return view('scaffold::announcement.create', compact('recipients'));
+        return view('announcement.create', compact('recipients'));
     }
 
     public function store(AnnouncementRequest $request)

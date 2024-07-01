@@ -61,7 +61,7 @@
         </div>
     </div>
     <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-        <x-secondary-button class="mr-2"><a href="">{{ __('Cancel') }}</a></x-secondary-button>
+        <x-secondary-button class="mr-2"><a href="{{ route('manage.visualization.index') }}">{{ __('Cancel') }}</a></x-secondary-button>
         <x-button>{{ __('Submit') }}</x-button>
     </div>
 </div>

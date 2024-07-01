@@ -49,6 +49,6 @@ class AreaRestrictionManager extends AreaFilter
 
     public function render()
     {
-        return view('scaffold::livewire.area-restriction-manager');
+        return view('livewire.area-restriction-manager');
     }
 }

@@ -42,13 +42,6 @@ class VisualizationBuilder extends Component
     public bool $showSaveNotification = false;
     public array $dataShaperSelections = [];
 
-    public array $state = [
-        'step' => 'step1',
-        'step1' => ['selections' => [], 'dataParams' => []],
-        'step2' => ['type' => 'table', 'options' => []],
-        'step3' => ['title' => '', 'description' => '', 'topicId' => null, 'tags' => []],
-    ];
-
     public function mount()
     {
         $this->topics = Topic::all();
@@ -56,7 +49,7 @@ class VisualizationBuilder extends Component
         $this->updateLayout();
     }
 
-    #[On('selectionMade')]
+    #[On('dataShaperSelectionMade')]
     public function dataShaperSelectionMade(array $selection)
     {
         $this->dataShaperSelections = $selection;
@@ -92,9 +85,9 @@ class VisualizationBuilder extends Component
     }
 
     #[On('changeOccurred')]
-    public function dataParamsUpdated(array $data, array $dataParams): void
+    public function dataParamsUpdated(array $rawData, array $dataParams): void
     {
-        $this->data = $data;
+        $this->data = $rawData;
         $this->hasData = ! empty($data);
         $this->dataParams = $dataParams;
     }

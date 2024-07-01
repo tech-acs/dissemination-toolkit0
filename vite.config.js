@@ -12,9 +12,8 @@ export default defineConfig({
                 'resources/css/app.css',
                 'resources/js/app.js',
 
-                'resources/css/table.css',
-
                 'resources/css/content-styles.css',
+                'resources/css/grid.css',
 
                 'resources/js/ChartEditor/index.jsx',
             ],

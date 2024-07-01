@@ -7,16 +7,12 @@ use Livewire\Component;
 
 class StateRecorder extends Component
 {
-    #[On('selectionMade')]
-    public function recordSelection()
-    {
-
-    }
-
     #[On('changeOccurred')]
-    public function recordChange()
+    public function recordChange(array $rawData, string $indicatorName, array $dataParams)
     {
-
+        session()->put('step1.data', $rawData);
+        session()->put('step1.indicatorName', $indicatorName);
+        session()->put('step1.dataParams', $dataParams);
     }
 
     public function render()

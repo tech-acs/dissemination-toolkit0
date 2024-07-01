@@ -18,15 +18,15 @@ class DataExplorer extends Component
     public array $dataShaperSelections = [];
 
     #[On('changeOccurred')]
-    public function dataShaperUpdated(array $data, string $indicatorName, array $dataParams)
+    public function dataShaperUpdated(array $rawData, string $indicatorName, array $dataParams)
     {
-        $this->data = $data;
+        $this->data = $rawData;
         $this->indicatorName = $indicatorName;
         $this->dataParams = $dataParams;
         $this->hasData = ! empty($this->data);
     }
 
-    #[On('selectionMade')]
+    #[On('dataShaperSelectionMade')]
     public function dataShaperSelectionMade(array $selection)
     {
         $this->dataShaperSelections = $selection;

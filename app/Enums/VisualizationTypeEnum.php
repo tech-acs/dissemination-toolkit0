@@ -23,6 +23,14 @@ enum VisualizationTypeEnum
             ->map(fn (VisualizationTypeEnum $vizType) => $vizType->details());
     }
 
+    public static function componentFromName(string $name)
+    {
+        return self::all()
+            ->first(function ($vizType) use ($name) {
+                return $vizType['name'] == $name;
+            });
+    }
+
     public function details(): array
     {
         return match ($this) {
@@ -36,7 +44,7 @@ enum VisualizationTypeEnum
 
             self::CHART => [
                 'type' => 'Chart',
-                'name' => 'Plotly chart',
+                'name' => 'Chart',
                 'rank' => 1,
                 'component' => Chart::class,
                 'icon' => '<svg fill="currentColor" preserveAspectRatio="xMidYMid meet" viewBox="0 0 46 46">

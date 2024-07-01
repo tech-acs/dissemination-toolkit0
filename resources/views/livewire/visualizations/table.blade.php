@@ -8,8 +8,8 @@
         x-data="{ table: null }"
         x-init="table = new AgGridTable('{{ $htmlId }}')"
         x-intersect="table.resize()"
-        data-options='@json($options)'
         class="ag-theme-quartz w-full h-[calc(60vh)]"
+        data-options='@json($options)'
         wire:ignore
     >
         <div class="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 py-32 text-center focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">

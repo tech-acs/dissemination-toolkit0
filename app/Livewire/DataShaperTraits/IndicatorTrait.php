@@ -16,6 +16,6 @@ trait IndicatorTrait {
         $this->datasets = $indicator->datasets->all();
         $this->nextSelection = 'dataset';
 
-        $this->dispatch('selectionMade', $this->makeReadableDataParams('indicator', $indicator->name));
+        $this->dispatch('dataShaperSelectionMade', $this->makeReadableDataParams('indicator', $indicator->name));
     }
 }

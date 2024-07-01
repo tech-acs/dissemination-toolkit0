@@ -1,3 +1,7 @@
+@push('styles')
+    @vite(['resources/css/grid.css'])
+@endpush
+
 <x-app-layout>
     <div class="container mx-auto py-12">
 
@@ -19,8 +23,10 @@
                 editor: null,
                 storyId: @json($story->id),
                 storyHtml: @json($story->html),
+                chartList: @json($visualizations),
 
                 init() {
+                    ClassicEditor.defaultConfig.chartList = this.chartList
                     ClassicEditor
                         // Note that you do not have to specify the plugin and toolbar configuration — using defaults from the build.
                         .create(document.querySelector('#story-editor'))

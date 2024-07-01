@@ -8,7 +8,7 @@
                 <livewire:geographical-area-filter :dataParams="$visualization->data_params" />
             @endif--}}
 
-            @livewire($visualization->livewire_component, ['vizId' => $visualization->id])
+            <livewire:visualizer :designated-component="$visualization->livewire_component" :viz-id="$visualization->id" />
 
         </main>
 

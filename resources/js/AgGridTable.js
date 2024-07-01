@@ -4,16 +4,34 @@ export default class AgGridTable {
     id;
     rootElement;
     table;
+    options;
+
+    async fetchData(vizId) {
+        const response = await axios.get(`/api/visualization/${vizId}`);
+        console.log('Fetched table via axios:', response.data);
+        this.options = response.data.options;
+    }
 
     constructor(htmlId) {
         this.id = htmlId
         this.rootElement = document.getElementById(htmlId)
-        let options = JSON.parse(this.rootElement.dataset['options'])
-        if (options.rowData.length > 0) {
-            this.rootElement.innerHTML = ''
-            this.table = createGrid(this.rootElement, options);
+        this.rootElement.classList.add(...['ag-theme-quartz', 'w-full', 'h-[calc(60vh)]']);
+        const vizId = this.rootElement.getAttribute('viz-id')
+
+        this.rootElement.innerHTML = ''
+        if (vizId) {
+            this.fetchData(vizId)
+                .then(() => {
+                    this.table = createGrid(this.rootElement, this.options);
+                })
+        } else {
+            this.options = JSON.parse(this.rootElement.dataset['options'])
+            if (this.options?.rowData?.length > 0) {
+                this.table = createGrid(this.rootElement, this.options);
+            }
         }
-        console.log({htmlId, options, table: this.table})
+
+        console.log({htmlId, options: this.options})
         this.registerLivewireEventListeners();
     }
 

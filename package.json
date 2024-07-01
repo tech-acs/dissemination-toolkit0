@@ -48,6 +48,7 @@
         "plotly.js-dist": "^2.33.0",
         "plotly.js-locales": "^2.33.0",
         "postcss": "^8.4.32",
+
         "react": "^16.14.0",
         "react-chart-editor": "^0.46.1",
         "react-dom": "^16.14.0",

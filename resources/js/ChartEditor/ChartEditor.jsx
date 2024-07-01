@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import plotly from 'plotly.js-dist';
 import PlotlyEditor from 'react-chart-editor';
 import 'react-chart-editor/lib/react-chart-editor.css';
@@ -10,22 +10,24 @@ import fr from 'plotly.js-locales/fr';
 import ptPT from 'plotly.js-locales/pt-pt';
 import {cloneDeep} from "lodash";
 
-function ChartEditor({dataSources, initialData, initialLayout, config, indicatorId, indicatorTitle, defaultLayout}) {
+function ChartEditor({dataSources, initialData, initialLayout, config, vizId, indicatorTitle, defaultLayout}) {
     const [data, setData] = useState(initialData);
     const [layout, setLayout] = useState(initialLayout);
     const [frames, setFrames] = useState([]);
-    const [notification, setNotification] = useState({});
+    /*const [notification, setNotification] = useState({});*/
 
     const updateState = (data, layout, frames) => {
         setData(data);
         setLayout(layout);
         setFrames(frames);
+
+        writeToTransporterFormElements();
     };
 
     const stripData = (original) => {
         const dataStrippedData = cloneDeep(original);
         dataStrippedData.forEach((trace, index) => {
-            if (trace.meta.columnNames) {
+            if (trace.meta?.columnNames) {
                 const propertiesToRemove = Object.keys(trace.meta.columnNames);
                 propertiesToRemove.forEach(property => {
                     delete dataStrippedData[index][property];
@@ -35,18 +37,19 @@ function ChartEditor({dataSources, initialData, initialLayout, config, indicator
         return dataStrippedData;
     }
 
+    const writeToTransporterFormElements = () => {
+        console.log(data, layout)
+        //const dataStrippedData = stripData(data)
+        const chartData = document.getElementById('chart-data')
+        chartData.value = JSON.stringify(data);
+        const chartLayout = document.getElementById('chart-layout')
+        chartLayout.value = JSON.stringify(layout);
+    };
+
     const save = async () => {
         const dataStrippedData = stripData(data);
-        const response = await axios.post(`/manage/developer/api/indicator/${indicatorId}`, { data: dataStrippedData, layout }, {validateStatus: () => true});
-        console.log('Saving: (traces, layout, response.status, response.data)', dataStrippedData, layout, response.status, response.data);
-        if (response.status === 200) {
-            setNotification({color: "green", icon: SuccessIcon, text: "Successfully saved"})
-        } else {
-            setNotification({color: "red", icon: ErrorIcon, text: "Error: " + response.data.message});
-        }
-        setTimeout(() => {
-            setNotification({})
-        },5000)
+        const response = await axios.post('/manage/viz-builder-wizard/api/put', { data: dataStrippedData, layout }, {validateStatus: () => true});
+        console.log({dataStrippedData, layout, responseStatus: response.status, responseData: response.data});
     };
 
     const reset = () => {
@@ -105,7 +108,7 @@ function ChartEditor({dataSources, initialData, initialLayout, config, indicator
 
     return (
         <>
-            <div className="flex justify-between w-full bg-gray-50">
+            {/*<div className="flex justify-between w-full bg-gray-50">
                 <div className="text-gray-600 text-xl font-medium items-center p-3 w-1/4 xl:w-1/3 2xl:w-1/2 truncate">{indicatorTitle}</div>
                 <div className="flex justify-end gap-x-4 p-3">
                     <div className="flex items-center text-nowrap font-medium mr-8"
@@ -119,7 +122,7 @@ function ChartEditor({dataSources, initialData, initialLayout, config, indicator
                     <Button label="Save" clickHandler={save} icon={SaveIcon}
                             colorClasses="bg-teal-600 hover:bg-teal-500 focus:ring-teal-500"/>
                 </div>
-            </div>
+            </div>*/}
 
             <PlotlyEditor
                 data={data}
@@ -134,7 +137,7 @@ function ChartEditor({dataSources, initialData, initialLayout, config, indicator
                 plotly={plotly}
                 onUpdate={updateState}
                 locale={config.locale}
-                dictionaries={{ fr: { "Vertical": "Verticale", "Type": "Le genre" } }}
+                dictionaries={{fr: {"Vertical": "Verticale", "Type": "Le genre"}}}
                 useResizeHandler
                 debug={true}
                 advancedTraceTypeSelector={true}

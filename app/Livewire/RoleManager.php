@@ -116,6 +116,6 @@ class RoleManager extends Component
 
     public function render()
     {
-        return view('scaffold::livewire.role-manager');
+        return view('livewire.role-manager');
     }
 }

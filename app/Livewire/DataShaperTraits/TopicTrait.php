@@ -22,6 +22,6 @@ trait TopicTrait {
         $this->indicators = $topic?->indicators->pluck('name', 'id')->all() ?? [];
         $this->nextSelection = 'indicator';
 
-        $this->dispatch('selectionMade', $this->makeReadableDataParams('topic', $topic->name));
+        $this->dispatch('dataShaperSelectionMade', $this->makeReadableDataParams('topic', $topic->name));
     }
 }

@@ -12,9 +12,11 @@ abstract class Visualization extends Component
     public const EDITABLE_OPTIONS = [];
 
     public string $htmlId;
-    public ?int $vizId;
+    public array $rawData = [];
     public array $data = [];
+    public array $layout = [];
     public array $options = [];
+    public ?int $vizId = null;
 
     /*protected function getListeners(): array
     {
@@ -24,19 +26,21 @@ abstract class Visualization extends Component
         ];
     }*/
 
-    public function mount(int $vizId = null): void
+    public function mount(): void
     {
         $this->htmlId = 'viz-' . str()->random(5);
 
-        if ($vizId) {
-            $visualization = \App\Models\Visualization::find($vizId);
+        if ($this->vizId) {
+            $visualization = \App\Models\Visualization::find($this->vizId);
+            $this->data = $visualization->data;
+            $this->layout = $visualization->layout;
             $this->options = $visualization->options;
             $query = new QueryBuilder($visualization->data_params);
-            $this->data = Sorter::sort($query->get())->all();
+            $this->rawData = Sorter::sort($query->get())->all();
         }
-        $this->options = array_replace_recursive($this::DEFAULT_OPTIONS, $this->options);
-        $this->preparePayload();
-        //dump('At mount', $this->data, $this->options);
+        if (! empty($this->rawData)) {
+            $this->preparePayload($this->rawData);
+        }
     }
 
     /*#[On('thumbnailCaptureRequested')]
@@ -45,7 +49,7 @@ abstract class Visualization extends Component
         $this->dispatch("captureThumbnail.$this->visualizationId", $name);
     }*/
 
-    abstract public function reactToChanges($data, $indicatorName, $dataParams);
+    abstract public function reactToChanges(array $rawData, string $indicatorName, array $dataParams);
 
-    abstract public function preparePayload(): void;
+    abstract public function preparePayload(array $rawData = []): void;
 }

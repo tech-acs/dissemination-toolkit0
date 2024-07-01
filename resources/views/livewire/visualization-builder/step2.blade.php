@@ -18,7 +18,6 @@
     </div>
 
     <div class="flex w-full">
-
         @if ($livewireComponent === App\Livewire\Visualizations\Chart::class)
 
             <div class="relative pr-3" style="height: calc(100vh - 210px);">

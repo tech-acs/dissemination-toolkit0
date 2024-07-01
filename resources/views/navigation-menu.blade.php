@@ -51,9 +51,9 @@
                                     <x-dropdown-link class="px-6" href="{{ route('manage.role.index') }}">{{ __('Roles') }}</x-dropdown-link>
                                     <div class="border-t border-gray-100"></div>
                                     <div class="block px-4 py-2 text-xs text-gray-400">{{ __('Core Configuration') }}</div>
-                                    {{--<x-dropdown-link class="px-6" href="{{route('developer.source.index')}}">{{ __('Sources') }}</x-dropdown-link>
-                                    <x-dropdown-link class="px-6" href="{{route('developer.area-hierarchy.index')}}">{{ __('Area Hierarchy') }}</x-dropdown-link>
-                                    <x-dropdown-link class="px-6" href="{{ route('developer.area.index') }}">{{ __('Areas') }}</x-dropdown-link>--}}
+                                    {{--<x-dropdown-link class="px-6" href="{{route('developer.source.index')}}">{{ __('Sources') }}</x-dropdown-link>--}}
+                                    <x-dropdown-link class="px-6" href="{{route('manage.area-hierarchy.index')}}">{{ __('Area Hierarchy') }}</x-dropdown-link>
+                                    <x-dropdown-link class="px-6" href="{{ route('manage.area.index') }}">{{ __('Areas') }}</x-dropdown-link>
                                     <div class="border-t border-gray-100"></div>
                                     {{--<div class="block px-4 py-2 text-xs text-gray-400">{{ __('Data') }}</div>
                                     <x-dropdown-link class="px-6" href="{{ route('manage.topic.index') }}">{{ __('Topics') }}</x-dropdown-link>
@@ -66,10 +66,10 @@
                                     <div class="block px-4 py-2 text-xs text-gray-400">{{ __('Dissemination') }}</div>
                                     <x-dropdown-link class="px-6" href="{{ route('manage.organization.edit') }}">{{ __('Organization') }}</x-dropdown-link>
                                     <x-dropdown-link class="px-6" href="{{ route('manage.tag.index') }}">{{ __('Tags') }}</x-dropdown-link>
-                                    <div class="border-t border-gray-100"></div>
+                                    {{--<div class="border-t border-gray-100"></div>
                                     <div class="block px-4 py-2 text-xs text-gray-400">{{ __('Templates') }}</div>
                                     <x-dropdown-link class="px-6" href="{{ route('manage.templates.visualization.index') }}">{{ __('Visualizations') }}</x-dropdown-link>
-                                    <x-dropdown-link class="px-6" href="{{ route('manage.templates.story.index') }}">{{ __('Stories') }}</x-dropdown-link>
+                                    <x-dropdown-link class="px-6" href="{{ route('manage.templates.story.index') }}">{{ __('Stories') }}</x-dropdown-link>--}}
                                     {{-- <x-dropdown-link class="px-6" href="{{ route('manage.story.index') }}">{{ __('Stories Store') }}</x-dropdown-link> --}}
                                     <div class="border-t border-gray-100"></div>
                                     <x-dropdown-link href="{{route('manage.announcement.index')}}">{{ __('Announcements') }}</x-dropdown-link>

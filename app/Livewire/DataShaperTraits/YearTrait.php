@@ -13,6 +13,6 @@ trait YearTrait {
     {
         $this->nextSelection = 'dimension';
 
-        $this->dispatch('selectionMade', $this->makeReadableDataParams('years', Year::find($this->selectedYears)->pluck('name')->join(', ', ' and ')));
+        $this->dispatch('dataShaperSelectionMade', $this->makeReadableDataParams('years', Year::find($this->selectedYears)->pluck('name')->join(', ', ' and ')));
     }
 }

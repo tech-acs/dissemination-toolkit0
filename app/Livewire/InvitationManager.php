@@ -2,8 +2,8 @@
 
 namespace App\Livewire;
 
-use Uneca\Scaffold\Mail\InvitationMail;
-use Uneca\Scaffold\Models\Invitation;
+use App\Mail\InvitationMail;
+use App\Models\Invitation;
 use Exception;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
@@ -115,6 +115,6 @@ class InvitationManager extends Component
 
     public function render()
     {
-        return view('scaffold::livewire.invitation-manager');
+        return view('livewire.invitation-manager');
     }
 }

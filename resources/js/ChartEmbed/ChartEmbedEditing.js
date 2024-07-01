@@ -23,7 +23,7 @@ export default class ChartEmbedEditing extends Plugin {
 
         schema.register( 'chartEmbedElement', {
             inheritAllFrom: '$inlineObject',
-            allowAttributes: [ 'indicator-id', 'id', 'x-data', 'x-init' ]
+            allowAttributes: [ 'id', 'viz-id', 'type', 'x-data', 'x-init' ]
         } );
     }
 
@@ -32,14 +32,14 @@ export default class ChartEmbedEditing extends Plugin {
 
         editor.conversion.for( 'upcast' ).elementToElement( {
             view: {
-                name: 'span',
-                attributes: [ 'indicator-id' ]
+                name: 'div',
+                attributes: [ 'id', 'viz-id', 'x-init', 'type' ]
             },
             model: ( viewElement, { writer } ) => {
-                const externalUrl = viewElement.getAttribute( 'indicator-id' );
-
                 return writer.createElement( 'chartEmbedElement', {
-                    'indicator-id': externalUrl
+                    'id': viewElement.getAttribute( 'id' ),
+                    'viz-id': viewElement.getAttribute( 'viz-id' ),
+                    'type': viewElement.getAttribute( 'type' )
                 } );
             }
         } );
@@ -47,8 +47,21 @@ export default class ChartEmbedEditing extends Plugin {
         editor.conversion.for( 'dataDowncast' ).elementToElement( {
             model: 'chartEmbedElement',
             view: ( modelElement, { writer } ) => {
-                return writer.createEmptyElement( 'span', {
-                    'indicator-id': modelElement.getAttribute( 'indicator-id' )
+                let id = modelElement.getAttribute('id')
+                let vizType = modelElement.getAttribute('type')
+
+                let vizInit
+                if (vizType === 'Chart') {
+                    vizInit = `new PlotlyChart('${id}')`
+                } else if (vizType === 'Table') {
+                    vizInit = `new AgGridTable('${id}')`
+                }
+
+                return writer.createEmptyElement( 'div', {
+                    'id': id,
+                    'viz-id': modelElement.getAttribute('viz-id'),
+                    'type': vizType,
+                    'x-init': vizInit
                 } );
             }
         } );
@@ -56,17 +69,28 @@ export default class ChartEmbedEditing extends Plugin {
         editor.conversion.for( 'editingDowncast' ).elementToElement( {
             model: 'chartEmbedElement',
             view: ( modelElement, { writer } ) => {
+                let id = modelElement.getAttribute('id')
+                let vizType = modelElement.getAttribute('type')
 
-                const externalDataPreviewElement = writer.createRawElement( 'div', {id: 'chart', 'indicator-id': modelElement.getAttribute('indicator-id')}, function( domElement ) {
-                    //domElement.classList.add( 'external-data-widget' );
+                let vizInit
+                if (vizType === 'Chart') {
+                    vizInit = `new PlotlyChart('${id}')`
+                } else if (vizType === 'Table') {
+                    vizInit = `new AgGridTable('${id}')`
+                }
 
-                } );
+                const vizRootElement = writer.createRawElement(
+                    'div',
+                    {id: id, 'viz-id': modelElement.getAttribute('viz-id')}
+                );
 
-                const externalWidgetContainer = writer.createContainerElement( 'div', {class: '', 'x-data': '{}', 'x-init': "new PlotlyChart('chart')"}, externalDataPreviewElement );
+                const vizContainer = writer.createContainerElement(
+                    'div',
+                    {'x-init': vizInit},
+                    vizRootElement
+                );
 
-                return toWidget( externalWidgetContainer, writer, {
-                    label: 'External widget'
-                } );
+                return toWidget( vizContainer, writer);
             }
         } );
     }

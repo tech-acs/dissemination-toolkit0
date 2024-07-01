@@ -42,7 +42,8 @@ class DataShaper extends Component
     {
         $this->reset();
         $this->topics = Topic::has('indicators')->pluck('name', 'id')->all();
-        $this->dispatch('selectionMade', $this->makeReadableDataParams('reset', ''));
+        $this->dispatch('dataShaperSelectionMade', $this->makeReadableDataParams('reset', ''));
+
     }
 
     private function prefillIndicator(?int $id): void
@@ -190,7 +191,7 @@ class DataShaper extends Component
             $query = new QueryBuilder($queryParameters);
             $this->dispatch(
                 "changeOccurred",
-                data: Sorter::sort($query->get()),
+                rawData: Sorter::sort($query->get()),
                 indicatorName: $this->makeIndicatorName(),
                 dataParams: $queryParameters
             );

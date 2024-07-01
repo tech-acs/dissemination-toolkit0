@@ -29,10 +29,10 @@
                         </label>
                         <input type="file" id="file" name="file" wire:model="file" onchange="document.getElementById('file_label').innerText=this.files[0].name;" class="hidden">
                         @if ($fileAccepted)
-                            <x-scaffold::icon.accepted />
+                            <x-icon.accepted />
                         @endif
                         @if($errors->has('file'))
-                            <x-scaffold::icon.rejected />
+                            <x-icon.rejected />
                         @endif
                     </div>
                 </div>

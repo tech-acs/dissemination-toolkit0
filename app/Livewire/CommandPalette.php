@@ -37,6 +37,6 @@ class CommandPalette extends Component
         }
         $this->resultCount = $results->count();
         $this->activeResult = 0;
-        return view('scaffold::livewire.command-palette', compact('results'));
+        return view('livewire.command-palette', compact('results'));
     }
 }

@@ -26,23 +26,23 @@
 
                 <div class="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 md:gap-4 mt-6">
                     @forelse($records as $record)
-                            <div class="group w-full rounded-md bg-white shadow-md ring-1 ring-indigo-300 hover:bg-indigo-50 hover:ring-indigo-500 hover:ring-2">
-                                <a href="{{ route('visualization.show', $record->id) }}" class="group-hover:bg-indigo-50 rounded-md grid grid-cols-3">
-                                    <div class="overflow-hidden flex justify-center items-center text-indigo-300">
-                                        @if($record->type === 'Table')
-                                            <x-icon.table class="w-2/3 group-hover:text-indigo-500"/>
-                                        @elseif($record->type === 'ChartEmbed')
-                                            <x-icon.chart class="w-2/3 group-hover:text-indigo-500" url="{{$record->id}}"/>
-                                        @elseif($record->type === 'Map')
-                                            <x-icon.map class="w-2/3 group-hover:text-indigo-500" url="{{$record->id}}"/>
-                                        @endif
-                                    </div>
-                                    <div class="py-2 px-3 cursor-pointer flex-col flex overflow-hidden pb-5 col-span-2">
-                                        <h5 class="line-clamp-2 text-lg text-indigo-900 font-semibold">{{ $record->title }}</h5>
-                                        <p class="line-clamp-3 text-sm text-gray-500 font-normal leading-5">{{ $record->description }}</p>
-                                    </div>
-                                </a>
-                            </div>
+                        <div class="group w-full rounded-md bg-white shadow-md ring-1 ring-indigo-300 hover:bg-indigo-50 hover:ring-indigo-500 hover:ring-2">
+                            <a href="{{ route('visualization.show', $record->id) }}" class="group-hover:bg-indigo-50 rounded-md grid grid-cols-3">
+                                <div class="overflow-hidden flex justify-center items-center text-indigo-300">
+                                    @if($record->type === 'Table')
+                                        <x-icon.table class="w-2/3 group-hover:text-indigo-500"/>
+                                    @elseif($record->type === 'ChartEmbed')
+                                        <x-icon.chart class="w-2/3 group-hover:text-indigo-500" url="{{$record->id}}"/>
+                                    @elseif($record->type === 'Map')
+                                        <x-icon.map class="w-2/3 group-hover:text-indigo-500" url="{{$record->id}}"/>
+                                    @endif
+                                </div>
+                                <div class="py-2 px-3 cursor-pointer flex-col flex overflow-hidden pb-5 col-span-2">
+                                    <h5 class="line-clamp-2 text-lg text-indigo-900 font-semibold">{{ $record->title }}</h5>
+                                    <p class="line-clamp-3 text-sm text-gray-500 font-normal leading-5">{{ $record->description }}</p>
+                                </div>
+                            </a>
+                        </div>
                     @empty
                         <div class="col-span-3 flex justify-center items-center py-6 mb-8">
                             <div class="text-center text-3xl p-4 text-gray-500">

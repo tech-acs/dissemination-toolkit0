@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\AreaController;
+use App\Http\Controllers\AreaHierarchyController;
 use App\Http\Controllers\Guest\LandingController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\RoleController;
@@ -23,7 +25,8 @@ Route::middleware(['web'])->group(function () {
     Route::view('contact', 'guest.contact')->name('contact');
     Route::get('renderer/visualization/{visualization}', \App\Http\Controllers\Guest\RendererController::class);
     Route::get('notification', NotificationController::class)->name('notification.index');
-    Route::get('api/indicator/{indicator}', [\App\Http\Controllers\Guest\IndicatorAjaxController::class, 'show']);
+    Route::get('api/visualization/{visualization}', [\App\Http\Controllers\Guest\VizAjaxController::class, 'show']);
+    Route::get('api/visualization', [\App\Http\Controllers\Guest\VizAjaxController::class, 'index']);
 
     Route::middleware(['auth:sanctum', 'verified', 'enforce_2fa'])->prefix('manage')->name('manage.')->group(function () {
         Route::get('/home', \App\Http\Controllers\AuthHomeController::class)->name('home');
@@ -45,6 +48,20 @@ Route::middleware(['web'])->group(function () {
         Route::get('story/{story}/duplicate', \App\Http\Controllers\StoryDuplicationController::class)->name('story.duplicate');
         Route::resource('story', \App\Http\Controllers\StoryController::class);
 
+        Route::controller(\App\Http\Controllers\VizBuilderWizardController::class)->group(function () {
+            Route::get('viz-builder-wizard/{currentStep}', 'show')
+                ->whereIn('currentStep', [1, 2, 3])
+                ->name('viz-builder-wizard.show.{currentStep}');
+            Route::post('viz-builder-wizard/{currentStep}', 'update')
+                ->whereIn('currentStep', [1, 2, 3])
+                ->name('viz-builder-wizard.update.{currentStep}');
+        });
+        Route::post('viz-builder-wizard/api/put', [\App\Http\Controllers\VizBuilderWizardController::class, 'ajaxSaveChart']);
+        Route::get('viz-builder-wizard/api/get', [\App\Http\Controllers\VizBuilderWizardController::class, 'ajaxGetChart']);
+
+        /*Route::get('viz-builder-wizard/{step}', \App\Http\Controllers\VizBuilderWizardController::class)
+            ->whereIn('step', ['step1-data', 'step2-viz', 'step3-save']);*/
+
         Route::resource('story-builder', \App\Http\Controllers\StoryBuilderController::class)->parameters(['story-builder' => 'story'])->only(['edit', 'update']);
 
         /*Route::get('story/builder/{story}/edit', [\App\Http\Controllers\StoryBuilderController::class, 'edit'])->name('story.builder.edit');
@@ -61,6 +78,11 @@ Route::middleware(['web'])->group(function () {
             Route::resource('role', RoleController::class)->only(['index', 'store', 'edit', 'destroy']);
             Route::resource('user', UserController::class)->only(['index', 'edit', 'update']);
             Route::get('user/{user}/suspension', UserSuspensionController::class)->name('user.suspension');
+
+            Route::resource('area-hierarchy', AreaHierarchyController::class);
+            Route::resource('area', AreaController::class)->except(['destroy']);
+            Route::delete('area/truncate', [AreaController::class, 'destroy'])->name('area.destroy');
+
             Route::get('organization', [\App\Http\Controllers\OrganizationController::class, 'edit'])->name('organization.edit');
             Route::patch('organization/{organization}', [\App\Http\Controllers\OrganizationController::class, 'update'])->name('organization.update');
             Route::resource('tag', \App\Http\Controllers\TagController::class)->only(['index', 'edit', 'update']);

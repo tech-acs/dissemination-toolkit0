@@ -20,12 +20,12 @@ return new class extends Migration {
             $table->unsignedBigInteger('topic_id')->nullable();
             $table->foreignId('user_id');
 
-            $table->string('type');
-            $table->jsonb('data_params')->default('{}');
-            $table->jsonb('options')->default('{}');
             $table->string('livewire_component');
-            /*$table->jsonb('data')->default('[]');
-            $table->jsonb('layout')->default('{}');*/
+            $table->jsonb('data_params')->default('{}');
+            $table->jsonb('data')->default('[]');
+            $table->jsonb('layout')->default('{}');
+            $table->jsonb('options')->default('{}');
+
             $table->timestamps();
         });
     }

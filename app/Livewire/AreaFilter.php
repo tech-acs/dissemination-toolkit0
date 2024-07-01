@@ -87,6 +87,6 @@ class AreaFilter extends Component
 
     public function render()
     {
-        return view('scaffold::livewire.area-filter');
+        return view('livewire.area-filter');
     }
 }

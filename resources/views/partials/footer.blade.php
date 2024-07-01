@@ -4,7 +4,7 @@
             <div class="lg:col-span-2">
                 <div>
                     <a class="flex items-center space-x-2 text-2xl font-medium text-indigo-500" href="/">
-                        <img class="h-8" title="{{ $org?->name }}" alt="{{ $org?->name }}" src="{{ asset($org?->logo_path) }}">
+                        <img class="h-8" title="{{ $org?->name }}" alt="{{ $org?->name }}" src="{{ asset(empty($org?->logo_path) ? 'images/placeholder-logo.png' : $org->logo_path) }}">
                     </a>
                 </div>
                 <div class="max-w-md mt-4 text-gray-500">

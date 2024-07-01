@@ -21,12 +21,6 @@ class Table extends Visualization
         ],
     ];
 
-    public function preparePayload(): void
-    {
-        $this->options['rowData'] = $this->data;
-        $this->options['columnDefs'] = $this->makeColumnDefs(collect($this->data));
-    }
-
     private function makeColumnDefs($data): array
     {
         if ($data->isNotEmpty()) {
@@ -98,12 +92,18 @@ class Table extends Visualization
         return [];
     }
 
-    #[On('changeOccurred')]
-    public function reactToChanges($data, $indicatorName, $dataParams): void
+    public function preparePayload(array $rawData = []): void
     {
-        $this->data = $data;
-        $this->options = array_replace_recursive($this::DEFAULT_OPTIONS, $this->options, []);
-        $this->preparePayload();
+        $this->options = array_replace_recursive($this::DEFAULT_OPTIONS, $this->options);
+        $this->options['rowData'] = $rawData;
+        $this->options['columnDefs'] = $this->makeColumnDefs(collect($rawData));
+    }
+
+    #[On('changeOccurred')]
+    public function reactToChanges(array $rawData, string $indicatorName, array $dataParams): void
+    {
+        //$this->options = array_replace_recursive($this::DEFAULT_OPTIONS, $this->options, []);
+        $this->preparePayload($rawData);
         $this->dispatch("updateTable.$this->htmlId", $this->options);
     }
 

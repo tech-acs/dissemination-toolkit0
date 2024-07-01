@@ -15,6 +15,6 @@ trait DimensionTrait {
         $this->setPivotableDimensions();
         $this->nextSelection = 'apply';
 
-        $this->dispatch('selectionMade', $this->makeReadableDataParams('dimensions', Dimension::find($this->selectedDimensions)->pluck('name')->join(', ', ' and ')));
+        $this->dispatch('dataShaperSelectionMade', $this->makeReadableDataParams('dimensions', Dimension::find($this->selectedDimensions)->pluck('name')->join(', ', ' and ')));
     }
 }
