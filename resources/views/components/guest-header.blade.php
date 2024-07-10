@@ -37,7 +37,7 @@
                 @if($showPdf)
 
 
-                <button popovertarget="coming-soon-popover"
+                <button
                         class="group border border-red-800 px-2 h-7 uppercase hover:bg-red-800 rounded-md shadow-sm bg-white cursor-pointer inline-flex items-center gap-x-2 text-xs font-semibold text-blue-700">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 text-red-800 group-hover:text-white"
                          viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"

@@ -2,12 +2,8 @@
 
 namespace App\Livewire;
 
-use App\Models\MapIndicator;
-use App\Models\Page;
-use App\Models\Report;
 use Livewire\Component;
 use Spatie\Permission\Models\Permission;
-use Uneca\Scaffold\Models\Scorecard;
 
 class RoleManager extends Component
 {
@@ -17,9 +13,27 @@ class RoleManager extends Component
 
     public function mount()
     {
-        $groups = collect([]);
+        $groups = collect();
 
-        $pages = Page::with('indicators')
+        Permission::firstOrCreate(['guard_name' => 'web', 'name' => 'visualizations']);
+        $reports = [
+            [
+                'title' => 'Visualizations',
+                'description' => 'This is the visualizations page',
+                'permission_name' => 'visualizations',
+                'permissionables' => \App\Models\Visualization::all()->map(function ($report) {
+                    return [
+                        'title' => $report->title,
+                        'description' => $report->description,
+                        'permission_name' => $report->permission_name,
+                    ];
+                }),
+                'count' => \App\Models\Visualization::all()->count(),
+            ]
+        ];
+        $groups = $groups->merge($reports);
+
+        /*$pages = Page::with('indicators')
             ->withCount('indicators')
             ->get()
             ->map(function ($page) {
@@ -37,9 +51,9 @@ class RoleManager extends Component
                     'count' => $page->indicators_count,
                 ];
             });
-        $groups = $groups->merge($pages);
+        $groups = $groups->merge($pages);*/
 
-        Permission::firstOrCreate(['guard_name' => 'web', 'name' => 'reports']);
+        /*Permission::firstOrCreate(['guard_name' => 'web', 'name' => 'reports']);
         $reports = [
             [
                 'title' => 'Reports',
@@ -55,9 +69,9 @@ class RoleManager extends Component
                 'count' => Report::all()->count(),
             ]
         ];
-        $groups = $groups->merge($reports);
+        $groups = $groups->merge($reports);*/
 
-        Permission::firstOrCreate(['guard_name' => 'web', 'name' => 'scorecards']);
+        /*Permission::firstOrCreate(['guard_name' => 'web', 'name' => 'scorecards']);
         $scorecards = [
             [
                 'title' => 'Scorecards',
@@ -73,9 +87,9 @@ class RoleManager extends Component
                 'count' => Scorecard::all()->count(),
             ]
         ];
-        $groups = $groups->merge($scorecards);
+        $groups = $groups->merge($scorecards);*/
 
-        Permission::firstOrCreate(['guard_name' => 'web', 'name' => 'maps']);
+        /*Permission::firstOrCreate(['guard_name' => 'web', 'name' => 'maps']);
         $maps = [
             [
                 'title' => 'Map Indicators',
@@ -91,7 +105,7 @@ class RoleManager extends Component
                 'count' => MapIndicator::count(),
             ]
         ];
-        $groups = $groups->merge($maps);
+        $groups = $groups->merge($maps);*/
 
         $this->permissionGroups = $groups;
         foreach (($this->permissionGroups ?? []) as $permissionGroup) {

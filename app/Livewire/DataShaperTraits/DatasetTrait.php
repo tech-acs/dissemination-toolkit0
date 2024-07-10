@@ -14,7 +14,8 @@ trait DatasetTrait
     public function updatedSelectedDataset($datasetId): void
     {
         $this->reset(
-            'selectedGeographyLevel',
+            'selectedIndicator',
+            'selectedGeographyLevels',
             'selectedGeographies',
             'geographyLevels',
             'geographies',
@@ -30,12 +31,29 @@ trait DatasetTrait
         );
 
         $dataset = Dataset::with('dimensions')->find($datasetId);
+        $this->indicators = $dataset?->indicators->pluck('name', 'id')->all() ?? [];
+        $this->nextSelection = 'indicator';
+        $this->dispatch('dataShaperSelectionMade', $this->makeReadableDataParams('dataset', $dataset->name));
 
-        $allLevels = (new AreaTree())->hierarchies;
+        /*$allLevels = (new AreaTree())->hierarchies;
         $this->geographyLevels = $dataset ? array_slice($allLevels, 0,$dataset->max_area_level + 1) : $allLevels;
-        /*$this->max_area_level = $dataset->max_area_level;
-        $this->geographyLevels = $dataset ? array_slice($allLevels, 0, $dataset->max_area_level + 1) : $allLevels;*/
-        $this->geographies = Area::ofLevel(0)->pluck('name', 'id')->all();
+        //$this->geographies = Area::ofLevel(0)->pluck('name', 'id')->all();
+
+        foreach($this->geographyLevels as $level => $levelName) {
+            //$this->geographies[$level] = Area::ofLevel($level)->pluck('name', 'id')->all();
+            $areas = Area::ofLevel($level)->select(['id', 'name', 'path'])
+                ->get()
+                ->map(function ($area) {
+                    $area->group = str($area->path)
+                        ->beforeLast('.')
+                        ->value();
+                    return $area;
+                })
+                ->groupBy("group")
+                ->all();
+            $this->geographies[$level] = $areas;
+            $this->selectedGeographies[$level] = [];
+        }
 
         $this->years = $dataset->years->pluck('name', 'id')->all();
 
@@ -53,6 +71,6 @@ trait DatasetTrait
             ->all();
         $this->nextSelection = 'geography';
 
-        $this->dispatch('dataShaperSelectionMade', $this->makeReadableDataParams('dataset', $dataset->name));
+        $this->dispatch('dataShaperSelectionMade', $this->makeReadableDataParams('dataset', $dataset->name));*/
     }
 }

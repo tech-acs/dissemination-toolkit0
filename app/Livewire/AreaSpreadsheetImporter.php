@@ -1,15 +1,15 @@
 <?php
 
-namespace Uneca\Scaffold\Http\Livewire;
+namespace App\Livewire;
 
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Notification;
-use Uneca\Scaffold\Jobs\ImportAreaSpreadsheetJob;
-use Uneca\Scaffold\Models\Area;
-use Uneca\Scaffold\Models\AreaHierarchy;
-use Uneca\Scaffold\Notifications\TaskCompletedNotification;
-use Uneca\Scaffold\Notifications\TaskFailedNotification;
-use Uneca\Scaffold\Services\AreaTree;
+use App\Jobs\ImportAreaSpreadsheetJob;
+use App\Models\Area;
+use App\Models\AreaHierarchy;
+use App\Notifications\TaskCompletedNotification;
+use App\Notifications\TaskFailedNotification;
+use App\Services\AreaTree;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -81,15 +81,6 @@ class AreaSpreadsheetImporter extends Component
         $this->fileAccepted = true;
     }
 
-    /*private function makePathFormulaForExcel()
-    {
-        // TEXTJOIN(".", 0, TEXT(C2,"00"), TEXT(E2, "0000"), TEXT(L2, "0"))
-        $paddedColumns = collect($this->columnMapping)->map(function ($column) {
-            return 'TEXT(' . $column['code'] . ', "' . sprintf("%0{$column['zeroPadding']}s", 0) . '")';
-        })->join(',');
-        return '=TEXTJOIN(".", 0, ' . $paddedColumns . ')';
-    }*/
-
     public function import()
     {
         $this->validate();
@@ -121,7 +112,6 @@ class AreaSpreadsheetImporter extends Component
         }
         fclose($fileHandle);
 
-        //$pathFormula = $this->makePathFormulaForExcel();
         Bus::chain(array_merge(
                 $jobs,
                 [

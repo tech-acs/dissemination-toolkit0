@@ -81,7 +81,7 @@
                                         {{ $record->name }}
                                     </td>
                                     <td class="px-6 py-4 text-left text-sm font-medium text-gray-900">
-                                        {{ $record->indicator->name }}
+                                        {{ $record->indicators->pluck('name')->join(', ') }}
                                     </td>
                                     <td class="px-6 py-4 text-center text-xs font-medium text-gray-900">
                                         {{ $record->dimensions->pluck('name')->join(', ') }}

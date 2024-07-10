@@ -14,7 +14,7 @@ class MapVisualizationController extends Controller
     {
         //order by desc updated_at
         $records = Visualization::published()
-            ->where('type', 'Map')
+            //->where('type', 'Map')
             ->when($request->has('keyword'), function (Builder $query) use ($request) {
                 $locale = app()->getLocale();
                 $query->where("title->{$locale}", 'ilike', '%' . $request->get('keyword') . '%');

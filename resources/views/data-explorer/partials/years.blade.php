@@ -27,7 +27,7 @@
                     <div class="flex items-start">
                         <input
                             id="year-{{ $loop->index }}"
-                            wire:model="selectedYears"
+                            wire:model.live="selectedYears"
                             value="{{ $id }}"
                             type="checkbox"
                             class="h-4 w-4 mt-1 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"

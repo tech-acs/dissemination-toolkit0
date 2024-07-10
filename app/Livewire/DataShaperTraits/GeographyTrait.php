@@ -3,40 +3,37 @@
 namespace App\Livewire\DataShaperTraits;
 
 use App\Models\Area;
-use App\Services\AreaTree;
-use Livewire\Attributes\Computed;
 
 trait GeographyTrait
 {
-    //public int $max_area_level = 0;
     public array $geographyLevels = [];
-    public int $selectedGeographyLevel = 0;
+    public array $selectedGeographyLevels = [];
 
     public array $geographies = [];
     public array $selectedGeographies = [];
 
-    /*public bool $fetchGeographicalChildren = false;
+    private function dispatchDisplayUpdate()
+    {
+        $this->nextSelection = 'dimension';
 
-    #[Computed]
-    public function showFetchGeographicalChildren(): bool
-    {
-        return $this->selectedGeographyLevel < $this->max_area_level && ((count($this->geographies) == 1) || (count($this->selectedGeographies) == 1));
+        $selectedCount = array_reduce($this->selectedGeographies, fn ($carry, $levelAreas) => $carry + count($levelAreas), 0);
+        $this->dispatch('dataShaperSelectionMade', $this->makeReadableDataParams('geography', $selectedCount . str('area')->plural($selectedCount)->prepend(' ')->append(' selected') ));
     }
-    public function resetFetchGeographicalChildren(): void
+
+    public function updatedSelectedGeographyLevels($added, $level): void
     {
-        unset($this->fetchGeographicalChildren);
-    }*/
-    public function updatedSelectedGeographyLevel(int $level): void
-    {
-        $this->geographies = Area::ofLevel($level)->pluck('name', 'id')->all();
-        $this->reset('selectedGeographies');
-        $this->nextSelection = 'year';
-        //unset($this->showfetchGeographicalChildren);
-        $this->dispatch('dataShaperSelectionMade', $this->makeReadableDataParams('geography', (new AreaTree)->hierarchies[$level]));
+        if ($added) {
+            $this->selectedGeographies[$level] = Area::ofLevel($level)->pluck('id')->all();
+        } else {
+            unset($this->selectedGeographies[$level]);
+        }
+        $this->selectedGeographyLevels = array_filter($this->selectedGeographyLevels, fn ($nestedArr) => ! empty($nestedArr));
+
+        $this->dispatchDisplayUpdate();
     }
 
     public function updatedSelectedGeographies($geographyId): void
     {
-        $this->nextSelection = 'year';
+        $this->dispatchDisplayUpdate();
     }
 }

@@ -54,7 +54,7 @@
                             <div class="flex items-start">
                                 <input
                                     id="dimension-{{ $dimension['id'] }}-dimension-value-{{ $value['id'] }}"
-                                    wire:model="selectedDimensionValues.{{ $dimension['id'] }}"
+                                    wire:model.live="selectedDimensionValues.{{ $dimension['id'] }}"
                                     value="{{ $value['id'] }}"
                                     type="checkbox"
                                     class="h-4 w-4 mt-1 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"

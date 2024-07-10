@@ -24,12 +24,12 @@
         <div class="px-6 pb-4">
             @if($datasets)
                 <select wire:model.live="selectedDataset" size="4" class="bg-none scrollbar block w-full appearance-none rounded-md border-1 border-gray-300 py-2 pl-3 text-gray-900 focus:ring-1 focus:ring-indigo-300 sm:text-sm sm:leading-6">
-                    @foreach($datasets ?? [] as $dataset)
-                        <option value="{{ $dataset['id'] }}" class="p-2 rounded-md">{{ $dataset['name'] }}</option>
+                    @foreach($datasets ?? [] as $id => $name)
+                        <option value="{{ $id }}" class="p-2 rounded-md">{{ $name }}</option>
                     @endforeach
                 </select>
             @else
-                <div class="text-gray-500 mt-2 border rounded-md p-4 py-2">{{ __('Select indicator to see available datasets') }}</div>
+                <div class="text-gray-500 mt-2 border rounded-md p-4 py-2">{{ __('Select topic to see available datasets') }}</div>
             @endif
         </div>
     </div>

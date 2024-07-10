@@ -13,7 +13,6 @@ use App\Models\Dataset;
 use App\Models\Dimension;
 use App\Models\Indicator;
 use App\Models\Topic;
-use App\Services\DataParam;
 use App\Services\QueryBuilder;
 use App\Services\Sorter;
 use Illuminate\Support\Facades\Validator;
@@ -68,14 +67,15 @@ class DataShaper extends Component
             $this->updatedSelectedIndicator($this->selectedIndicator);
             $this->selectedDataset = $dataset->id;
             $this->updatedSelectedDataset($this->selectedDataset);
-            $this->nextSelection = 'dimension';
+            $this->nextSelection = 'geography';
         }
     }
 
     private function makeIndicatorName(): string
     {
-        $dataset = Dataset::with('indicator', 'dimensions')->find($this->selectedDataset);
-        return str($dataset->indicator->name)
+        $dataset = Dataset::with('indicators', 'dimensions')->find($this->selectedDataset);
+        $indicator = Indicator::find($this->selectedIndicator);
+        return str($indicator->name)
             ->when(collect($this->selectedDimensions)->isNotEmpty(), function (Stringable $string) use ($dataset) {
                 $selectedDimensions = $dataset->dimensions->filter(fn ($dim) => in_array($dim->id, $this->selectedDimensions));
                 return $string->append(' by ', $selectedDimensions->pluck('name')->join(', ', ' and '));
@@ -101,8 +101,9 @@ class DataShaper extends Component
 
         return [
             'dataset' => $this->selectedDataset,
-            'geographies' => [$this->selectedGeographyLevel => $this->selectedGeographies],
-            'years' => $this->selectedYears,
+            'indicators' => $this->selectedIndicator,
+            'geographies' => array_filter($this->selectedGeographies, fn ($areasOfLevel) => ! empty($areasOfLevel)),
+            //'years' => $this->selectedYears,
             'dimensions' => collect($this->selectedDimensions)
                 ->mapWithKeys(fn ($dimensionId) => [$dimensionId => $this->selectedDimensionValues[$dimensionId]])
                 ->all(),
@@ -117,11 +118,11 @@ class DataShaper extends Component
         $positionLookup = [
             "reset" => 0,
             "topic" => 1,
-            "indicator" => 2,
-            "dataset" => 3,
+            "dataset" => 2,
+            "indicator" => 3,
             "geography" => 4,
-            "years" => 5,
-            "dimensions" => 6,
+            //"years" => 5,
+            "dimensions" => 5,
         ];
         $this->selections[$field] = $value;
         $this->selections = array_slice($this->selections, 0, $positionLookup[$field]);
@@ -164,20 +165,27 @@ class DataShaper extends Component
 
     public function apply(): void
     {
+        $queryParameters = $this->makeDataParam();
         $validator = Validator::make(
             array_filter([
-                'selectedDataset' => $this->selectedDataset,
-                'pivotColumn' => $this->pivotColumn,
-                'pivotRow' => $this->pivotRow,
-                'nestingPivotColumn' => $this->nestingPivotColumn,
+                //'selectedDataset' => $queryParameters['dataset'],
+
+                'selectedGeography' => $queryParameters['geographies'],
+                'pivotColumn' => $queryParameters['pivotColumn'],
+                'pivotRow' => $queryParameters['pivotRow'],
+                'nestingPivotColumn' => $queryParameters['nestingPivotColumn'],
             ], fn ($v) => ! is_null($v)),
             [
-                'selectedDataset' => 'integer|min:1',
+                //'selectedDataset' => 'integer|min:1',
+
+                'selectedGeography' => 'array|min:1',
                 'pivotColumn' => 'sometimes|bail|required|different:pivotRow|different:nestingPivotColumn',
                 'pivotRow' => 'bail|required_unless:pivotColumn,null|different:nestingPivotColumn'
             ],
             [
-                'selectedDataset.min' => 'You must select a dataset before you can see results',
+                //'selectedDataset.min' => 'You must select a dataset before you can see results',
+
+                'selectedGeography.min' => 'You must select geographic areas before you can see results',
                 'pivotRow.required_unless' => 'You must also select a pivot row since you have selected a pivot column',
             ]
         );
@@ -187,7 +195,6 @@ class DataShaper extends Component
                 $this->dispatch('notify', content: $error, type: 'error');
             }
         } else {
-            $queryParameters = $this->makeDataParam();
             $query = new QueryBuilder($queryParameters);
             $this->dispatch(
                 "changeOccurred",

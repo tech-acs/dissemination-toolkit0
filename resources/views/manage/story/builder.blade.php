@@ -3,15 +3,16 @@
 @endpush
 
 <x-app-layout>
-    <div class="container mx-auto py-12">
+    <div class="container mx-auto py-12 pt-0">
 
         <div class="col-span-3 bg-white" x-cloak x-data="storyEditor()">
 
-            <div class="col-span-3 bg-gray-50 py-2">
+            <div class="col-span-3 flex justify-end gap-x-4 bg-gray-100 py-4">
+                <x-danger-button x-on:click="reset()">Reset</x-danger-button>
                 <x-button x-on:click="save()">Save</x-button>
             </div>
 
-            <div id="story-editor"></div>
+            <div id="story-editor" class="h-full"></div>
 
         </div>
 
@@ -28,7 +29,6 @@
                 init() {
                     ClassicEditor.defaultConfig.chartList = this.chartList
                     ClassicEditor
-                        // Note that you do not have to specify the plugin and toolbar configuration — using defaults from the build.
                         .create(document.querySelector('#story-editor'))
                         .then(e => {
                             this.editor = e
@@ -48,6 +48,11 @@
                     } else {
                         this.$dispatch('notify', {type: 'error', content: 'Error while saving'})
                     }
+                },
+
+                reset() {
+                    let editor = Alpine.raw(this.editor)
+                    editor.setData('')
                 }
             }
         }

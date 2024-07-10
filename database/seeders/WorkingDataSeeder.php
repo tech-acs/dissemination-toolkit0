@@ -15,7 +15,7 @@ class WorkingDataSeeder extends Seeder
     {
         $this->call([
             DimensionValueSeeder::class,
-            YearValueSeeder::class,
+            //YearValueSeeder::class,
             IndicatorsSeeder::class,
             DatasetsSeeder::class,
         ]);

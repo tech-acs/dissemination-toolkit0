@@ -23,17 +23,26 @@ class DatasetRequest extends FormRequest
     {
         return [
             'name' => 'required|string|min:5',
-            'indicator_id' => 'required|exists:indicators,id',
+            'indicators' => 'required|exists:indicators,id',
+            'dimensions' => 'required|exists:dimensions,id',
             'fact_table' => 'required',
             'max_area_level' => 'required',
-            'years' => 'required'
+            //'years' => 'required'
+            'topic_id' => 'exists:App\Models\Topic,id'
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'indicators.required' => 'You must select at least one indicator.',
+            'dimensions.required' => 'You must select at least one dimension.',
         ];
     }
 
     public function attributes(): array
     {
         return [
-            'indicator_id' => 'indicator',
             'max_area_level' => 'data geographic granularity',
         ];
     }

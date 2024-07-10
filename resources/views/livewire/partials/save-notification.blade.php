@@ -1,4 +1,4 @@
-<x-dialog-strict-modal wire:model="showSaveNotification">
+<x-dialog-strict-modal wire:model.live="showSaveNotification">
     <x-slot name="title">
         Visualization successfully created
     </x-slot>

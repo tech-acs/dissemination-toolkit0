@@ -1,7 +1,7 @@
 <div>
     <x-button wire:click="$toggle('showBulkInviteForm')" wire:loading.attr="disabled" class="ml-3">{{ __('Bulk Invite') }}</x-button>
 
-    <x-dialog-modal wire:model="showBulkInviteForm">
+    <x-dialog-modal wire:model.live="showBulkInviteForm">
         <x-slot name="title">
             {{ __('Invite multiple users') }}
         </x-slot>
@@ -27,7 +27,7 @@
                                 <span>Browse</span>
                             </div>
                         </label>
-                        <input type="file" id="file" name="file" wire:model="file" onchange="document.getElementById('file_label').innerText=this.files[0].name;" class="hidden">
+                        <input type="file" id="file" name="file" wire:model.live="file" onchange="document.getElementById('file_label').innerText=this.files[0].name;" class="hidden">
                         @if ($fileAccepted)
                             <x-icon.accepted />
                         @endif
@@ -47,7 +47,7 @@
             <div class="mt-5">
                 @if(config('scaffold.emailing_enabled'))
                     <x-label>
-                        <x-checkbox name="send_email" class="mr-1" wire:model="sendEmails" /> {{ __('send invitation emails') }}
+                        <x-checkbox name="send_email" class="mr-1" wire:model.live="sendEmails" /> {{ __('send invitation emails') }}
                     </x-label>
                 @endif
             </div>

@@ -57,6 +57,10 @@ class DimensionValueSeeder extends Seeder
                 ['code' => '6', 'name' => 'Temporary camp or settlement'],
                 ['code' => '7', 'name' => 'Other'],
                 ['code' => '8', 'name' => 'Not stated'],
+            ],
+            'year' => [
+                ['code' => '2010', 'name' => '2010'],
+                ['code' => '2022', 'name' => '2022'],
             ]
         ];
         foreach ($dimensions as $dimensionTable => $values) {

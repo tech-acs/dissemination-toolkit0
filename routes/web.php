@@ -3,36 +3,48 @@
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\AreaHierarchyController;
+use App\Http\Controllers\AuthHomeController;
+use App\Http\Controllers\DimensionTableCreationController;
+use App\Http\Controllers\Guest\CensusTableController;
+use App\Http\Controllers\Guest\DataExplorerController;
 use App\Http\Controllers\Guest\LandingController;
+use App\Http\Controllers\Guest\MapVisualizationController;
+use App\Http\Controllers\Guest\RendererController;
+use App\Http\Controllers\Guest\StoryController;
+use App\Http\Controllers\Guest\VisualizationController;
+use App\Http\Controllers\Guest\VizAjaxController;
+use App\Http\Controllers\IndicatorController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\TopicController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserSuspensionController;
+use App\Http\Controllers\VizBuilderWizardController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['web'])->group(function () {
     Route::get('landing', [LandingController::class, 'index'])->name('landing');
-    Route::get('data-explorer', [\App\Http\Controllers\Guest\DataExplorerController::class, 'index'])->name('data-explorer');
-    Route::get('visualization', [\App\Http\Controllers\Guest\VisualizationController::class, 'index'])->name('visualization.index');
-    Route::get('map-visualization', [\App\Http\Controllers\Guest\MapVisualizationController::class, 'index'])->name('map-visualization.index');
-    Route::get('visualization/{visualization}', [\App\Http\Controllers\Guest\VisualizationController::class, 'show'])->name('visualization.show');
-    Route::get('story', [\App\Http\Controllers\Guest\StoryController::class, 'index'])->name('story.index');
-    Route::get('story/{story}', [\App\Http\Controllers\Guest\StoryController::class, 'show'])->name('story.show');
-    Route::get('census-table', [\App\Http\Controllers\Guest\CensusTableController::class, 'index'])->name('census-table.index');
-    Route::get('census-table/{id}', [\App\Http\Controllers\Guest\CensusTableController::class, 'show'])->name('census-table.show');
-    Route::get('census-table/download/{censusTable}', [\App\Http\Controllers\Guest\CensusTableController::class, 'download'])->name('census-table.download');
+    Route::get('data-explorer', [DataExplorerController::class, 'index'])->name('data-explorer');
+    Route::get('visualization', [VisualizationController::class, 'index'])->name('visualization.index');
+    Route::get('map-visualization', [MapVisualizationController::class, 'index'])->name('map-visualization.index');
+    Route::get('visualization/{visualization}', [VisualizationController::class, 'show'])->name('visualization.show');
+    Route::get('story', [StoryController::class, 'index'])->name('story.index');
+    Route::get('story/{story}', [StoryController::class, 'show'])->name('story.show');
+    Route::get('census-table', [CensusTableController::class, 'index'])->name('census-table.index');
+    Route::get('census-table/{id}', [CensusTableController::class, 'show'])->name('census-table.show');
+    Route::get('census-table/download/{censusTable}', [CensusTableController::class, 'download'])->name('census-table.download');
     Route::view('about', 'guest.about')->name('about');
     Route::view('contact', 'guest.contact')->name('contact');
-    Route::get('renderer/visualization/{visualization}', \App\Http\Controllers\Guest\RendererController::class);
+    Route::get('renderer/visualization/{visualization}', RendererController::class);
     Route::get('notification', NotificationController::class)->name('notification.index');
-    Route::get('api/visualization/{visualization}', [\App\Http\Controllers\Guest\VizAjaxController::class, 'show']);
-    Route::get('api/visualization', [\App\Http\Controllers\Guest\VizAjaxController::class, 'index']);
+    Route::get('api/visualization/{visualization}', [VizAjaxController::class, 'show']);
+    Route::get('api/visualization', [VizAjaxController::class, 'index']);
 
     Route::middleware(['auth:sanctum', 'verified', 'enforce_2fa'])->prefix('manage')->name('manage.')->group(function () {
-        Route::get('/home', \App\Http\Controllers\AuthHomeController::class)->name('home');
-        Route::resource('topic', \App\Http\Controllers\TopicController::class);
-        Route::resource('indicator', \App\Http\Controllers\IndicatorController::class);
-        Route::get('dimension/create-table', \App\Http\Controllers\DimensionTableCreationController::class)->name('dimension.create-table');
+        Route::get('/home', AuthHomeController::class)->name('home');
+        Route::resource('topic', TopicController::class);
+        Route::resource('indicator', IndicatorController::class);
+        Route::get('dimension/create-table', DimensionTableCreationController::class)->name('dimension.create-table');
         Route::delete('dimension/delete-table', \App\Http\Controllers\DimensionTableDeletionController::class)->name('dimension.delete-table');
         Route::resource('dimension', \App\Http\Controllers\DimensionController::class);
         Route::resource('year', \App\Http\Controllers\YearController::class);
@@ -48,7 +60,7 @@ Route::middleware(['web'])->group(function () {
         Route::get('story/{story}/duplicate', \App\Http\Controllers\StoryDuplicationController::class)->name('story.duplicate');
         Route::resource('story', \App\Http\Controllers\StoryController::class);
 
-        Route::controller(\App\Http\Controllers\VizBuilderWizardController::class)->group(function () {
+        Route::controller(VizBuilderWizardController::class)->group(function () {
             Route::get('viz-builder-wizard/{currentStep}', 'show')
                 ->whereIn('currentStep', [1, 2, 3])
                 ->name('viz-builder-wizard.show.{currentStep}');
@@ -56,8 +68,8 @@ Route::middleware(['web'])->group(function () {
                 ->whereIn('currentStep', [1, 2, 3])
                 ->name('viz-builder-wizard.update.{currentStep}');
         });
-        Route::post('viz-builder-wizard/api/put', [\App\Http\Controllers\VizBuilderWizardController::class, 'ajaxSaveChart']);
-        Route::get('viz-builder-wizard/api/get', [\App\Http\Controllers\VizBuilderWizardController::class, 'ajaxGetChart']);
+        Route::post('viz-builder-wizard/api/put', [VizBuilderWizardController::class, 'ajaxSaveChart']);
+        Route::get('viz-builder-wizard/api/get', [VizBuilderWizardController::class, 'ajaxGetChart']);
 
         /*Route::get('viz-builder-wizard/{step}', \App\Http\Controllers\VizBuilderWizardController::class)
             ->whereIn('step', ['step1-data', 'step2-viz', 'step3-save']);*/

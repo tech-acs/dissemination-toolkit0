@@ -73,7 +73,7 @@
                         </div>
                     </div>
 
-                    <form action="{{route('developer.area.store')}}" method="POST" enctype="multipart/form-data">
+                    <form action="{{route('manage.area.store')}}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="shadow sm:rounded-md sm:overflow-hidden mt-4">
                             <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
@@ -130,7 +130,7 @@
                             </div>
 
                             <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                                <a href="{{ route('developer.area.index') }}"><x-secondary-button class="mr-2">{{ __('Cancel') }}</x-secondary-button></a>
+                                <a href="{{ route('manage.area.index') }}"><x-secondary-button class="mr-2">{{ __('Cancel') }}</x-secondary-button></a>
                                 <x-button>{{ __('Import') }}</x-button>
                             </div>
 

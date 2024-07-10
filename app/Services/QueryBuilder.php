@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Dataset;
 use App\Models\Dimension;
+use App\Models\Indicator;
 use App\Models\Year;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -12,9 +13,9 @@ class QueryBuilder
 {
     public const VALUE_COLUMN_INVISIBLE_MARKER = '­';
     private Dataset $dataset;
+    private Collection $indicators;
     private Collection $geographies;
-    //private bool $fetchGeographicalChildren;
-    private Collection $years;
+    //private Collection $years;
     private Collection $dimensions;
     private string $valueColumnInFactTable = 'value';
     private string $valueColumnInResult = 'result';
@@ -27,10 +28,10 @@ class QueryBuilder
     {
         $this->schema = is_null($schema) ? '' : "$schema.";
         $this->dataset = Dataset::find($queryParameter['dataset']);
-        $this->dataset->load('dimensions', 'years', 'indicator');
+        $this->dataset->load('dimensions', 'indicators');
+        $this->indicators = Indicator::findMany($queryParameter['indicators']); // ToDo
         $this->geographies = collect($queryParameter['geographies']);
-        //$this->fetchGeographicalChildren = $queryParameter->fetchGeographicalChildren;
-        $this->years = Year::find($queryParameter['years']);
+        //$this->years = Year::find($queryParameter['years']);
         $this->dimensions = collect($queryParameter['dimensions'])->map(function ($dimensionValueIds, $dimensionId) {
             return [
                 'model' => Dimension::find($dimensionId),
@@ -65,7 +66,7 @@ class QueryBuilder
             $orderBy = "areas.path";
             $this->sql = vsprintf(
                 "SELECT %s, %s.%s::text AS \"%s%s\" FROM %s WHERE %s ORDER BY %s",
-                [$select, $this->dataset->fact_table, $this->valueColumnInFactTable, $this->dataset->indicator->name, self::VALUE_COLUMN_INVISIBLE_MARKER, $from, $where, $orderBy]
+                [$select, $this->dataset->fact_table, $this->valueColumnInFactTable, $this->indicators->first()->name, self::VALUE_COLUMN_INVISIBLE_MARKER, $from, $where, $orderBy]
             );
         }
     }
@@ -116,43 +117,24 @@ class QueryBuilder
 
         $whereClauseForGeography = $this->geographies
             ->map(function ($areaCodes, $level) {
-                if (empty($areaCodes)) {
-                    return "( areas.level = '$level' )";
-                } else {
+                if (! empty($areaCodes)) {
+                    /*return "( areas.level = '$level' )";
+                } else {*/
                     $inClause = collect($areaCodes)->map(fn ($code) => str($code)->wrap("'"))->join(', ');
                     return "( areas.level = '$level' AND areas.id IN ($inClause) )";
                 }
-            })->join(' OR ');
+            })->filter()->join(' OR ');
 
-        /*if($this->fetchGeographicalChildren) {
-            $parent = max(array_keys($this->geographies->toArray()));
-            $parentAreaCode = empty($this->geographies[$parent])?null:$this->geographies[$parent][0];
-            $leaf = $parent + 1;
-
-
-            $whereClauseForGeography = $parentAreaCode?"(areas.id IN (SELECT id FROM areas WHERE path <@ (SELECT path FROM areas WHERE id = '$parentAreaCode') ORDER BY path)) and areas.level = '$leaf'":
-                "(areas.id IN (SELECT id FROM areas WHERE path <@ (SELECT path FROM areas WHERE level = '$parent' limit 1) ORDER BY path)) and areas.level = '$leaf'";
-        } else {
-            $whereClauseForGeography = $this->geographies
-                ->map(function ($areaCodes, $level) {
-                    if (empty($areaCodes)) {
-                        return "( areas.level = '$level' )";
-                    } else {
-                        $inClause = collect($areaCodes)->map(fn ($code) => str($code)->wrap("'"))->join(', ');
-                        return "( areas.level = '$level' AND areas.id IN ($inClause) )";
-                    }
-                })->join(' OR ');
-
-        }*/
-        $whereClauseForYear = $this->years
+        /*$whereClauseForYear = $this->years
             ->map(function ($year) use ($factTable) {
                 return "$factTable.year_id = $year->id";
-            })->join(' OR ');
+            })->join(' OR ');*/
 
         return $whereClauseForDimensions
             ->concat([str($whereClauseForGeography)->wrap('(', ')')->toString()])
-            ->when(! empty($whereClauseForYear), fn (Collection $c) => $c->concat([str($whereClauseForYear)->wrap('(', ')')->toString()]))
+            //->when(! empty($whereClauseForYear), fn (Collection $c) => $c->concat([str($whereClauseForYear)->wrap('(', ')')->toString()]))
             ->prepend("$factTable.dataset_id = {$this->dataset->id}")
+            ->prepend("$factTable.indicator_id IN ({$this->indicators->pluck('id')->map(fn ($id) => str($id)->wrap("'"))->join(', ')})")
             ->filter()
             ->join(' AND ');
     }
@@ -179,6 +161,7 @@ class QueryBuilder
 
     public function get(?string $sql = null) : Collection
     {
+        //dump($this->sql);
         try {
             $result = DB::select($sql ?? $this->sql);
             return collect(json_decode(json_encode($result), true));

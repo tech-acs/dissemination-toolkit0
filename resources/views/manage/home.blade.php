@@ -117,7 +117,7 @@
                     </div>
                 </div>
             </li>
-            <li class="flow-root py-2">
+            {{--<li class="flow-root py-2">
                 <div class="relative -m-2 flex items-center space-x-4 rounded-xl p-2 focus-within:ring-2 focus-within:ring-indigo-500 hover:bg-gray-50 border hover:border hover:border-green-800">
                     <div class="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-lg bg-orange-500">
                         <svg  class="w-6 h-6 text-white" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="1.5"  stroke-linecap="round"  stroke-linejoin="round">
@@ -138,7 +138,7 @@
                         </p>
                     </div>
                 </div>
-            </li>
+            </li>--}}
             <li class="flow-root py-2">
                 <div class="relative -m-2 flex items-center space-x-4 rounded-xl p-2 focus-within:ring-2 focus-within:ring-indigo-500 hover:bg-gray-50 border hover:border hover:border-pink-800">
                     <div class="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-lg bg-pink-500">

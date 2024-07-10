@@ -32,7 +32,7 @@
                                 <span>Browse</span>
                             </div>
                         </label>
-                        <input type="file" id="spreadsheet" name="spreadsheet" wire:model="spreadsheet" onchange="document.getElementById('file_label').innerText=this.files[0].name;" class="hidden">
+                        <input type="file" id="spreadsheet" name="spreadsheet" wire:model.live="spreadsheet" onchange="document.getElementById('file_label').innerText=this.files[0].name;" class="hidden">
                         @if ($fileAccepted)
                             <x-icon.accepted />
                         @endif
@@ -80,7 +80,7 @@
                             <tr>
                                 <td class="whitespace-nowrap py-4 pl-4 pr-1 text-sm font-medium text-gray-900 sm:pl-6 md:pl-0">{{ str()->ucfirst($areaLevel) }}</td>
                                 <td class="align-top whitespace-nowrap py-4 px-3 text-sm text-gray-500">
-                                    <select wire:model="columnMapping.{{ $areaLevel }}.name" class="w-full rounded-md border border-gray-300 bg-white px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
+                                    <select wire:model.live="columnMapping.{{ $areaLevel }}.name" class="w-full rounded-md border border-gray-300 bg-white px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
                                         <option value="">{{ __('Select column') }}</option>
                                         @foreach($columnHeaders as $column)
                                             <option value="{{ $column }}">{{ $column }}</option>
@@ -89,7 +89,7 @@
                                     <x-input-error for="columnMapping.{{ $areaLevel }}.name" class="text-xs" />
                                 </td>
                                 <td class="align-top whitespace-nowrap py-4 px-3 text-sm text-gray-500">
-                                    <select wire:model="columnMapping.{{ $areaLevel }}.code" class="w-full rounded-md border border-gray-300 bg-white px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
+                                    <select wire:model.live="columnMapping.{{ $areaLevel }}.code" class="w-full rounded-md border border-gray-300 bg-white px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
                                         <option value="">{{ __('Select column') }}</option>
                                         @foreach($columnHeaders as $column)
                                             <option value="{{ $column }}">{{ $column }}</option>
@@ -97,8 +97,8 @@
                                     </select>
                                     <x-input-error for="columnMapping.{{ $areaLevel }}.code" class="text-xs" />
                                 </td>
-                                <td class="align-top whitespace-nowrap py-4 px-3 text-sm text-gray-500 align-top">
-                                    <input wire:model="columnMapping.{{ $areaLevel }}.zeroPadding" type="number" class="w-full rounded-md border border-gray-300 bg-white px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
+                                <td class="align-top whitespace-nowrap py-4 px-3 text-sm text-gray-500">
+                                    <input wire:model.live="columnMapping.{{ $areaLevel }}.zeroPadding" type="number" class="w-full rounded-md border border-gray-300 bg-white px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
                                     {{--<x-input-error for="columnMapping.{{ $areaLevel }}.zeroPadding" class="text-xs" />--}}
                                 </td>
                             </tr>
@@ -115,7 +115,7 @@
         </div>
     </div>
     <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-        <a href="{{ route('developer.area.index') }}"><x-secondary-button class="mr-2">{{ __('Cancel') }}</x-secondary-button></a>
+        <a href="{{ route('manage.area.index') }}"><x-secondary-button class="mr-2">{{ __('Cancel') }}</x-secondary-button></a>
         <x-button wire:click.prevent="import()">
             {{ __('Import') }}
         </x-button>

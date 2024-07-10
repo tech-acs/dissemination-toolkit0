@@ -8,6 +8,7 @@ use App\Models\Announcement;
 
 use App\Notifications\BroadcastMessageNotification;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\MessageBag;
 use Spatie\Permission\Models\Role;
 
 class AnnouncementController extends Controller
@@ -51,8 +52,8 @@ class AnnouncementController extends Controller
             } catch (\Exception $exception) {
                 //
             }
-            return redirect()->route('announcement.index')->withMessage('The announcement has been sent to the specified recipients group.');
+            return redirect()->route('manage.announcement.index')->withMessage('The announcement has been sent to the specified recipients group.');
         }
-        return redirect()->route('announcement.index')->withMessage('No users found for specified recipients group.');
+        return redirect()->route('manage.announcement.index')->withErrors(new MessageBag(['No users found for specified recipients group.']));
     }
 }

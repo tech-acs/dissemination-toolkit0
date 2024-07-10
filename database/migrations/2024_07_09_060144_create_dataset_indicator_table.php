@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('population_facts', function (Blueprint $table) {
+        Schema::create('dataset_indicator', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('indicator_id');
-            $table->foreignId('area_id');
-            //$table->foreignId('year_id');
             $table->foreignId('dataset_id');
-            $table->decimal('value', 12, 1);
+            $table->foreignId('indicator_id');
+            //$table->timestamps();
         });
     }
 
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('population_facts');
+        Schema::dropIfExists('dataset_indicator');
     }
 };

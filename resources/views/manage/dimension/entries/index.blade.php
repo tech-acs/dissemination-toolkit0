@@ -12,10 +12,9 @@
 <div class="flex flex-col max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
 
 <div class="text-right">
-    <a class="mr-4"><x-button popovertarget="coming-soon-popover" class="opacity-25">{{ __('Import') }}</x-button></a>
+    <a class="mr-4"><x-button class="opacity-25">{{ __('Import') }}</x-button></a>
     <a href="{{ route('manage.dimension.entries.create', $dimension) }}"><x-button>{{ __('Create new') }}</x-button></a>
 </div>
-    <x-coming-soon-popover />
 @if (session('message'))
 <div class="rounded-md p-4 py-3 mt-4 mb-4 border bg-blue-50 border-blue-300">
     <div class="flex">

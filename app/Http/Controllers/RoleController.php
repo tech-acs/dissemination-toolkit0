@@ -11,7 +11,7 @@ class RoleController extends Controller
     public function index()
     {
         $records = Role::with('permissions')->get();
-        return view('role.index', compact('records'));
+        return view('manage.role.index', compact('records'));
     }
 
     public function store(Request $request)
@@ -26,7 +26,7 @@ class RoleController extends Controller
                 ->withInput();
         }
         Role::create(['name' => $request->get('name'), 'guard_name' => 'web']);
-        return redirect()->route('role.index');
+        return redirect()->route('manage.role.index');
     }
 
     public function edit(Role $role)
@@ -34,7 +34,7 @@ class RoleController extends Controller
         if ($role->name === 'Super Admin') {
             abort(403, 'Unauthorized action');
         }
-        return view('role.manage', compact('role'));
+        return view('manage.role.manage', compact('role'));
     }
 
     public function destroy(Role $role)
@@ -48,6 +48,6 @@ class RoleController extends Controller
             $role->delete();
             $message = 'The role has been deleted';
         }
-        return redirect()->route('role.index')->withMessage($message);
+        return redirect()->route('manage.role.index')->withMessage($message);
     }
 }

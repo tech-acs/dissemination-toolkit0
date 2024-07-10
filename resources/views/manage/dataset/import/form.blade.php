@@ -12,7 +12,7 @@
                         <li>The CSV file must have at least these columns:
                             <span class="font-semibold">geography</span>,
                             <span class="font-semibold">year</span> and
-                            <span class="font-semibold">value</span>
+                            value columns for <span class="font-semibold">{{ $dataset->indicators->pluck('name')->join(', ', ' and ') }}</span> indicators
                         </li>
                         <li>It should also have the columns for each of the dimensions containing the dimension <b>codes</b></li>
                         <li>For a list of all possible dimension names, please click <a class="text-blue-600 underline" href="{{ route('manage.dimension.index') }}">here</a></li>

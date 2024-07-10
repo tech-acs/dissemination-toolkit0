@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\Translatable\HasTranslations;
 
 class Indicator extends Model
@@ -23,8 +23,13 @@ class Indicator extends Model
         return $this->belongsTo(Topic::class);
     }
 
-    public function datasets(): HasMany
+    public function datasets(): BelongsToMany
     {
-        return $this->hasMany(Dataset::class);
+        return $this->belongsToMany(Dataset::class);
+    }
+
+    public function getSlugAttribute(): string
+    {
+        return str($this->name)->slug()->value();
     }
 }

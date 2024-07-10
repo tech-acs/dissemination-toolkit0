@@ -1,3 +1,0 @@
-<div>
-    {!! $story->html !!}
-</div>

@@ -15,14 +15,19 @@ class Dataset extends Model
     protected $guarded = ['id'];
     public array $translatable = ['name', 'description'];
 
+    public function topic(): BelongsTo
+    {
+        return $this->belongsTo(Topic::class);
+    }
+
     public function dimensions(): BelongsToMany
     {
         return $this->belongsToMany(Dimension::class);
     }
 
-    public function indicator(): BelongsTo
+    public function indicators(): BelongsToMany
     {
-        return $this->belongsTo(Indicator::class);
+        return $this->belongsToMany(Indicator::class);
     }
 
     public function years(): BelongsToMany
@@ -34,7 +39,7 @@ class Dataset extends Model
     {
         try {
             return DB::table($this->fact_table)
-                ->where('indicator_id', $this->indicator_id)
+                //->where('indicator_id', $this->indicator_id)
                 ->where('dataset_id', $this->id)
                 ->count();
         } catch (\Exception $exception) {

@@ -41,10 +41,10 @@ class Dimension extends Model
         }
         return false;
     }
-    public function datasetDimension()
-    {
-        return $this->hasMany(DatasetDimension::class);
-    }
 
+    public function getForeignKeyAttribute(): string
+    {
+        return str($this->name)->lower()->snake()->append('_id')->value();
+    }
 
 }

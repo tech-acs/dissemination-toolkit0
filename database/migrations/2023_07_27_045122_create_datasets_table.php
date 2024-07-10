@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->jsonb('name');
             $table->jsonb('description')->nullable();
-            $table->foreignId('indicator_id');
+            //$table->foreignId('indicator_id');
+            $table->foreignId('topic_id');
             $table->tinyInteger('max_area_level')->default(0);
             $table->string('fact_table');
             $table->timestamps();

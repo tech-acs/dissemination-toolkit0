@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Dimension;
-use App\Service\DynamicDimensionModel;
+use App\Services\DynamicDimensionModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 

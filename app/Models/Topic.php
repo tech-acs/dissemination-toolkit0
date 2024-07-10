@@ -14,6 +14,11 @@ class Topic extends Model
     protected $guarded = ['id'];
     public array $translatable = ['name', 'description'];
 
+    public function datasets(): HasMany
+    {
+        return $this->hasMany(Dataset::class);
+    }
+
     public function indicators(): HasMany
     {
         return $this->hasMany(Indicator::class);
