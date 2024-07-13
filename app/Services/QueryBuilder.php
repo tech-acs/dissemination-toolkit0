@@ -116,11 +116,12 @@ class QueryBuilder
             });
 
         $whereClauseForGeography = $this->geographies
-            ->map(function ($areaCodes, $level) {
-                if (! empty($areaCodes)) {
+            ->map(function ($areaIds, $level) {
+                if (! empty($areaIds)) {
                     /*return "( areas.level = '$level' )";
                 } else {*/
-                    $inClause = collect($areaCodes)->map(fn ($code) => str($code)->wrap("'"))->join(', ');
+                    $inClause = collect($areaIds)->map(fn ($id) => str($id)->wrap("'"))->join(', ');
+                    //logger('ah', ['inClause' => $inClause]);
                     return "( areas.level = '$level' AND areas.id IN ($inClause) )";
                 }
             })->filter()->join(' OR ');
@@ -161,7 +162,7 @@ class QueryBuilder
 
     public function get(?string $sql = null) : Collection
     {
-        //dump($this->sql);
+        //logger('SQL', ['sql' => $this->sql]);
         try {
             $result = DB::select($sql ?? $this->sql);
             return collect(json_decode(json_encode($result), true));

@@ -12,12 +12,13 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex items-center">
+                    <x-nav-link href="{{ route('manage.home') }}" :active="request()->routeIs('manage.home')">{{ __('Home') }}</x-nav-link>
                     <x-nav-link href="{{ route('manage.visualization.index') }}" :active="request()->routeIs('manage.visualization.*')">{{ __('Visualizations') }}</x-nav-link>
                     <x-nav-link href="{{ route('manage.story.index') }}" :active="request()->routeIs('manage.story.*')" class="whitespace-nowrap">{{ __('Data stories') }}</x-nav-link>
                     <x-nav-link href="{{ route('manage.topic.index') }}" :active="request()->routeIs('manage.topic.*')">{{ __('Topics') }}</x-nav-link>
-                    <x-nav-link href="{{ route('manage.dataset.index') }}" :active="request()->routeIs('manage.dataset.*')">{{ __('Datasets') }}</x-nav-link>
                     <x-nav-link href="{{ route('manage.indicator.index') }}" :active="request()->routeIs('manage.indicator.*')">{{ __('Indicators') }}</x-nav-link>
                     <x-nav-link href="{{ route('manage.dimension.index') }}" :active="request()->routeIs('manage.dimension.*')">{{ __('Dimensions') }}</x-nav-link>
+                    <x-nav-link href="{{ route('manage.dataset.index') }}" :active="request()->routeIs('manage.dataset.*')">{{ __('Datasets') }}</x-nav-link>
                     {{--<x-nav-link href="{{ route('manage.year.index') }}" :active="request()->routeIs('manage.year.*')">{{ __('Years') }}</x-nav-link>--}}
                     <x-nav-link href="{{ route('manage.census-table.index') }}" :active="request()->routeIs('manage.census-table.*')">{{ __('Census tables') }}</x-nav-link>
                 </div>

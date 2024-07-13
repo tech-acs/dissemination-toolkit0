@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('indicator_id');
             $table->foreignId('area_id');
-            $table->foreignId('year_id');
+            //$table->foreignId('year_id');
             $table->foreignId('dataset_id');
-            $table->decimal('value', 12);
+            $table->decimal('value', 12, 1);
         });
     }
 

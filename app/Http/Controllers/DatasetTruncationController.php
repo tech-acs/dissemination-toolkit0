@@ -9,8 +9,8 @@ class DatasetTruncationController extends Controller
 {
     public function __invoke(Dataset $dataset)
     {
-        $dataset->years()->detach();
-        $dataset->dimensions()->detach();
+        //$dataset->years()->detach();
+        //$dataset->dimensions()->detach();
         DB::table($dataset->fact_table)
             ->where('dataset_id', $dataset->id)
             ->delete();

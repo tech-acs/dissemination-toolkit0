@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('dataset_year', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('dataset_id');
-            $table->foreignId('year_id');
-            //$table->timestamps();
+        Schema::table('stories', function (Blueprint $table) {
+            $table->boolean('is_filterable')->default(false);
         });
     }
 
@@ -24,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('dataset_year');
+        Schema::table('stories', function (Blueprint $table) {
+            $table->dropColumn('is_filterable');
+        });
     }
 };

@@ -31,7 +31,7 @@
             <livewire:data-shaper />
 
             <div class="lg:col-span-3 pl-6 pt-4 pr-2 border-l">
-                <livewire:visualizations.table lazy />
+                <livewire:visualizations.table />
             </div>
         </div>
 

@@ -31,7 +31,7 @@
                                 <div class="overflow-hidden flex justify-center items-center text-indigo-300">
                                     @if($record->type === 'Table')
                                         <x-icon.table class="w-2/3 group-hover:text-indigo-500"/>
-                                    @elseif($record->type === 'ChartEmbed')
+                                    @elseif($record->type === 'Chart')
                                         <x-icon.chart class="w-2/3 group-hover:text-indigo-500" url="{{$record->id}}"/>
                                     @elseif($record->type === 'Map')
                                         <x-icon.map class="w-2/3 group-hover:text-indigo-500" url="{{$record->id}}"/>

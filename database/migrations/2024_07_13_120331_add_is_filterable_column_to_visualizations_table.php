@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('years', function (Blueprint $table) {
-            $table->id();
-            $table->string('code', 25)->index();
-            $table->string('name');
-            $table->timestamps();
+        Schema::table('visualizations', function (Blueprint $table) {
+            $table->boolean('is_filterable')->default(false);
         });
     }
 
@@ -24,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('years');
+        Schema::table('visualizations', function (Blueprint $table) {
+            $table->dropColumn('is_filterable');
+        });
     }
 };

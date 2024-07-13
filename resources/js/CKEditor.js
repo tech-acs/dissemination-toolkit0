@@ -7,7 +7,7 @@ import { Heading } from '@ckeditor/ckeditor5-heading';
 import { Link, LinkImage } from '@ckeditor/ckeditor5-link';
 import { List } from '@ckeditor/ckeditor5-list';
 import { Paragraph } from '@ckeditor/ckeditor5-paragraph';
-import { Table, TableColumnResize, TableToolbar } from "@ckeditor/ckeditor5-table";
+import {Table, TableCellProperties, TableColumnResize, TableProperties, TableToolbar} from "@ckeditor/ckeditor5-table";
 import { MediaEmbed } from "@ckeditor/ckeditor5-media-embed";
 import { Indent, IndentBlock } from "@ckeditor/ckeditor5-indent";
 import {
@@ -37,7 +37,7 @@ export default class ClassicEditor extends ClassicEditorBase {}
 ClassicEditor.builtinPlugins = [
     Essentials, Autoformat, Font, Style, GeneralHtmlSupport, Bold, ShowBlocks, Alignment,
     Italic, Underline, BlockQuote, Heading, TextTransformation, Link, List, Paragraph,
-    Table, TableToolbar, TableColumnResize, MediaEmbed, Indent, IndentBlock,
+    Table, TableToolbar, TableColumnResize, MediaEmbed, Indent, IndentBlock, TableProperties, TableCellProperties,
     Image, ImageCaption, ImageStyle, ImageInsert, ImageResize, ImageUpload, ImageToolbar, LinkImage, ImageInline,
     ImageResizeEditing, ImageResizeHandles,
     HtmlEmbed, SourceEditing, HorizontalLine, Base64UploadAdapter, RemoveFormat,
@@ -71,10 +71,31 @@ ClassicEditor.defaultConfig = {
     },
     language: 'en',
     table: {
-        contentToolbar: [ 'tableColumn', 'tableRow', 'mergeTableCells' ]
+        contentToolbar: [ 'tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties' ],
+        tableProperties: {
+            // The default styles for tables in the editor.
+            // They should be synchronized with the content styles.
+            defaultProperties: {
+                borderStyle: 'double',
+                borderColor: 'hsl(0, 0%, 70%)',
+                borderWidth: '1px',
+                width: '100%',
+                height: '100%'
+            }
+            // The default styles for table cells in the editor.
+            // They should be synchronized with the content styles.
+        },
+    },
+    heading: {
+        options: [
+            { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+            { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+            { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
+            { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' }
+        ]
     },
     alignment: {
-        options: [ 'left', 'right' ]
+        options: [ 'left', 'center', 'right', 'justify' ]
     },
     style: {
         definitions: [
@@ -84,10 +105,45 @@ ClassicEditor.defaultConfig = {
                 classes: [ 'category' ]
             },
             {
+                name: 'Title',
+                element: 'h2',
+                classes: [ 'document-title' ]
+            },
+            {
+                name: 'Subtitle',
+                element: 'h3',
+                classes: [ 'document-subtitle' ]
+            },
+            {
                 name: 'Info box',
                 element: 'p',
                 classes: [ 'info-box' ]
             },
+            {
+                name: 'Side quote',
+                element: 'blockquote',
+                classes: [ 'side-quote' ]
+            },
+            {
+                name: 'Marker',
+                element: 'span',
+                classes: [ 'marker' ]
+            },
+            {
+                name: 'Spoiler',
+                element: 'span',
+                classes: [ 'spoiler' ]
+            },
+            {
+                name: 'Code (dark)',
+                element: 'pre',
+                classes: [ 'fancy-code', 'fancy-code-dark' ]
+            },
+            {
+                name: 'Code (bright)',
+                element: 'pre',
+                classes: [ 'fancy-code', 'fancy-code-bright' ]
+            }
         ]
     },
     // ToDo: define the styles.
@@ -125,6 +181,14 @@ ClassicEditor.defaultConfig = {
                 hasChanged: false
             };
         }
+    },
+    htmlSupport: {
+        allow: [
+            {
+                name: 'div',
+                classes: [ 'grid', 'grid-cols-2', 'grid-cols-3', 'grid-cols-4', 'border-1', 'border-2', 'flex' ]
+            },
+        ]
     },
     chartList: []
 };

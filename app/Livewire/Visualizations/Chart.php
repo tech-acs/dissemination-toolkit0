@@ -3,18 +3,22 @@
 namespace App\Livewire\Visualizations;
 
 use App\Livewire\Visualization;
+use App\Traits\AreaResolver;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\On;
 
 class Chart extends Visualization
 {
+    use AreaResolver;
+
     public const DEFAULT_CONFIG = [
         'responsive' => true,
         'displaylogo' => false,
         'modeBarButtonsToRemove' => ['select2d', 'lasso2d', 'autoScale2d', 'hoverClosestCartesian', 'hoverCompareCartesian'],
     ];
     public array $config;
+    public string $filterPath = '';
 
     public function mount(): void
     {
@@ -26,13 +30,18 @@ class Chart extends Visualization
     {
         $traces = $this->data;
         $data = toDataFrame($rawData);
-        //logger('dump', ['traces' => $traces, 'df' => $data]);
+        logger('dump', ['traces' => $traces, 'df' => $data]);
         if ($data->isNotEmpty()) {
             foreach ($traces as $index => $trace) {
-                $columnNames = Arr::get($trace, 'meta.columnNames', null);
-                if ($columnNames) {
+                $columnNames = Arr::get($trace, 'meta.columnNames', []);
+                /*if ($columnNames) {
                     $traces[$index]['x'] = $data[$columnNames['x']] ?? null;
                     $traces[$index]['y'] = $data[$columnNames['y']] ?? null;
+                }*/
+                foreach($columnNames as $key => $columnName) {
+                    if (! is_array($columnName)) {
+                        $traces[$index][$key] = $data[$columnName] ?? null;
+                    }
                 }
             }
         } else {
@@ -59,6 +68,14 @@ class Chart extends Visualization
         $this->preparePayload($rawData);
         $this->dispatch("updateChart.$this->htmlId", $this->data, $this->layout);
     }
+
+    /*#[On(['filterChanged'])]
+    public function update()
+    {
+        list($this->filterPath,) = $this->areaResolver();
+        $this->data = $this->getTraces($data, $this->filterPath);
+        $this->layout = $this->getLayout($this->filterPath);
+    }*/
 
     public function render()
     {

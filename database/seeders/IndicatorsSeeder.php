@@ -10,21 +10,18 @@ class IndicatorsSeeder extends Seeder
     public function run(): void
     {
         $topics = [
-            'Geographical' => [],
-            'Migration' => [],
-            'Household and family' => [
-                ['name' => 'Population', 'description' => 'Population count']
+            'Population' => [
+                ['name' => 'Population', 'description' => 'Population count'],
+                ['name' => 'Households', 'description' => 'Number of households'],
+                ['name' => 'Average household size', 'description' => 'Average household size'],
+                ['name' => 'Sex ratio', 'description' => 'Number of males per 100 females'],
+                ['name' => 'Population density', 'description' => 'Population density'],
             ],
-            'Demographic and social' => [],
-            'Fertility and mortality' => [],
-            'Education' => [],
-            'Economic' => [],
-            'Disability' => [
-                ['name' => 'Prevalence (%) of disability among the elderly', 'description' => 'Prevalence (%) of disability among the elderly']
+            'Education' => [
+
             ],
-            'Housing' => [
-                ['name' => 'Private households (Number)', 'description' => 'Private households (Number)'],
-                ['name' => 'Tenure of household (%)', 'description' => 'Distribution of the private housing units by tenure of household']
+            'Household living conditions' => [
+
             ],
         ];
         foreach ($topics as $topicName => $indicators) {

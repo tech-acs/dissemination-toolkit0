@@ -49,22 +49,47 @@
                     </div>
                 </div>
 
-                <div>
-                    <x-label for="tags" value="{{ __('Tags') }}" />
-                    @if(isset($story))
-                        <x-tags :value="\App\Models\Tag::tagsToJsArray($story->tags())" class="mt-1" />
-                    @else
-                        <x-tags class="mt-1" />
-                    @endif
-                    <x-input-error for="tags" class="mt-2" />
+                <div class="space-y-6">
+                    <div>
+                        <x-label for="topic" value="{{ __('Filterable by geography') }}" />
+                        <div class="flex items-center mt-3 ml-3" x-data="{enabled: @json($story->is_filterable ?? false) }" x-cloak>
+                            <label for="featured">
+                                <span class="text-sm text-gray-500">{{ __('No') }}</span>
+                            </label>
+                            <input type="hidden" name="featured" :value="enabled">
+                            <button
+                                x-on:click="enabled = ! enabled"
+                                :class="enabled ? 'bg-indigo-600' : 'bg-gray-200'"
+                                type="button"
+                                class="ml-3  relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                role="switch"
+                                id="featured"
+                            >
+                                <span aria-hidden="true" :class="enabled ? 'translate-x-5' : 'translate-x-0'" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                            </button>
+                            <label for="featured" class="ml-3">
+                                <span class="text-sm text-gray-900">{{ __('Yes') }}</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <x-label for="tags" value="{{ __('Tags') }}" />
+                        @if(isset($story))
+                            <x-tags :value="\App\Models\Tag::tagsToJsArray($story->tags())" class="mt-1" />
+                        @else
+                            <x-tags class="mt-1" />
+                        @endif
+                        <x-input-error for="tags" class="mt-2" />
+                    </div>
                 </div>
+
             </div>
 
             <div class="grid lg:grid-cols-3">
                 <div>
-                    <x-label for="published" value="{{ __('Featured') }}" />
+                    <x-label value="{{ __('Featured') }}" />
                     <div class="flex items-center mt-3 ml-3" x-data="{enabled: @json($story->featured ?? false) }" x-cloak>
-                        <label for="status">
+                        <label for="featured">
                             <span class="text-sm text-gray-500">{{ __('No') }}</span>
                         </label>
                         <input type="hidden" name="featured" :value="enabled">
@@ -74,11 +99,11 @@
                             type="button"
                             class="ml-3  relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                             role="switch"
-                            id="status"
+                            id="featured"
                         >
                             <span aria-hidden="true" :class="enabled ? 'translate-x-5' : 'translate-x-0'" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
                         </button>
-                        <label for="status" class="ml-3">
+                        <label for="featured" class="ml-3">
                             <span class="text-sm text-gray-900">{{ __('Yes') }}</span>
                         </label>
                     </div>
@@ -91,7 +116,7 @@
                 </div>
             </div>
 
-            @if(! isset($story))
+            {{--@if(! isset($story))
             <div x-data="{selected: null}">
                 <x-label for="rank" value="{{ __('Template (click to select)') }}" class="inline" /> <x-input-error for="template_id" class="inline ml-4" />
                 <input type="hidden" name="template_id" x-ref="template_id" />
@@ -113,7 +138,7 @@
                     @endforeach
                 </ul>
             </div>
-            @endif
+            @endif--}}
 
         </div>
     </div>

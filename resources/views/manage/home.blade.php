@@ -117,6 +117,27 @@
                     </div>
                 </div>
             </li>
+            <li class="flow-root py-2">
+                <div class="relative -m-2 flex items-center space-x-4 rounded-xl p-2 focus-within:ring-2 focus-within:ring-indigo-500 hover:bg-gray-50 border hover:border hover:border-pink-800">
+                    <div class="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-lg bg-pink-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-white" >
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-900">
+                            <a href="{{route('manage.dataset.index')}}" class="focus:outline-none">
+                                <span class="absolute inset-0" aria-hidden="true"></span>
+                                <span>Manage datasets</span>
+                                <span aria-hidden="true"> &rarr;</span>
+                            </a>
+                        </h3>
+                        <p class="mt-1 text-sm text-gray-500">
+                            Datasets can be created and edited in the Dataset management page. A dataset is a collection of data, generally tabular, that is organized into rows and columns.
+                        </p>
+                    </div>
+                </div>
+            </li>
             {{--<li class="flow-root py-2">
                 <div class="relative -m-2 flex items-center space-x-4 rounded-xl p-2 focus-within:ring-2 focus-within:ring-indigo-500 hover:bg-gray-50 border hover:border hover:border-green-800">
                     <div class="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-lg bg-orange-500">
@@ -139,27 +160,7 @@
                     </div>
                 </div>
             </li>--}}
-            <li class="flow-root py-2">
-                <div class="relative -m-2 flex items-center space-x-4 rounded-xl p-2 focus-within:ring-2 focus-within:ring-indigo-500 hover:bg-gray-50 border hover:border hover:border-pink-800">
-                    <div class="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-lg bg-pink-500">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-white" >
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25" />
-                        </svg>
-                    </div>
-                    <div>
-                        <h3 class="text-sm font-medium text-gray-900">
-                            <a href="{{route('manage.dataset.index')}}" class="focus:outline-none">
-                                <span class="absolute inset-0" aria-hidden="true"></span>
-                                <span>Manage datasets</span>
-                                <span aria-hidden="true"> &rarr;</span>
-                            </a>
-                        </h3>
-                        <p class="mt-1 text-sm text-gray-500">
-                            Datasets can be created and edited in the Dataset management page. A dataset is a collection of data, generally tabular, that is organized into rows and columns.
-                        </p>
-                    </div>
-                </div>
-            </li>
+
             <li class="flow-root py-2">
                 <div class="relative -m-2 flex items-center space-x-4 rounded-xl p-2 focus-within:ring-2 focus-within:ring-indigo-500 hover:bg-gray-50 border hover:border hover:border-sky-800">
                     <div class="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-lg bg-sky-500">

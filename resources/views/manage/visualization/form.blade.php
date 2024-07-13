@@ -31,7 +31,7 @@
 
             <div>
                 <x-label for="tags" value="{{ __('Tags') }}" />
-                {{--<x-tags :value="\App\Models\Tag::tagsToJsArray($visualization->tags())" class="mt-1" />--}}
+                <x-tags :value="\App\Models\Tag::tagsToJsArray($visualization->tags())" class="mt-1" />
                 <x-input-error for="tags" class="mt-2" />
             </div>
             <div>

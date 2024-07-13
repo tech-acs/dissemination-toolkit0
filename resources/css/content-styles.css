@@ -565,3 +565,8 @@
         color: unset;
     }
 }
+
+
+.ck-content .table table, .ck-content .table table td {
+    border: none !important;
+}

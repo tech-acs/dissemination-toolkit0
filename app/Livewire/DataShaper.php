@@ -40,7 +40,7 @@ class DataShaper extends Component
     public function resetFilter(): void
     {
         $this->reset();
-        $this->topics = Topic::has('indicators')->pluck('name', 'id')->all();
+        $this->topics = Topic::has('datasets')->pluck('name', 'id')->all();
         $this->dispatch('dataShaperSelectionMade', $this->makeReadableDataParams('reset', ''));
 
     }
@@ -86,24 +86,10 @@ class DataShaper extends Component
 
     private function makeDataParam(): array
     {
-        /*return new DataParam(
-            dataset: $this->selectedDataset,
-            geographies: [$this->selectedGeographyLevel => $this->selectedGeographies],
-            //fetchGeographicalChildren: $this->showFetchGeographicalChildren()?$this->fetchGeographicalChildren:false,
-            years: $this->selectedYears,
-            dimensions: collect($this->selectedDimensions)
-                ->mapWithKeys(fn ($dimensionId) => [$dimensionId => $this->selectedDimensionValues[$dimensionId]])
-                ->all(),
-            pivotColumn: $this->pivotColumn,
-            pivotRow: $this->pivotRow,
-            nestingPivotColumn: $this->nestingPivotColumn,
-        );*/
-
         return [
             'dataset' => $this->selectedDataset,
             'indicators' => $this->selectedIndicator,
             'geographies' => array_filter($this->selectedGeographies, fn ($areasOfLevel) => ! empty($areasOfLevel)),
-            //'years' => $this->selectedYears,
             'dimensions' => collect($this->selectedDimensions)
                 ->mapWithKeys(fn ($dimensionId) => [$dimensionId => $this->selectedDimensionValues[$dimensionId]])
                 ->all(),
@@ -121,7 +107,6 @@ class DataShaper extends Component
             "dataset" => 2,
             "indicator" => 3,
             "geography" => 4,
-            //"years" => 5,
             "dimensions" => 5,
         ];
         $this->selections[$field] = $value;
@@ -166,30 +151,29 @@ class DataShaper extends Component
     public function apply(): void
     {
         $queryParameters = $this->makeDataParam();
+        //dump($queryParameters);
+        $yearDimensionId = Dimension::firstWhere('table_name', 'year')->id;
         $validator = Validator::make(
             array_filter([
-                //'selectedDataset' => $queryParameters['dataset'],
-
                 'selectedGeography' => $queryParameters['geographies'],
+                'selectedDimensions' => $queryParameters['dimensions'],
                 'pivotColumn' => $queryParameters['pivotColumn'],
                 'pivotRow' => $queryParameters['pivotRow'],
                 'nestingPivotColumn' => $queryParameters['nestingPivotColumn'],
             ], fn ($v) => ! is_null($v)),
             [
-                //'selectedDataset' => 'integer|min:1',
-
                 'selectedGeography' => 'array|min:1',
+                'selectedDimensions' => "required_array_keys:$yearDimensionId|min:1",
                 'pivotColumn' => 'sometimes|bail|required|different:pivotRow|different:nestingPivotColumn',
                 'pivotRow' => 'bail|required_unless:pivotColumn,null|different:nestingPivotColumn'
             ],
             [
-                //'selectedDataset.min' => 'You must select a dataset before you can see results',
-
+                'selectedDimensions' => 'Year is a required dimension and must be selected',
                 'selectedGeography.min' => 'You must select geographic areas before you can see results',
                 'pivotRow.required_unless' => 'You must also select a pivot row since you have selected a pivot column',
             ]
         );
-        if ($validator->fails()) {
+        if ($validator->stopOnFirstFailure()->fails()) {
             $errors = $validator->errors();
             foreach ($errors->all() as $error) {
                 $this->dispatch('notify', content: $error, type: 'error');

@@ -1,4 +1,4 @@
-<div class="py-6 sm:p-6 bg-gray-100">
+<div class="mt-3">
     <div class="bg-white shadow sm:rounded-lg">
         <div class="p-4">
             <div class="flex justify-between">

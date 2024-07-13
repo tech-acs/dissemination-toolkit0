@@ -1,13 +1,12 @@
 <x-guest-layout>
     <div class="container mx-auto">
         @include('partials.nav')
+
         <main class="py-12">
             <div class="flex flex-col space-y-5">
-
                 <form class="flex flex-row space-x-1">
                     <div class="relative flex-1 ">
-                        <label for="keyword"
-                               class="absolute -top-3 left-2 inline-block bg-white px-1 text-base font-normal text-gray-700">Search</label>
+                        <label for="keyword" class="absolute -top-3 left-2 inline-block bg-white px-1 text-base font-normal text-gray-700">Search</label>
                         <input type="search" name="keyword" id="keyword" value="{{ request()->get('keyword') }}"
                                class="block w-full rounded-l-md border-0 py-1.5 pt-2 text-gray-900 shadow-sm ring-1 ring-inset ring-indigo-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-8"
                                placeholder="Type keyword and press enter"/>
@@ -19,8 +18,7 @@
                                 class="relative block w-full  rounded-none rounded-r-md border-0 bg-transparent py-1.5 pt-2 text-gray-700 ring-1 ring-inset ring-indigo-300 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-8">
                             <option value>All topics</option>
                             @foreach($topics ?? [] as $topic)
-                                <option class="p-2 rounded-md"
-                                        value="{{ $topic?->id }}" @selected($topic->id == request()->get('topic'))>
+                                <option class="p-2 rounded-md" value="{{ $topic?->id }}" @selected($topic->id == request()->get('topic'))>
                                     {{ $topic->name }}
                                 </option>
                             @endforeach
@@ -29,7 +27,7 @@
                 </form>
                 <div class="flex flex-wrap pt-4">
                     @forelse($records as $record)
-                        <div class="w-full md:w-1/2 p-3">
+                        <div class="w-full md:w-1/2 py-3">
                             <a href="{{ route('story.show', $record->id) }}">
                                 <div
                                     class="flex ring-1 ring-indigo-200 shadow-md rounded-md hover:ring-2 hover:ring-indigo-500 overflow-hidden">

@@ -2,7 +2,7 @@
     <div class="container mx-auto">
         @include('partials.nav')
 
-        <main class="max-w-2xl px-4 py-8 mx-auto sm:px-6 lg:max-w-7xl lg:px-8">
+        <main class="py-12">
             <div class="pb-6 border-b border-gray-200">
                 <h1 class="text-3xl font-bold tracking-tight text-indigo-800">Census Tables</h1>
                 <p class="mt-4 text-sm text-left text-gray-500">
@@ -115,8 +115,7 @@
                                 class="py-3 pl-4 pr-3 text-sm text-left sm:pl-6">
                                 <form class="flex flex-row space-x-1">
                                     <div class="relative flex-1" x-data>
-                                        <label for="keyword"
-                                               class="absolute inline-block px-1 text-sm font-thin text-gray-700 bg-white -top-3 left-2">Search</label>
+                                        <label for="keyword" class="absolute -top-3 left-2 inline-block bg-white px-1 text-base font-normal text-gray-700">Search</label>
                                         <input type="search" name="keyword" id="keyword"
                                                value="{{ request()->get('keyword') }}"
                                                class="block w-full rounded-l-md border-0 py-1.5 pt-2 text-gray-400 ring-1 ring-inset ring-indigo-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-8"
@@ -137,53 +136,11 @@
                             </th>
                         </tr>
                         <tr>
-                            <th scope="col"
-                                class="py-1 pl-4 pr-3 text-sm text-left sm:pl-6">
+                            <th scope="col" class="py-1 pl-4 pr-3 text-sm text-left sm:pl-6">
                                 <p>
-                                @if (session('message'))
-                                    <div class="p-4 py-3 mt-4 mb-4 border border-blue-300 rounded-md bg-blue-50">
-                                        <div class="flex">
-                                            <div class="flex-shrink-0">
-                                                <svg class="w-5 h-5 text-blue-400" xmlns="http://www.w3.org/2000/svg"
-                                                     viewBox="0 0 20 20"
-                                                     fill="currentColor" aria-hidden="true">
-                                                    <path fill-rule="evenodd"
-                                                          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                                                          clip-rule="evenodd"/>
-                                                </svg>
-                                            </div>
-                                            <div class="flex-1 ml-3 md:flex md:justify-between">
-                                                <p class="text-sm text-blue-700">
-                                                    {{ session('message') }}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endif
-                                @if ($errors->any())
-                                    <div class="p-4 py-3 mt-4 mb-4 bg-red-100 border border-red-400 rounded-md">
-                                        <div class="flex">
-                                            <div class="flex-shrink-0">
-                                                <!-- Heroicon name: solid/information-circle -->
-                                                <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor"
-                                                     viewBox="0 0 24 24"
-                                                     xmlns="http://www.w3.org/2000/svg">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                          stroke-width="2"
-                                                          d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                                </svg>
-                                            </div>
-                                            <div class="flex-1 ml-3 text-sm text-red-700 md:flex md:justify-between">
-                                                <ul class="">
-                                                    @foreach($errors->all() as $error)
-                                                        <li class="">{{ $error }}</li>
-                                                    @endforeach
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @endif
-                                    </p>
+                                <x-message-display />
+                                <x-error-display />
+                                </p>
                             </th>
                         </tr>
                         <tr>

@@ -60,12 +60,12 @@ class AreaTree
     {
         $lquery = empty($parentPath) ? '*{1}' : "$parentPath.*{1}";
         if (is_null($referenceValueToInclude)) {
-            return Area::selectRaw($checksumSafe ? "CONCAT('*', areas.path) AS path, code, name" : 'areas.path, code, name')
+            return Area::selectRaw($checksumSafe ? "CONCAT('*', areas.path) AS path, code, name, id" : 'areas.path, code, name, id')
                 ->whereRaw("path ~ '{$lquery}'")
                 ->orderBy($orderBy)
                 ->get();
         } else {
-            return Area::selectRaw($checksumSafe ? "CONCAT('*', areas.path) AS path, code, name, value AS ref_value" : 'areas.path, code, name, value AS ref_value')
+            return Area::selectRaw($checksumSafe ? "CONCAT('*', areas.path) AS path, code, name, id, value AS ref_value" : 'areas.path, code, name, id, value AS ref_value')
                 ->leftJoin('reference_values', 'areas.path', 'reference_values.path')
                 ->whereRaw("areas.path ~ '{$lquery}' AND COALESCE(reference_values.indicator, '{$referenceValueToInclude}') = '{$referenceValueToInclude}'")
                 ->orderBy($orderBy)
@@ -75,7 +75,7 @@ class AreaTree
 
     public function getArea(string $path)
     {
-        return Area::select('path', 'code', 'name', 'level')
+        return Area::select('id', 'path', 'code', 'name', 'level')
             ->whereRaw("path ~ '{$path}'")
             ->first();
     }

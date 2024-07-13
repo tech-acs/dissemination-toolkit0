@@ -37,8 +37,6 @@ trait IndicatorTrait {
             $this->selectedGeographies[$level] = [];
         }
 
-        //$this->years = $dataset->years->pluck('name', 'id')->all();
-
         $this->dimensions = $dataset->dimensions->map(function ($dimension) {
             return [
                 'id' => $dimension->id,
@@ -47,7 +45,7 @@ trait IndicatorTrait {
             ];
         })->all();
 
-        $this->selectedDimensions = [Dimension::where('table_name', 'year')->first()->id];
+        //$this->selectedDimensions = [Dimension::where('table_name', 'year')->first()->id];
 
         $this->selectedDimensionValues = collect($this->dimensions)
             ->keyBy('id')

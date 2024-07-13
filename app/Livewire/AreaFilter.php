@@ -3,21 +3,22 @@
 namespace App\Livewire;
 
 use App\Services\AreaTree;
+use App\Traits\AreaResolver;
 use App\Traits\ChecksumSafetyTrait;
 use Livewire\Component;
 
 class AreaFilter extends Component
 {
     use ChecksumSafetyTrait;
+    use AreaResolver;
 
     public array $dropdowns;
 
     public function mount()
     {
-        //session()->forget('area-filter');
-        $areaTree = new AreaTree(removeLastNLevels: 1);
+        $areaTree = new AreaTree();
         $selectionsFromSession = session()->get('area-filter', []);
-        $restrictions = auth()->user()->areaRestrictionAsFilter();
+        $restrictions = [];
         $subject = null;
         $this->dropdowns = array_map(function ($level) use ($selectionsFromSession, $restrictions, $areaTree, &$subject) {
             $dropdown = ['list' => [], 'selected' => null, 'restricted' => null];
@@ -75,14 +76,15 @@ class AreaFilter extends Component
             array_filter($this->dropdowns, fn ($dropdown) => $dropdown['selected'])
         );
         session()->put('area-filter', $filter);
-        $this->emit('filterChanged', $filter);
+        list($filterPath,) = $this->areaResolver();
+        $this->dispatch('filterChanged', $filterPath);
     }
 
     public function clear()
     {
         session()->forget('area-filter');
         $this->mount();
-        $this->emit('filterChanged', []);
+        $this->dispatch('filterChanged');
     }
 
     public function render()

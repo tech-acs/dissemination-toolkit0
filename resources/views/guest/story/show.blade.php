@@ -8,6 +8,7 @@
 
         <article class="py-5 border-t border-b">
             <x-guest-header :data="$story" :show-pdf="true" :show-embed="false"/>
+            <livewire:area-filter />
             <div class="pt-10 ck-content">
 
                 {!! Blade::render($story->html) !!}

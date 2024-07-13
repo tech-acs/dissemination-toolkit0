@@ -18,16 +18,17 @@ export default class AgGridTable {
         this.rootElement.classList.add(...['ag-theme-quartz', 'w-full', 'h-[calc(60vh)]']);
         const vizId = this.rootElement.getAttribute('viz-id')
 
-        this.rootElement.innerHTML = ''
         if (vizId) {
             this.fetchData(vizId)
                 .then(() => {
+                    this.rootElement.innerHTML = ''
                     this.table = createGrid(this.rootElement, this.options);
                 })
         } else {
             this.options = JSON.parse(this.rootElement.dataset['options'])
             if (this.options?.rowData?.length > 0) {
-                this.table = createGrid(this.rootElement, this.options);
+                this.rootElement.innerHTML = ''
+                this.table = createGrid(this.rootElement, this.options)
             }
         }
 

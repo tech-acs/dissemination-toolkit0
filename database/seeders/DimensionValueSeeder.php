@@ -42,12 +42,25 @@ class DimensionValueSeeder extends Seeder
                 ['code' => '80-84', 'name' => '80-84'],
                 ['code' => '85+', 'name' => '85+'],
             ],
-            'area_of_residence' => [
+            'ten_year_age_group' => [
+                ['code' => '_T', 'name' => 'Total'],
+                ['code' => '0-9', 'name' => '0-9'],
+                ['code' => '10-19', 'name' => '10-19'],
+                ['code' => '20-29', 'name' => '20-29'],
+                ['code' => '30-39', 'name' => '30-39'],
+                ['code' => '40-49', 'name' => '40-49'],
+                ['code' => '50-59', 'name' => '50-59'],
+                ['code' => '60-69', 'name' => '60-69'],
+                ['code' => '70-79', 'name' => '70-79'],
+                ['code' => '80-89', 'name' => '80-89'],
+                ['code' => '90+', 'name' => '90+'],
+            ],
+            'urban_rural' => [
                 ['code' => '_T', 'name' => 'Total'],
                 ['code' => 'ur', 'name' => 'Urban'],
                 ['code' => 'ru', 'name' => 'Rural'],
             ],
-            'tenure_of_household' => [
+            /*'tenure_of_household' => [
                 ['code' => '_T', 'name' => 'Total'],
                 ['code' => '1', 'name' => 'Owner'],
                 ['code' => '2', 'name' => 'Tenant'],
@@ -57,10 +70,12 @@ class DimensionValueSeeder extends Seeder
                 ['code' => '6', 'name' => 'Temporary camp or settlement'],
                 ['code' => '7', 'name' => 'Other'],
                 ['code' => '8', 'name' => 'Not stated'],
-            ],
+            ],*/
             'year' => [
-                ['code' => '2010', 'name' => '2010'],
-                ['code' => '2022', 'name' => '2022'],
+                ['code' => '1991', 'name' => '1991'],
+                ['code' => '2001', 'name' => '2001'],
+                ['code' => '2011', 'name' => '2011'],
+                ['code' => '2023', 'name' => '2023'],
             ]
         ];
         foreach ($dimensions as $dimensionTable => $values) {
@@ -69,7 +84,7 @@ class DimensionValueSeeder extends Seeder
                     DB::table($dimensionTable)->insert($value);
                 }
             } else {
-                dump("Dimension table $dimensionTable does not exist");
+                dump("Dimension table $dimensionTable does not exist. Run the 'data:create-dimensions' command");
             }
         }
     }
