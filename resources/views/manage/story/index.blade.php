@@ -51,7 +51,7 @@
                         @forelse($records as $record)
                             <tr>
                                 <td class="w-1/3 px-6 py-4 text-sm font-medium text-gray-900 break-words">
-                                    {{$record->title}}
+                                    {{$record->title}} @if($record->is_filterable) <x-icon.filter /> @endif
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     {{$record->topic?->name}}

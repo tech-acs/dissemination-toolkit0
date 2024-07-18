@@ -53,7 +53,7 @@
                                     {{ $record->title }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-red text-center break-words">
-                                    {{ ucfirst($record->type) }}
+                                    {{ ucfirst($record->type) }} @if ($record->is_filterable) <span class="text-green-700" title="Filterable by geography"><x-icon.filter /></span> @endif
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
                                     <x-yes-no value="{{$record->published}}" />
@@ -69,6 +69,8 @@
                                     @if($record->is_owner)
                                         <span class="text-gray-400 px-1">|</span>
                                         <a href="{{route('manage.visualization.edit', $record->id)}}" class="text-indigo-600 hover:text-indigo-900">{{ __('Edit') }}</a>
+                                        <span class="text-gray-400 px-1">|</span>
+                                        <a href="{{ route('manage.viz-builder-wizard.show.{currentStep}', 1) }}?viz-id={{ $record->id }}" class="text-indigo-600 hover:text-indigo-900">{{ __('Design') }}</a>
                                         <span class="text-gray-400 px-1">|</span>
                                         <a href="{{ route('manage.visualization.destroy', $record->id) }}" x-on:click.prevent="confirmThenDelete($el)" class="text-red-600">{{ __('Delete') }}</a>
                                     @endif

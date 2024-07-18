@@ -34,7 +34,7 @@ class VisualizationController extends Controller
 
     public function update(Request $request, Visualization $visualization)
     {
-        $visualization->update($request->only(['title', 'description', 'published', 'topic_id']));
+        $visualization->update($request->only(['title', 'description', 'published', 'topic_id', 'is_filterable']));
         $updatedTags = Tag::prepareForSync($request->get('tags', ''));
         $visualization->tags()->sync($updatedTags->pluck('id'));
         return redirect()->route('manage.visualization.index')

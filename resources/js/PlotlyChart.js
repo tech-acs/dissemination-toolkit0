@@ -9,6 +9,7 @@ export default class PlotlyChart {
     data = [];
     layout = {};
     config = [];
+    filterable = false;
 
     emptyLayout = {
         xaxis: {visible: false},
@@ -29,6 +30,7 @@ export default class PlotlyChart {
         this.data = response.data.data;
         this.layout = response.data.layout;
         this.config = response.data.config;
+        this.filterable = response.data.filterable;
     }
 
     constructor(htmlId) {
@@ -48,35 +50,37 @@ export default class PlotlyChart {
                 .then(() => {
                     console.log({data: this.data});
                     Plotly.newPlot(this.rootElement, this.data, this.layout, this.config);
+                    this.registerLivewireEventListeners(this.filterable);
                 })
         } else {
             this.data = JSON.parse(this.rootElement.dataset['data'])
             this.layout = JSON.parse(this.rootElement.dataset['layout'])
             this.config = JSON.parse(this.rootElement.dataset['config'])
             Plotly.newPlot(this.rootElement, this.data, this.layout, this.config);
+            this.registerLivewireEventListeners(this.filterable);
         }
-        console.log({data:this.data, layout:this.layout});
-        this.registerLivewireEventListeners();
     }
 
-    registerLivewireEventListeners() {
+    registerLivewireEventListeners(filterable) {
         Livewire.on(`updateResponse.${this.id}`, (dataAndLayout) => {
             console.log('Received updateResponse: ' + this.id, dataAndLayout);
             Plotly.react(this.id, ...dataAndLayout, this.config)
         });
 
-        Livewire.on(`filterChanged`, (filter) => {
-            let filterPath
-            [filterPath] = filter
-            this.fetchData(this.vizId, filterPath)
-                .then(() => {
-                    console.log({Path: filterPath, Filtered: this.data});
-                    if (! this.data.length) {
-                        Plotly.react(this.rootElement, this.data, this.emptyLayout);
-                    } else {
-                        Plotly.react(this.rootElement, this.data, this.layout);
-                    }
-                })
-        });
+        if (filterable) {
+            Livewire.on(`filterChanged`, (filter) => {
+                let filterPath
+                [filterPath] = filter
+                this.fetchData(this.vizId, filterPath)
+                    .then(() => {
+                        console.log({Path: filterPath, Filtered: this.data});
+                        if (! this.data.length) {
+                            Plotly.react(this.rootElement, this.data, this.emptyLayout);
+                        } else {
+                            Plotly.react(this.rootElement, this.data, this.layout);
+                        }
+                    })
+            });
+        }
     }
 }

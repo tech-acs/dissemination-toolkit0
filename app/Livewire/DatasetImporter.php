@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Number;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Livewire\Component;
@@ -34,7 +35,8 @@ class DatasetImporter extends Component
     public array $columnMapping = [];
     public string $filePath = '';
     public string $message = '';
-    const CHUNK_SIZE = 4000;
+    const CHUNK_SIZE = 500;
+    public string $importError = '';
 
     private function mappings(): array
     {
@@ -47,7 +49,7 @@ class DatasetImporter extends Component
 
     protected function rules()
     {
-        return array_merge(['spreadsheet' => 'required|file|mimes:csv'], $this->messages());
+        return array_merge(['spreadsheet' => 'required|file|mimes:csv,xlsx'], $this->messages());
     }
 
     protected function messages()
@@ -102,6 +104,7 @@ class DatasetImporter extends Component
         $this->validate();
         //dump($result);
 
+        $this->importError = '';
         try {
             $dataFile = SimpleExcelReader::create($this->filePath);//->formatHeadersUsing(fn($header) => strtolower(trim($header)));
             $rows = $dataFile->getRows();
@@ -151,7 +154,7 @@ class DatasetImporter extends Component
                         $entry = [...$commonForMultipleIndicators];
 
                         $entry['indicator_id'] = $indicatorId;
-                        $entry['value'] = $row[$valueColumn];
+                        $entry['value'] = (float)$row[$valueColumn];
 
                         if (in_array(null, $entry, true)) {
                             $lineNo = self::CHUNK_SIZE * $chunkIndex + $rowIndexWithinAChunk + 2;
@@ -164,6 +167,7 @@ class DatasetImporter extends Component
                         } else {
                             array_push($entries, $entry);
                         }
+                        //logger('looping', ['chunk' => $chunkIndex, 'chunk-row' => $rowIndexWithinAChunk, 'i-id' => $indicatorId, 'col' => $valueColumn, 'val' => $row[$valueColumn]]);
                     }
 
                     /*$entry = [...$common];
@@ -174,15 +178,19 @@ class DatasetImporter extends Component
                     }
                     $entry['value'] = $row['value'];*/
 
-                    //dump($row, $entries);
+                    //logger('loop', ['entries' => $entries]);
                 });
                 $result = DB::table($this->dataset->fact_table)->insertOrIgnore($entries);
                 $inserted += $result;
+
             });
             return redirect()->route('manage.dataset.index')->withMessage("$inserted observations imported for dataset");
+
         } catch (\Exception $exception) {
+
             logger('Exception: ' . $exception->getMessage());
-            return back()->withErrors(['datafile' => $exception->getMessage()]);
+            //return back()->withErrors(['datafile' => $exception->getMessage()]);
+            $this->importError = str($exception->getMessage())->limit(500);
         }
     }
 

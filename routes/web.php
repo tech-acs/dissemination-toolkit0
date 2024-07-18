@@ -68,6 +68,7 @@ Route::middleware(['web'])->group(function () {
                 ->whereIn('currentStep', [1, 2, 3])
                 ->name('viz-builder-wizard.update.{currentStep}');
         });
+
         Route::post('viz-builder-wizard/api/put', [VizBuilderWizardController::class, 'ajaxSaveChart']);
         Route::get('viz-builder-wizard/api/get', [VizBuilderWizardController::class, 'ajaxGetChart']);
 

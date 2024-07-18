@@ -47,7 +47,7 @@ class VizAjaxController extends Controller
             $instance = new Chart();
             $instance->vizId = $visualization->id;
             $instance->mount();
-            $path = $request->get('path', null);
+            $path = $request->get('path');
             if ($path) {
                 $dataParams = $this->updateDataParam($visualization->data_params, $path);
                 logger('Data params', ['original' => $visualization->data_params['geographies'], 'new' => $dataParams['geographies']]);
@@ -59,6 +59,7 @@ class VizAjaxController extends Controller
                 'data' => $instance->data,
                 'layout' => $instance->layout,
                 'config' => $instance->config,
+                'filterable' => $visualization->is_filterable,
             ];
 
 
@@ -68,6 +69,7 @@ class VizAjaxController extends Controller
             $instance->mount();
             return [
                 'options' => $instance->options,
+                'filterable' => $visualization->is_filterable,
             ];
         } else {
             //

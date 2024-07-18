@@ -80,8 +80,8 @@ class ImportDataset extends Command
             });
             $this->info("Data for table: {$dataInfo['fact_table']}");
             $result = DB::table($dataInfo['fact_table'])->insertOrIgnore($entries);
-            dump($result);
-            dump($entries);
+            //dump($result);
+            //dump($entries);
         });
     }
 }

@@ -31,6 +31,7 @@ import { GeneralHtmlSupport } from "@ckeditor/ckeditor5-html-support";
 import { Alignment } from "@ckeditor/ckeditor5-alignment";
 
 import ChartEmbed from "./ChartEmbed/ChartEmbed";
+import Placeholder from "./Placeholder/Placeholder";
 
 export default class ClassicEditor extends ClassicEditorBase {}
 
@@ -41,7 +42,7 @@ ClassicEditor.builtinPlugins = [
     Image, ImageCaption, ImageStyle, ImageInsert, ImageResize, ImageUpload, ImageToolbar, LinkImage, ImageInline,
     ImageResizeEditing, ImageResizeHandles,
     HtmlEmbed, SourceEditing, HorizontalLine, Base64UploadAdapter, RemoveFormat,
-    ChartEmbed
+    ChartEmbed, Placeholder
 ];
 
 ClassicEditor.defaultConfig = {
@@ -66,7 +67,8 @@ ClassicEditor.defaultConfig = {
             '|', 'bulletedList', 'numberedList',
             '|', 'outdent', 'indent',
             '|', 'showBlocks', 'sourceEditing',
-            '|', 'chartEmbed',
+            '|', 'placeholder',
+            'chartEmbed',
         ], shouldNotGroupWhenFull: true,
     },
     language: 'en',
@@ -192,4 +194,3 @@ ClassicEditor.defaultConfig = {
     },
     chartList: []
 };
-

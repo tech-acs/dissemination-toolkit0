@@ -9,6 +9,7 @@ use App\Models\Year;
 use Closure;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\MessageBag;
 use Illuminate\Validation\ValidationException;
 use Spatie\SimpleExcel\SimpleExcelReader;
 use App\Models\Area;
@@ -104,7 +105,7 @@ class DatasetImportController extends Controller
             });
             return redirect()->route('manage.dataset.index')->withMessage("$inserted observations imported for dataset");
         } catch (\Exception $exception) {
-            return back()->withErrors(['datafile' => $exception->getMessage()]);
+            return redirect()->back()->withErrors(new MessageBag(['datafile' => $exception->getMessage()]));
         }
     }
 }

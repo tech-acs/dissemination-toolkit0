@@ -180,6 +180,7 @@ class DataShaper extends Component
             }
         } else {
             $query = new QueryBuilder($queryParameters);
+            //dump($query->toSql());
             $this->dispatch(
                 "changeOccurred",
                 rawData: Sorter::sort($query->get()),
