@@ -1,9 +1,17 @@
 {
-    "name": "laravel/laravel",
+    "name": "uneca/dissemination-toolkit",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "description": "Tell engaging stories with data through the use of visualizations and powerful data exploration tools.",
+    "keywords": ["census", "dissemination", "uneca"],
+    "homepage": "https://github.com/tech-acs/dissemination-toolkit",
     "license": "MIT",
+    "authors": [
+        {
+            "name": "UNECA",
+            "email": "tamerat@un.org",
+            "role": "Developer"
+        }
+    ],
     "require": {
         "php": "^8.2",
         "ext-pgsql": "*",
