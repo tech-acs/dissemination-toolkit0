@@ -20,6 +20,7 @@
         "@ckeditor/ckeditor5-html-support": "^41.4.2",
         "@ckeditor/ckeditor5-image": "^41.4.2",
         "@ckeditor/ckeditor5-indent": "^41.4.2",
+        "@ckeditor/ckeditor5-inspector": "^4.1.0",
         "@ckeditor/ckeditor5-link": "^41.4.2",
         "@ckeditor/ckeditor5-list": "^41.4.2",
         "@ckeditor/ckeditor5-media-embed": "^41.4.2",
@@ -48,7 +49,6 @@
         "plotly.js-dist": "^2.33.0",
         "plotly.js-locales": "^2.33.0",
         "postcss": "^8.4.32",
-
         "react": "^16.14.0",
         "react-chart-editor": "^0.46.1",
         "react-dom": "^16.14.0",
