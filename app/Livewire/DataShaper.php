@@ -51,8 +51,8 @@ class DataShaper extends Component
         if ($indicator) {
             $this->selectedTopic = $indicator->topic->id;
             $this->updatedSelectedTopic($this->selectedTopic);
-            $this->selectedIndicator = $indicator->id;
-            $this->updatedSelectedIndicator($this->selectedIndicator);
+            $this->selectedIndicators[] = $indicator->id;
+            $this->updatedSelectedIndicators($indicator->id);
             $this->nextSelection = 'dataset';
         }
     }
@@ -63,8 +63,8 @@ class DataShaper extends Component
         if ($dataset) {
             $this->selectedTopic = $dataset->indicator->topic->id;
             $this->updatedSelectedTopic($this->selectedTopic);
-            $this->selectedIndicator = $dataset->indicator->id;
-            $this->updatedSelectedIndicator($this->selectedIndicator);
+            $this->selectedIndicators[] = $dataset->indicator->id;
+            $this->updatedSelectedIndicators($dataset->indicator->id);
             $this->selectedDataset = $dataset->id;
             $this->updatedSelectedDataset($this->selectedDataset);
             $this->nextSelection = 'geography';
@@ -74,8 +74,8 @@ class DataShaper extends Component
     private function makeIndicatorName(): string
     {
         $dataset = Dataset::with('indicators', 'dimensions')->find($this->selectedDataset);
-        $indicator = Indicator::find($this->selectedIndicator);
-        return str($indicator->name)
+        $indicators = Indicator::findMany($this->selectedIndicators);
+        return str($indicators->pluck('name')->join(', ', ' and '))
             ->when(collect($this->selectedDimensions)->isNotEmpty(), function (Stringable $string) use ($dataset) {
                 $selectedDimensions = $dataset->dimensions->filter(fn ($dim) => in_array($dim->id, $this->selectedDimensions));
                 return $string->append(' by ', $selectedDimensions->pluck('name')->join(', ', ' and '));
@@ -88,7 +88,7 @@ class DataShaper extends Component
     {
         return [
             'dataset' => $this->selectedDataset,
-            'indicators' => $this->selectedIndicator,
+            'indicators' => $this->selectedIndicators,
             'geographies' => array_filter($this->selectedGeographies, fn ($areasOfLevel) => ! empty($areasOfLevel)),
             'dimensions' => collect($this->selectedDimensions)
                 ->mapWithKeys(fn ($dimensionId) => [$dimensionId => $this->selectedDimensionValues[$dimensionId]])
@@ -105,7 +105,7 @@ class DataShaper extends Component
             "reset" => 0,
             "topic" => 1,
             "dataset" => 2,
-            "indicator" => 3,
+            "indicators" => 3,
             "geography" => 4,
             "dimensions" => 5,
         ];
@@ -117,35 +117,32 @@ class DataShaper extends Component
     private function setPivotableDimensions(): void
     {
         $this->pivotableDimensions = [];
-        $dimensions = collect($this->selectedDimensions)
-            ->mapWithKeys(fn ($dimensionId) => [$dimensionId => $this->selectedDimensionValues[$dimensionId]])
-            ->map(function ($dimensionValueIds, $dimensionId) {
-                $dimension = Dimension::find($dimensionId);
-                return [
-                    'id' => $dimensionId,
-                    'label' => $dimension->name,
+        if (count($this->selectedIndicators) === 1) {
+            $this->pivotingNotPossible = false;
+            $dimensions = collect($this->selectedDimensions)
+                ->mapWithKeys(fn ($dimensionId) => [$dimensionId => $this->selectedDimensionValues[$dimensionId]])
+                ->map(function ($dimensionValueIds, $dimensionId) {
+                    $dimension = Dimension::find($dimensionId);
+                    return [
+                        'id' => $dimensionId,
+                        'label' => $dimension->name,
+                    ];
+                });
+            /*->when(count($this->selectedIndicators) > 1, function (Collection $pivotableList) {
+                return $pivotableList->prepend(['id' => 3, 'label' => 'Indicator']);
+            });*/
+            if ($dimensions->isNotEmpty()) {
+                $this->pivotableDimensions = [
+                    ...$dimensions,
+                    [
+                        'id' => 0,
+                        'label' => 'Geography',
+                    ],
                 ];
-            });
-        if ($dimensions->isNotEmpty()) {
-            $this->pivotableDimensions = [
-                ...$dimensions,
-                [
-                    'id' => 0,
-                    'label' => 'Geography',
-                ],
-            ];
+            }
+        } else {
+            $this->pivotingNotPossible = true;
         }
-        /*$this->pivotableDimensions = [
-            ...$dimensions,
-            [
-                'id' => 0,
-                'label' => 'Geography',
-            ],
-            [
-                'id' => -1,
-                'label' => 'Year',
-            ],
-        ];*/
     }
 
     public function apply(): void
@@ -180,7 +177,7 @@ class DataShaper extends Component
             }
         } else {
             $query = new QueryBuilder($queryParameters);
-            //dump($query->toSql());
+            //dump($queryParameters, $query->toSql());
             $this->dispatch(
                 "changeOccurred",
                 rawData: Sorter::sort($query->get()),

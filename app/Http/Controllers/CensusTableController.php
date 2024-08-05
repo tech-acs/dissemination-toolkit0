@@ -8,6 +8,9 @@ use App\Models\CensusTable;
 use App\Models\Indicator;
 use App\Models\Tag;
 use App\Models\Topic;
+use App\Services\SmartTableColumn;
+use App\Services\SmartTableData;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -30,10 +33,31 @@ class CensusTableController extends Controller
         ];
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $records = auth()->user()->censusTables()->orderByDesc('updated_at')->get();
-        return view('manage.census-table.index', compact('records'));
+        /*$records = auth()->user()->censusTables()->orderByDesc('updated_at')->get();
+        return view('manage.census-table.index', compact('records'));*/
+
+        return (new SmartTableData(auth()->user()->censusTables(), $request))
+            ->columns([
+                SmartTableColumn::make('title')->sortable()->tdClasses('w-1/3'),
+                SmartTableColumn::make('type')->sortable()
+                    ->setBladeTemplate('<x-dataset-type-badge :text="$row->dataset_type" class="{{\App\Enums\CensusTableTypeEnum::getTypeClass($row->dataset_type)}}"/>'),
+                SmartTableColumn::make('publisher')->sortable(),
+                SmartTableColumn::make('author')->sortable()
+                    ->setBladeTemplate('{{ $row->user->name }}'),
+                SmartTableColumn::make('published')
+                    ->setBladeTemplate('<x-yes-no value="{{$row->published}}"/>'),
+                SmartTableColumn::make('updated')
+                    ->setBladeTemplate('{{ $row->updated_at->diffForHumans() }}'),
+            ])
+            ->showable('census-table.show')
+            ->editable('manage.census-table.edit')
+            ->deletable('manage.census-table.destroy')
+            ->searchable(['title', 'type'])
+            ->sortBy('title')
+            ->downloadable()
+            ->view('manage.census-table.index');
     }
 
     public function create()

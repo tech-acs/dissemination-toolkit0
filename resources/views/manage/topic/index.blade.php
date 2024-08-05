@@ -14,10 +14,10 @@
         <div class="text-right">
             <a href="{{route('manage.topic.create')}}"><x-button>{{ __('Create new') }}</x-button></a>
         </div>
-        <x-message-display />
-        <x-error-display />
 
-        <div class="mt-2 flex flex-col">
+        <x-smart-table :$smartTableData />
+
+        {{--<div class="mt-2 flex flex-col">
             <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                     <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg" x-data="confirmedDeletion">
@@ -63,8 +63,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-
+        </div>--}}
 
     </div>
 </x-app-layout>

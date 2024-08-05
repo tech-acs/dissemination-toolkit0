@@ -14,7 +14,10 @@
         <div class="text-right">
             <a href="{{ route('manage.indicator.create') }}"><x-button>{{ __('Create new') }}</x-button></a>
         </div>
-        <x-message-display />
+
+        <x-smart-table :$smartTableData />
+
+        {{--<x-message-display />
         <x-error-display />
 
         <div class="mt-2 flex flex-col">
@@ -63,7 +66,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>--}}
 
 
     </div>

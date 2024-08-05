@@ -16,7 +16,7 @@ trait TopicTrait {
 
     public function updatedSelectedTopic(int $topicId): void
     {
-        $this->reset('selectedDataset', 'selectedIndicator', 'datasets', 'selectedGeographyLevels',
+        $this->reset('selectedDataset', 'selectedIndicators', 'datasets', 'selectedGeographyLevels',
             'geographyLevels', 'geographies', 'selectedGeographies', 'years', 'selectedYears',
             'dimensions', 'selectedDimensions', 'selectedDimensionValues', 'pivotableDimensions', 'pivotColumn', 'pivotRow', 'nestingPivotColumn');
         $topic = Topic::find($topicId);

@@ -15,7 +15,6 @@ class DimensionsSeeder extends Seeder
             ['name' => 'Five year age group', 'table_name' => 'five_year_age_group', 'for' => ['population_facts']],
             ['name' => 'Ten year age group', 'table_name' => 'ten_year_age_group', 'for' => ['population_facts']],
             ['name' => 'Urban/rural', 'table_name' => 'urban_rural', 'for' => ['population_facts', 'housing_facts']],
-            //['name' => 'Tenure of household', 'table_name' => 'tenure_of_household', 'for' => ['housing_facts']],
         ];
         foreach ($dimensions as $dimension) {
             Dimension::create($dimension);

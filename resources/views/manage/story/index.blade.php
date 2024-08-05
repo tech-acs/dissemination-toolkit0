@@ -10,10 +10,14 @@
     </x-slot>
 
     <div class="flex flex-col max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
+
         <div class="text-right">
             <a href="{{route('manage.story.create')}}"><x-button>{{ __('Create new') }}</x-button></a>
         </div>
-        <x-message-display />
+
+        <x-smart-table :$smartTableData custom-action-sub-view="manage.story.custom-action" />
+
+        {{--<x-message-display />
         <x-error-display />
 
         <div class="mt-2 flex flex-col">
@@ -94,6 +98,6 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>--}}
     </div>
 </x-app-layout>

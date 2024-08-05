@@ -60,17 +60,6 @@ class DimensionValueSeeder extends Seeder
                 ['code' => 'ur', 'name' => 'Urban'],
                 ['code' => 'ru', 'name' => 'Rural'],
             ],
-            /*'tenure_of_household' => [
-                ['code' => '_T', 'name' => 'Total'],
-                ['code' => '1', 'name' => 'Owner'],
-                ['code' => '2', 'name' => 'Tenant'],
-                ['code' => '3', 'name' => 'Hire purchase'],
-                ['code' => '4', 'name' => 'Free lodging'],
-                ['code' => '5', 'name' => 'Staff housing'],
-                ['code' => '6', 'name' => 'Temporary camp or settlement'],
-                ['code' => '7', 'name' => 'Other'],
-                ['code' => '8', 'name' => 'Not stated'],
-            ],*/
             'year' => [
                 ['code' => '1991', 'name' => '1991'],
                 ['code' => '2001', 'name' => '2001'],

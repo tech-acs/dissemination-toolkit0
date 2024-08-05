@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Tag;
 use App\Models\Topic;
+use App\Services\SmartTableColumn;
+use App\Services\SmartTableData;
 use Illuminate\Http\Request;
 use App\Models\Visualization;
 use Illuminate\Support\Facades\Auth;
@@ -12,11 +14,28 @@ use Illuminate\Support\Str;
 
 class VisualizationController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         //$records = Auth::user()->visualizations()->orderByDesc('updated_at')->get();
-        $records = Visualization::orderByDesc('updated_at')->get();
-        return view('manage.visualization.index', compact('records'));
+        /*$records = Visualization::orderByDesc('updated_at')->get();
+        return view('manage.visualization.index', compact('records'));*/
+
+        return (new SmartTableData(Visualization::query(), $request))
+            ->columns([
+                SmartTableColumn::make('title')->sortable(),
+                SmartTableColumn::make('type')
+                    ->setBladeTemplate('{{ ucfirst($row->type) }} @if ($row->is_filterable) <span class="text-green-700" title="Filterable by geography"><x-icon.filter /></span> @endif'),
+                SmartTableColumn::make('published_at')->setLabel('Published')
+                    ->setBladeTemplate('<x-yes-no value="{{ $row->published }}" />'),
+                SmartTableColumn::make('author')
+                    ->setBladeTemplate('{{ $row->user->name }}'),
+                /*SmartTableColumn::make('for')->setLabel('Applies to')
+                    ->setBladeTemplate('{{ implode(" | ", $row->for) }}'),*/
+            ])
+            ->searchable(['title'])
+            ->sortBy('name')
+            //->downloadable()
+            ->view('manage.visualization.index');
     }
 
     /*public function store(Request $request)

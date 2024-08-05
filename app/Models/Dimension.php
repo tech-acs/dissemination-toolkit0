@@ -42,6 +42,14 @@ class Dimension extends Model
         return false;
     }
 
+    public function getValuesCountAttribute(): int
+    {
+        if ($this->table_exists) {
+            return DB::table($this->table_name)->count();
+        }
+        return 0;
+    }
+
     public function getForeignKeyAttribute(): string
     {
         return str($this->name)->lower()->snake()->append('_id')->value();

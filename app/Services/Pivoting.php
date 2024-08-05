@@ -29,12 +29,6 @@ class Pivoting
                 'type' => $type,
             ];
             return 'Geography';
-        /*} elseif ($id === -1) {
-            $this->selections['years.name'] = [
-                'select' => "years.name::text AS $type", // AS geography
-                'type' => $type,
-            ];
-            return 'Year';*/
         } elseif ($id > 0) {
             $dim = Dimension::find($id);
             $this->selections["{$dim->table_name}.name"] = [

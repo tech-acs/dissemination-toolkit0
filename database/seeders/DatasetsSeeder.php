@@ -10,33 +10,38 @@ class DatasetsSeeder extends Seeder
 {
     public function run(): void
     {
-        $datasetsByIndicator = [
-            'Population' => [
-                'name' => 'Population by area of residence, sex and age',
-                'description' => 'Population by area of residence, sex and age',
+        $datasetsWithIndicator = [
+            [
+                'name' => 'Namibia population, hhs, avg. hh size for 1991 - 2023 censuses',
+                'description' => 'Figure 2.1.1: Namibia population, hhs, avg. hh size for 1991 - 2023  censuses',
                 'fact_table' => 'population_facts',
-                'max_area_level' => 0
+                'max_area_level' => 0,
+                'indicators' => ['Average household size', 'Households', 'Population'],
+                'dimensions' => '',
+                'topic' => 'Population'
             ],
-            'Prevalence (%) of disability among the elderly' => [
-                'name' => 'Prevalence (%) of disability among the elderly by geography, sex and residence',
-                'description' => 'Prevalence (%) of disability among the elderly by geography, sex and residence',
+            [
+                'name' => 'Population by sex and 5 year age group',
+                'description' => 'Figure 2.1.4: Population pyramid, Namibia 2023 census',
                 'fact_table' => 'population_facts',
-                'max_area_level' => 2
+                'max_area_level' => 0,
+                'indicators' => ['Population'],
+                'topic' => 'Population'
             ],
-            'Private households (Number)' => [
+            [
                 'name' => 'Private households (Number) by province, district and residence',
                 'description' => 'Private households (Number) by province, district and residence',
                 'fact_table' => 'housing_facts',
                 'max_area_level' => 2
             ],
-            'Tenure of household (%)' => [
+            [
                 'name' => 'Distribution of the private housing units by tenure of household by province and district',
                 'description' => 'Distribution of the private housing units by tenure of household by province and district',
                 'fact_table' => 'housing_facts',
                 'max_area_level' => 2
             ],
         ];
-        foreach ($datasetsByIndicator as $indicatorName => $dataset) {
+        foreach ($datasetsWithIndicator as $indicatorName => $dataset) {
             $indicator = Indicator::where('name->en', $indicatorName)->first();
             if ($indicator) {
                 $dataset = $indicator->datasets()->create($dataset);

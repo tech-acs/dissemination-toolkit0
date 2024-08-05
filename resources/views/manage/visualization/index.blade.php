@@ -10,12 +10,14 @@
     </x-slot>
 
     <div class="flex flex-col max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
+
         <div class="flex justify-end gap-4">
-            {{--<a href="{{ route('manage.visualization-deriver') }}"><x-button>{{ __('Create From Template') }}</x-button></a>--}}
             <a href="{{ route('manage.viz-builder-wizard.show.{currentStep}', 1) }}"><x-button>{{ __('Build New') }}</x-button></a>
         </div>
 
-        <x-message-display />
+        <x-smart-table :$smartTableData custom-action-sub-view="manage.visualization.custom-action" />
+
+        {{--<x-message-display />
         <x-error-display />
 
         <div class="mt-2 flex flex-col">
@@ -88,6 +90,6 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>--}}
     </div>
 </x-app-layout>

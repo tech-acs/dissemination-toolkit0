@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\Dataset;
 use App\Models\Dimension;
 use App\Models\Indicator;
-use App\Models\Year;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -15,7 +14,6 @@ class QueryBuilder
     private Dataset $dataset;
     private Collection $indicators;
     private Collection $geographies;
-    //private Collection $years;
     private Collection $dimensions;
     private string $valueColumnInFactTable = 'value';
     private string $valueColumnInResult = 'result';
@@ -29,9 +27,8 @@ class QueryBuilder
         $this->schema = is_null($schema) ? '' : "$schema.";
         $this->dataset = Dataset::find($queryParameter['dataset']);
         $this->dataset->load('dimensions', 'indicators');
-        $this->indicators = Indicator::findMany($queryParameter['indicators']); // ToDo
+        $this->indicators = Indicator::findMany($queryParameter['indicators']);
         $this->geographies = collect($queryParameter['geographies']);
-        //$this->years = Year::find($queryParameter['years']);
         $this->dimensions = collect($queryParameter['dimensions'])->map(function ($dimensionValueIds, $dimensionId) {
             return [
                 'model' => Dimension::find($dimensionId),
@@ -63,10 +60,17 @@ class QueryBuilder
             $select = $this->makeSelect($this->dimensions);
             $from = $this->makeFrom($this->dataset->dimensions);
             $where = $this->makeWhere($this->dimensions);
-            $orderBy = "areas.path";
+            if ($this->indicators->count() > 1) {
+                //$valueColumnInSelectClause = $this->dataset->fact_table . '.' . $this->valueColumnInFactTable . '::text AS "values' . self::VALUE_COLUMN_INVISIBLE_MARKER . '"';
+                $valueColumnInSelectClause = $this->dataset->fact_table . '.' . $this->valueColumnInFactTable . '::text AS values';
+                $orderBy = "indicator, areas.path";
+            } else {
+                $valueColumnInSelectClause = $this->dataset->fact_table . '.' . $this->valueColumnInFactTable . '::text AS "' . $this->indicators->first()->name . self::VALUE_COLUMN_INVISIBLE_MARKER . '"';
+                $orderBy = "areas.path";
+            }
             $this->sql = vsprintf(
-                "SELECT %s, %s.%s::text AS \"%s%s\" FROM %s WHERE %s ORDER BY %s",
-                [$select, $this->dataset->fact_table, $this->valueColumnInFactTable, $this->indicators->first()->name, self::VALUE_COLUMN_INVISIBLE_MARKER, $from, $where, $orderBy]
+                "SELECT %s, %s FROM %s WHERE %s ORDER BY %s",
+                [$select, $valueColumnInSelectClause, $from, $where, $orderBy]
             );
         }
     }
@@ -80,7 +84,9 @@ class QueryBuilder
                 return $collection->prepend("years.name AS year");
             })*/
             ->prepend("areas.name->>'" . app()->getLocale() . "'::text AS geography")
-            //->prepend("years.name::text AS year")
+            ->when($this->indicators->count() > 1, function (Collection $selectList) {
+                return $selectList->prepend("indicators.name->>'" . app()->getLocale() . "' AS indicator");
+            })
             ->join(', ');
     }
 
@@ -92,7 +98,9 @@ class QueryBuilder
                 $table = $dimension->table_name;
                 return "INNER JOIN {$this->schema}$table ON {$this->schema}{$factTable}.{$table}_id = $table.id";
             })
-            //->prepend("INNER JOIN years ON {$this->schema}{$factTable}.year_id = years.id")
+            ->when($this->indicators->count() > 1, function (Collection $fromList) use ($factTable) {
+                return $fromList->prepend("INNER JOIN indicators ON {$this->schema}{$factTable}.indicator_id = indicators.id");
+            })
             ->prepend("INNER JOIN areas ON {$this->schema}{$factTable}.area_id = areas.id")
             ->prepend($this->schema . $factTable)
             ->join(' ');
@@ -126,14 +134,8 @@ class QueryBuilder
                 }
             })->filter()->join(' OR ');
 
-        /*$whereClauseForYear = $this->years
-            ->map(function ($year) use ($factTable) {
-                return "$factTable.year_id = $year->id";
-            })->join(' OR ');*/
-
         return $whereClauseForDimensions
             ->concat([str($whereClauseForGeography)->wrap('(', ')')->toString()])
-            //->when(! empty($whereClauseForYear), fn (Collection $c) => $c->concat([str($whereClauseForYear)->wrap('(', ')')->toString()]))
             ->prepend("$factTable.dataset_id = {$this->dataset->id}")
             ->prepend("$factTable.indicator_id IN ({$this->indicators->pluck('id')->map(fn ($id) => str($id)->wrap("'"))->join(', ')})")
             ->filter()
@@ -160,12 +162,32 @@ class QueryBuilder
         return $orderByDimensions;
     }
 
+    private function moveIndicatorsToTheirOwnColumns(Collection $result): Collection
+    {
+        $columnized = $result->groupBy('indicator')
+            ->map(function ($indicatorValues, $indicatorName) {
+                $df = toDataFrame($indicatorValues);
+                $df->pull('indicator');
+                $df->put($indicatorName, $df->pull('values'));
+                return $df;
+            });
+        $unionized = $columnized->reduce(function ($carry, $subTable) {
+            return $carry->union($subTable);
+        }, collect());
+        $result = toResultSet($unionized);
+        return $result;
+    }
+
     public function get(?string $sql = null) : Collection
     {
         //logger('SQL', ['sql' => $this->sql]);
         try {
-            $result = DB::select($sql ?? $this->sql);
-            return collect(json_decode(json_encode($result), true));
+            $result = collect(json_decode(json_encode(DB::select($sql ?? $this->sql)), true));
+            if ($this->indicators->count() > 1) {
+                return $this->moveIndicatorsToTheirOwnColumns($result);
+            } else {
+                return $result;
+            }
         } catch (\Exception $exception) {
             logger('In QueryBuilder', ['Exception' => $exception->getMessage()]);
             return collect();

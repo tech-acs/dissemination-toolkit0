@@ -4,20 +4,19 @@ namespace App\Livewire\DataShaperTraits;
 
 use App\Models\Area;
 use App\Models\Dataset;
-use App\Models\Dimension;
 use App\Models\Indicator;
 use App\Services\AreaTree;
 
 trait IndicatorTrait {
     public array $indicators = [];
-    public int $selectedIndicator = 0;
+    public array $selectedIndicators = [];
 
-    public function updatedSelectedIndicator(int $indicatorId): void
+    public function updatedSelectedIndicators($value, $index): void
     {
         $this->reset('selectedGeographyLevels', 'geographyLevels', 'geographies', 'selectedGeographies',
             'years', 'selectedYears', 'dimensions', 'selectedDimensions', 'selectedDimensionValues', 'pivotableDimensions', 'pivotColumn', 'pivotRow', 'nestingPivotColumn');
 
-        $indicator = Indicator::find($indicatorId);
+        $indicators = Indicator::findMany($this->selectedIndicators);
         $dataset = Dataset::find($this->selectedDataset);
         $allLevels = (new AreaTree())->hierarchies;
         $this->geographyLevels = $dataset ? array_slice($allLevels, 0,$dataset->max_area_level + 1) : $allLevels;
@@ -45,8 +44,6 @@ trait IndicatorTrait {
             ];
         })->all();
 
-        //$this->selectedDimensions = [Dimension::where('table_name', 'year')->first()->id];
-
         $this->selectedDimensionValues = collect($this->dimensions)
             ->keyBy('id')
             ->map(fn ($dimension) => [])
@@ -56,6 +53,6 @@ trait IndicatorTrait {
 
         $this->nextSelection = 'geography';
 
-        $this->dispatch('dataShaperSelectionMade', $this->makeReadableDataParams('indicator', $indicator->name));
+        $this->dispatch('dataShaperSelectionMade', $this->makeReadableDataParams('indicators', $indicators->pluck('name')->join(', ', ' and ')));
     }
 }

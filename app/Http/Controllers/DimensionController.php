@@ -4,19 +4,32 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\DimensionRequest;
 use App\Models\Dimension;
+use App\Services\SmartTableColumn;
+use App\Services\SmartTableData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class DimensionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $dimensions = Dimension::orderBy('name')->get();
-        $records = $dimensions->map(function ($dimension) {
-            $dimension->entries = $dimension->table_exists ? DB::table($dimension->table_name)->count() : 'N/A';
-            return $dimension;
-        });
-        return view('manage.dimension.index', compact('records'));
+        return (new SmartTableData(Dimension::query(), $request))
+            ->columns([
+                SmartTableColumn::make('name')->sortable(),
+                SmartTableColumn::make('table_name')->setLabel('Table Name')->sortable(),
+                SmartTableColumn::make('values')->setLabel('Values')
+                    ->setBladeTemplate('{{ $row->values_count }}
+                                        @if(! $row->is_complete)
+                                            <a title="Value set is incomplete (must contain code _T)"><x-icon.exclamation-circle class="-mt-0.5" /></a>
+                                        @endif'),
+                SmartTableColumn::make('for')->setLabel('Applies to')
+                    ->setBladeTemplate('{{ implode(" | ", $row->for) }}'),
+            ])
+            ->editable('manage.dimension.edit')
+            ->searchable(['name', 'table_name'])
+            ->sortBy('name')
+            //->downloadable()
+            ->view('manage.dimension.index');
     }
 
     public function create()

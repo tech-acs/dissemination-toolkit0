@@ -38,3 +38,19 @@ if (! function_exists('toDataFrame')) {
         return $df;
     }
 }
+
+if (! function_exists('toResultSet')) {
+    function toResultSet(Collection $df): Collection
+    {
+        $resultSet = collect();
+        $columns = $df->keys();
+        for($i = 0; $i < count($df->first()); $i++) {
+            $row = [];
+            foreach ($columns as $column) {
+                $row[$column] = $df[$column][$i];
+            }
+            $resultSet->push($row);
+        }
+        return $resultSet;
+    }
+}

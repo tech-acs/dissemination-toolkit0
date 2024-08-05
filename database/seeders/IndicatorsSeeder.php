@@ -16,6 +16,7 @@ class IndicatorsSeeder extends Seeder
                 ['name' => 'Average household size', 'description' => 'Average household size'],
                 ['name' => 'Sex ratio', 'description' => 'Number of males per 100 females'],
                 ['name' => 'Population density', 'description' => 'Population density'],
+                ['name' => 'Households population', 'description' => 'Population in non-institution households'],
             ],
             'Education' => [
 

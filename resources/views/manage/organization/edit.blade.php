@@ -13,7 +13,7 @@
 
         <x-message-display />
 
-        <form action="{{route('manage.organization.update', $organization)}}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('manage.organization.update', $organization) }}" method="POST" enctype="multipart/form-data">
             @method('PATCH')
             @csrf
             @include('manage.organization.form')

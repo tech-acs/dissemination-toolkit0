@@ -5,15 +5,29 @@ namespace App\Http\Controllers;
 use App\Http\Requests\IndicatorRequest;
 use App\Models\Indicator;
 use App\Models\Topic;
+use App\Services\SmartTableColumn;
+use App\Services\SmartTableData;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class IndicatorController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $records = Indicator::with('topic')->get();
-        return view('manage.indicator.index', compact('records'));
+        /*$records = Indicator::with('topic')->get();
+        return view('manage.indicator.index', compact('records'));*/
+
+        return (new SmartTableData(Indicator::query()->with('topic'), $request))
+            ->columns([
+                SmartTableColumn::make('name')->sortable(),
+                SmartTableColumn::make('topic')->setLabel('Topic')
+                    ->setBladeTemplate('{{ $row?->topic?->name }}'),
+            ])
+            ->editable('manage.indicator.edit')
+            ->deletable('manage.indicator.destroy')
+            ->searchable(['name', 'description'])
+            ->sortBy('name')
+            ->downloadable()
+            ->view('manage.indicator.index');
     }
 
     public function create()
@@ -44,7 +58,7 @@ class IndicatorController extends Controller
     {
         //Check if the indicator has any related datasets
         if ($indicator->datasets()->count() > 0) {
-            return redirect()->back()->withErrors(['This indicator has related datasets,delete them first.']);
+            return redirect()->back()->withErrors(['This indicator has related datasets, please delete those first.']);
         }
         $indicator->delete();
         return redirect()->route('manage.indicator.index')->withMessage('Record deleted');

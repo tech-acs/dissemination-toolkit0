@@ -77,7 +77,8 @@ class AreaFilter extends Component
         );
         session()->put('area-filter', $filter);
         list($filterPath,) = $this->areaResolver();
-        $this->dispatch('filterChanged', $filterPath);
+        $area = (new AreaTree())->getArea($filterPath);
+        $this->dispatch('filterChanged', $filterPath, $area->name);
     }
 
     public function clear()

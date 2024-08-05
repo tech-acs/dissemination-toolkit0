@@ -54,7 +54,11 @@
                     </div>
                 </div>
             @else
-                <div class="text-gray-500 mt-2 border rounded-md p-4 py-2">{{ __('Select dimensions to see pivoting options') }}</div>
+                @if ($pivotingNotPossible)
+                    <div class="text-gray-500 mt-2 border rounded-md p-4 py-2">{{ __('Pivoting not possible when multiple indicators are selected') }}</div>
+                @else
+                    <div class="text-gray-500 mt-2 border rounded-md p-4 py-2">{{ __('Select dimensions to see pivoting options') }}</div>
+                @endif
             @endif
         </div>
     </div>

@@ -14,7 +14,7 @@ trait DatasetTrait
     public function updatedSelectedDataset($datasetId): void
     {
         $this->reset(
-            'selectedIndicator',
+            'selectedIndicators',
             'selectedGeographyLevels',
             'selectedGeographies',
             'geographyLevels',

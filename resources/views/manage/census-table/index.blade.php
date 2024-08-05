@@ -16,7 +16,10 @@
                 <x-button>{{ __('Create new') }}</x-button>
             </a>
         </div>
-        @if (session('message'))
+
+        <x-smart-table :$smartTableData />
+
+        {{--@if (session('message'))
             <div class="rounded-md p-4 py-3 mt-4 mb-4 border bg-blue-50 border-blue-300">
                 <div class="flex">
                     <div class="flex-shrink-0">
@@ -159,8 +162,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-
+        </div>--}}
 
     </div>
 </x-app-layout>
