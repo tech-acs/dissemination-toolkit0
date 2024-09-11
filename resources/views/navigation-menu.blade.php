@@ -52,7 +52,7 @@
                                     <x-dropdown-link class="px-6" href="{{ route('manage.role.index') }}">{{ __('Roles') }}</x-dropdown-link>
                                     <div class="border-t border-gray-100"></div>
                                     <div class="block px-4 py-2 text-xs text-gray-400">{{ __('Core Configuration') }}</div>
-                                    <x-dropdown-link class="px-6" href="{{route('manage.source.index')}}">{{ __('Sources') }}</x-dropdown-link>
+                                    {{--<x-dropdown-link class="px-6" href="{{route('developer.source.index')}}">{{ __('Sources') }}</x-dropdown-link>--}}
                                     <x-dropdown-link class="px-6" href="{{route('manage.area-hierarchy.index')}}">{{ __('Area Hierarchy') }}</x-dropdown-link>
                                     <x-dropdown-link class="px-6" href="{{ route('manage.area.index') }}">{{ __('Areas') }}</x-dropdown-link>
                                     <div class="border-t border-gray-100"></div>

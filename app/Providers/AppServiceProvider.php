@@ -4,14 +4,9 @@ namespace App\Providers;
 
 use App\Models\Organization;
 use App\Models\Story;
-use App\Services\ConnectionLoader;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Routing\Exceptions\InvalidSignatureException;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -41,16 +36,6 @@ class AppServiceProvider extends ServiceProvider
         } catch (\Exception $exception) {
             $stories = collect();
         }
-
-        (new ConnectionLoader())();
-        Blade::if('connectible', function ($value) {
-            try {
-                DB::connection($value)->getPdo();
-                return true;
-            } catch (\Exception $exception) {
-                return false;
-            }
-        });
 
         try {
             $org = Organization::first();

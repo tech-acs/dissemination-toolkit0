@@ -20,8 +20,6 @@ use App\Http\Controllers\TopicController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserSuspensionController;
 use App\Http\Controllers\VizBuilderWizardController;
-use App\Http\Controllers\ConnectionTestController;
-use App\Http\Controllers\SourceController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['web'])->group(function () {
@@ -94,9 +92,6 @@ Route::middleware(['web'])->group(function () {
             Route::resource('user', UserController::class)->only(['index', 'edit', 'update']);
             Route::get('user/{user}/suspension', UserSuspensionController::class)->name('user.suspension');
 
-            Route::resource('source', SourceController::class);
-            Route::resource('data-source', SourceController::class);
-            Route::get('data-source/{source}/test-connection', ConnectionTestController::class)->name('data-source.connection.test');
             Route::resource('area-hierarchy', AreaHierarchyController::class);
             Route::resource('area', AreaController::class)->except(['destroy']);
             Route::delete('area/truncate', [AreaController::class, 'destroy'])->name('area.destroy');
