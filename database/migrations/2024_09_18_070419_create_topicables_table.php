@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('census_table_topic', function (Blueprint $table) {
+        Schema::create('topicables', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('census_table_id');
-            $table->foreignId('topic_id');
+            $table->unsignedBigInteger('topic_id');
+            $table->unsignedBigInteger('topicable_id');
+            $table->string('topicable_type');
             $table->timestamps();
         });
     }
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('census_table_topic');
+        Schema::dropIfExists('topicables');
     }
 };

@@ -30,7 +30,7 @@ class CensusTableRequest extends FormRequest
             'published_date' => 'required|date|before_or_equal:' . $currentDate,
             'data_source' => 'required|min:5',
             'comment' => 'nullable',
-            'topics' => 'required|array',
+            'topics' => 'required|array|min:1',
             'tags' => 'nullable|string',
         ];
 
@@ -51,7 +51,7 @@ class CensusTableRequest extends FormRequest
             'published_date.required' => 'The published date field is required',
             'published_date.before_or_equal' => 'The published date must be a date before or equal to today',
             'data_source.required' => 'The data source field is required',
-            'topics.required' => 'The topic field is required',
+            'topics.required' => 'You must select at least one topic',
             'file.required' => 'The file field is required',
         ];
     }

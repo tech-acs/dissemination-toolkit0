@@ -27,8 +27,7 @@ class DatasetRequest extends FormRequest
             'dimensions' => 'required|exists:dimensions,id',
             'fact_table' => 'required',
             'max_area_level' => 'required',
-            //'years' => 'required'
-            'topic_id' => 'exists:App\Models\Topic,id'
+            'topics' => 'required|array|min:1'
         ];
     }
 
@@ -37,6 +36,7 @@ class DatasetRequest extends FormRequest
         return [
             'indicators.required' => 'You must select at least one indicator.',
             'dimensions.required' => 'You must select at least one dimension.',
+            'topics.required' => 'You must select at least one topic.',
         ];
     }
 

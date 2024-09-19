@@ -23,16 +23,14 @@ class StoryRequest extends FormRequest
     {
         return [
             'title' => 'required',
-            'topic_id' => 'required',
-            //'template_id' => 'required'
+            'topics' => 'required|array|min:1',
         ];
     }
 
     public function messages()
     {
         return [
-            'topic_id.required' => 'The topic field is required',
-            //'template_id.required' => 'You must select a story template'
+            'topics.required' => 'You must select at least one topic.',
         ];
     }
 }

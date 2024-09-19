@@ -43,7 +43,7 @@ class DimensionController extends Controller
         if (! $request->has('for')) {
             $request->merge(['for' => []]);
         }
-        $dimension = Dimension::create($request->only(['name', 'description', 'table_name', 'sorting_type', 'for']));
+        Dimension::create($request->only(['name', 'description', 'table_name', 'sorting_type', 'for']));
         return redirect()->route('manage.dimension.index')->withMessage('Record created');
     }
 

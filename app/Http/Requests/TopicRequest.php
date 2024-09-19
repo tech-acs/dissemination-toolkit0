@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class IndicatorRequest extends FormRequest
+class TopicRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -17,20 +17,13 @@ class IndicatorRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
-            'name' => 'required|string',
-            'topics' => 'required|array|min:1'
-        ];
-    }
-
-    public function messages(): array
-    {
-        return [
-            'topics.required' => 'You must select at least one topic',
+            'name' => 'required|min:2',
+            'description' => 'nullable'
         ];
     }
 }

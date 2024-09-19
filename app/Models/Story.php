@@ -27,9 +27,9 @@ class Story extends Model
         return $this->morphMany(Rating::class, 'rateable');
     }
 
-    public function topic(): BelongsTo
+    public function topics(): MorphToMany
     {
-        return $this->belongsTo(Topic::class);
+        return $this->morphToMany(Topic::class, 'topicable');
     }
 
     public function user(): BelongsTo

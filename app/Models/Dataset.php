@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Facades\DB;
 use Spatie\Translatable\HasTranslations;
 
@@ -15,9 +15,9 @@ class Dataset extends Model
     protected $guarded = ['id'];
     public array $translatable = ['name', 'description'];
 
-    public function topic(): BelongsTo
+    public function topics(): MorphToMany
     {
-        return $this->belongsTo(Topic::class);
+        return $this->morphToMany(Topic::class, 'topicable');
     }
 
     public function dimensions(): BelongsToMany

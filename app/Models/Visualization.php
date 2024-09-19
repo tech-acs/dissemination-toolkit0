@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-//use App\Service\RatingTrait;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,7 +12,6 @@ use Spatie\Translatable\HasTranslations;
 class Visualization extends Model
 {
     use HasTranslations;
-    //use RatingTrait;
 
     protected $guarded = ['id'];
     public array $translatable = ['title', 'description'];
@@ -42,9 +40,9 @@ class Visualization extends Model
         return $this->morphMany(Rating::class, 'rateable');
     }
 
-    public function topic(): BelongsTo
+    public function topics(): MorphToMany
     {
-        return $this->belongsTo(Topic::class);
+        return $this->morphToMany(Topic::class, 'topicable');
     }
 
     public function user(): BelongsTo
@@ -93,16 +91,6 @@ class Visualization extends Model
         );
     }
 
-    /*public function getQuestionnaire()
-    {
-        return Questionnaire::where('name', $this->questionnaire)->first();
-    }
-
-    public function scopePublished($query)
-    {
-        return $query->where('published', true);
-    }*/
-
     protected static function booted()
     {
         static::created(function ($visualization) {
@@ -113,12 +101,5 @@ class Visualization extends Model
                     ->append('-' . $visualization->id)
             ]);
         });
-
-        /*static::created(function ($indicator) {
-            Permission::create(['guard_name' => 'web', 'name' => $indicator->permission_name]);
-        });
-        static::deleted(function ($indicator) {
-            Permission::whereName($indicator->permission_name)->delete();
-        });*/
     }
 }

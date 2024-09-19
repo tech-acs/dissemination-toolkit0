@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TopicRequest;
 use App\Models\Topic;
 use App\Services\SmartTableColumn;
 use App\Services\SmartTableData;
@@ -12,14 +13,17 @@ class TopicController extends Controller
 {
     public function index(Request $request)
     {
-        /*$records = Topic::withCount(['indicators', 'visualizations', 'stories'])->get();
-        return view('manage.topic.index', compact('records'));*/
-
-        return (new SmartTableData(Topic::query()->withCount(['indicators', 'visualizations', 'stories']), $request))
+        return (new SmartTableData(Topic::query()->withCount(['indicators', 'visualizations', 'stories', 'datasets', 'censusTables']), $request))
             ->columns([
                 SmartTableColumn::make('name')->sortable(),
                 SmartTableColumn::make('coverage')->setLabel('Coverage')
-                    ->setBladeTemplate('{{ $row?->indicators_count }} indicators, {{ $row?->visualizations_count }} visualizations, {{ $row?->stories_count }} stories'),
+                    ->setBladeTemplate('
+                        {{ $row?->indicators_count }} indicators,
+                        {{ $row?->visualizations_count }} visualizations,
+                        {{ $row?->stories_count }} stories,
+                        {{ $row?->datasets_count }} datasets,
+                        {{ $row?->census_tables_count }} tables
+                    '),
             ])
             ->editable('manage.topic.edit')
             ->deletable('manage.topic.destroy')
@@ -34,7 +38,7 @@ class TopicController extends Controller
         return view('manage.topic.create');
     }
 
-    public function store(Request $request)
+    public function store(TopicRequest $request)
     {
         Topic::create($request->only(['name',  'description']));
         return redirect()->route('manage.topic.index')->withMessage('Record created');
@@ -45,7 +49,7 @@ class TopicController extends Controller
         return view('manage.topic.edit', compact('topic'));
     }
 
-    public function update(Topic $topic, Request $request)
+    public function update(Topic $topic, TopicRequest $request)
     {
         $topic->update($request->only(['name', 'description']));
         return redirect()->route('manage.topic.index')->withMessage('Record updated');

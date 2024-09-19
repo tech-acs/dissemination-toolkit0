@@ -77,18 +77,13 @@
                 <x-input-error for="years" class="mt-2" />
             </div>--}}
             <div>
-                <x-label for="topic" value="{{ __('Topic') }} *" />
-                <select id="topic" name="topic_id" class="mt-1 pr-10 space-y-1 text-sm p-1 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm">
-                    <option value="">{{ __('Select topic') }}</option>
-                    @foreach($topics ?? [] as $topic)
-                        <option class="p-2 rounded-md" value="{{ $topic?->id }}"
-                        @if($indicator->topic ?? null) @selected($topic?->id == $indicator->topic->id) @endif
-                        >
-                            {{ $topic->name }}
-                        </option>
+                <x-label for="topics" value="{{ __('Topics') }} *" />
+                <select size="5" multiple id="topics" name="topics[]" class="mt-1 p-2 text-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md">
+                    @foreach($topics as $id => $topicName)
+                        <option class="p-1 mb-1 rounded" value="{{ $id }}" @selected(in_array($id, $dataset->topics->pluck('id')->all()))>{{ $topicName }}</option>
                     @endforeach
                 </select>
-                <x-input-error for="topic_id" class="mt-2" />
+                <x-input-error for="topics" class="mt-2" />
             </div>
 
         </div>

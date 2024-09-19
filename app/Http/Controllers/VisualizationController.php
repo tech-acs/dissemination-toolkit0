@@ -16,46 +16,37 @@ class VisualizationController extends Controller
 {
     public function index(Request $request)
     {
-        //$records = Auth::user()->visualizations()->orderByDesc('updated_at')->get();
-        /*$records = Visualization::orderByDesc('updated_at')->get();
-        return view('manage.visualization.index', compact('records'));*/
-
         return (new SmartTableData(Visualization::query(), $request))
             ->columns([
                 SmartTableColumn::make('title')->sortable(),
                 SmartTableColumn::make('type')
                     ->setBladeTemplate('{{ ucfirst($row->type) }} @if ($row->is_filterable) <span class="text-green-700" title="Filterable by geography"><x-icon.filter /></span> @endif'),
-                SmartTableColumn::make('published_at')->setLabel('Published')
+                SmartTableColumn::make('published_at')->setLabel(__('Published'))
                     ->setBladeTemplate('<x-yes-no value="{{ $row->published }}" />'),
                 SmartTableColumn::make('author')
                     ->setBladeTemplate('{{ $row->user->name }}'),
-                /*SmartTableColumn::make('for')->setLabel('Applies to')
-                    ->setBladeTemplate('{{ implode(" | ", $row->for) }}'),*/
+                SmartTableColumn::make('updated_at')->setLabel('Last Updated')->sortable()
+                    ->setBladeTemplate('{{ $row->updated_at->format("M j, H:i") }}'),
             ])
             ->searchable(['title'])
-            ->sortBy('name')
-            //->downloadable()
+            ->sortBy('updated_at')
+            ->sortDesc()
             ->view('manage.visualization.index');
     }
-
-    /*public function store(Request $request)
-    {
-        Visualization::create($request->only(['title', 'description', 'published', 'topic_id']));
-        return redirect()->route('manage.visualization.index')->withMessage('Visualization created');
-    }*/
 
     public function edit(Visualization $visualization)
     {
         $tags = Tag::all();
-        $topics = Topic::all();
+        $topics = Topic::pluck('name', 'id');
         return view("manage.visualization.edit", compact('visualization', 'tags', 'topics'));
     }
 
     public function update(Request $request, Visualization $visualization)
     {
-        $visualization->update($request->only(['title', 'description', 'published', 'topic_id', 'is_filterable']));
+        $visualization->update($request->only(['title', 'description', 'published', 'is_filterable']));
         $updatedTags = Tag::prepareForSync($request->get('tags', ''));
         $visualization->tags()->sync($updatedTags->pluck('id'));
+        $visualization->topics()->sync($request->get('topics'));
         return redirect()->route('manage.visualization.index')
             ->withMessage("The visualization has been updated");
     }
@@ -66,9 +57,9 @@ class VisualizationController extends Controller
         return redirect()->route('manage.visualization.index')
             ->withMessage("The visualization has been deleted");
     }
+
     public function upload(Visualization $visualization, Request $request)
     {
-
         if ($request->hasFile('imageData')) {
             $image = $request->file('imageData');
             $fileName = $visualization->id . '.' . $image->getClientOriginalExtension();

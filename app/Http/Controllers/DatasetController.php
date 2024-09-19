@@ -23,7 +23,7 @@ class DatasetController extends Controller
     {
         $indicators = Indicator::orderBy('name')->get();
         $dimensions = Dimension::orderBy('name')->get();
-        $topics = Topic::all();
+        $topics = Topic::pluck('name', 'id');
         $factTables = config('dissemination.fact_tables');
         $areaLevels = (new AreaTree())->hierarchies;
         //$years = Year::pluck('name', 'id');
@@ -33,10 +33,10 @@ class DatasetController extends Controller
 
     public function store(DatasetRequest $request)
     {
-        $dataset = Dataset::create($request->only(['fact_table', 'max_area_level', 'name', 'description', 'topic_id']));
+        $dataset = Dataset::create($request->only(['fact_table', 'max_area_level', 'name', 'description']));
         $dataset->indicators()->sync($request->indicators);
         $dataset->dimensions()->sync($request->dimensions);
-        //$dataset->years()->sync($request->years);
+        $dataset->topics()->sync($request->topics);
         return redirect()->route('manage.dataset.index')->withMessage('Record created');
     }
 
@@ -44,19 +44,18 @@ class DatasetController extends Controller
     {
         $indicators = Indicator::orderBy('name')->get();
         $dimensions = Dimension::orderBy('name')->get();
-        $topics = Topic::all();
+        $topics = Topic::pluck('name', 'id');
         $factTables = config('dissemination.fact_tables');
         $areaLevels = (new AreaTree())->hierarchies;
-        //$years = Year::pluck('name', 'id');
         return view('manage.dataset.edit', compact('dataset', 'indicators', 'dimensions', 'factTables', 'areaLevels', 'topics'));
     }
 
     public function update(Dataset $dataset, DatasetRequest $request)
     {
-        $dataset->update($request->only(['fact_table', 'max_area_level', 'name', 'description', 'topic_id']));
+        $dataset->update($request->only(['fact_table', 'max_area_level', 'name', 'description']));
         $dataset->indicators()->sync($request->indicators);
         $dataset->dimensions()->sync($request->dimensions);
-        //$dataset->years()->sync($request->years);
+        $dataset->topics()->sync($request->topics);
         return redirect()->route('manage.dataset.index')->withMessage('Record updated');
     }
 

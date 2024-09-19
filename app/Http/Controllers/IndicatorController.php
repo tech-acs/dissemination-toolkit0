@@ -13,14 +13,11 @@ class IndicatorController extends Controller
 {
     public function index(Request $request)
     {
-        /*$records = Indicator::with('topic')->get();
-        return view('manage.indicator.index', compact('records'));*/
-
-        return (new SmartTableData(Indicator::query()->with('topic'), $request))
+        return (new SmartTableData(Indicator::query()->with('topics'), $request))
             ->columns([
                 SmartTableColumn::make('name')->sortable(),
                 SmartTableColumn::make('topic')->setLabel('Topic')
-                    ->setBladeTemplate('{{ $row?->topic?->name }}'),
+                    ->setBladeTemplate('{{ $row?->topics?->pluck("name")->join(", ") }}'),
             ])
             ->editable('manage.indicator.edit')
             ->deletable('manage.indicator.destroy')
@@ -32,26 +29,26 @@ class IndicatorController extends Controller
 
     public function create()
     {
-        $topics = Topic::all();
+        $topics = Topic::pluck('name', 'id');
         return view('manage.indicator.create', compact('topics'));
     }
 
-    public function store(Request $request)
+    public function store(IndicatorRequest $request)
     {
-        $indicator = Indicator::create($request->only(['name', 'description', 'topic_id']));
+        Indicator::create($request->only(['name', 'description', 'topic_id']));
         return redirect()->route('manage.indicator.index')->withMessage('Record created');
     }
 
     public function edit(Indicator $indicator)
     {
-        $topics = Topic::all();
+        $topics = Topic::pluck('name', 'id');
         return view('manage.indicator.edit', compact('indicator', 'topics'));
     }
 
     public function update(Indicator $indicator, IndicatorRequest $request)
     {
-        $indicator->update($request->only(['name', 'description', 'topic_id']));
-        //$indicator->topic()->associate($request->get('topics', []));
+        $indicator->update($request->only(['name', 'description']));
+        $indicator->topics()->sync($request->get('topics'));
         return redirect()->route('manage.indicator.index')->withMessage('Record updated');
     }
     public function destroy(Indicator $indicator)

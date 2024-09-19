@@ -1,14 +1,5 @@
 <x-app-layout>
 
-    {{--<x-slot name="header">
-        <h3 class="text-lg leading-6 font-medium text-gray-900">
-            {{ __('Visualization') }}
-        </h3>
-        <p class="mt-2 max-w-7xl text-sm text-gray-500">
-            {{ __('Creating a new visualization') }}
-        </p>
-    </x-slot>--}}
-
     <div class="flex flex-col max-w-full mx-auto py-6 px-4 sm:px-6 lg:px-8">
         @if (session('message'))
             <div class="rounded-md bg-blue-50 p-4 py-3 my-4 mb-4 border border-blue-300">
@@ -27,11 +18,6 @@
                 </div>
             </div>
         @endif
-
-        {{--<form action="{{route('manage.visualization.store')}}" method="POST" enctype="multipart/form-data">
-            @csrf
-            @include('manage.visualization.form')
-        </form>--}}
 
         <livewire:visualization-builder />
 

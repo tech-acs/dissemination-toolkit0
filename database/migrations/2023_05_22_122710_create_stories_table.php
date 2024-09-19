@@ -25,7 +25,6 @@ return new class extends Migration
             //$table->unsignedTinyInteger('rank')->nullable();
             $table->foreignId('user_id');
 
-            $table->unsignedBigInteger('topic_id')->nullable();
             $table->timestamps();
         });
     }

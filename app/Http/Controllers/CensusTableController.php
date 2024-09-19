@@ -35,9 +35,6 @@ class CensusTableController extends Controller
 
     public function index(Request $request)
     {
-        /*$records = auth()->user()->censusTables()->orderByDesc('updated_at')->get();
-        return view('manage.census-table.index', compact('records'));*/
-
         return (new SmartTableData(auth()->user()->censusTables(), $request))
             ->columns([
                 SmartTableColumn::make('title')->sortable()->tdClasses('w-1/3'),
@@ -62,10 +59,11 @@ class CensusTableController extends Controller
 
     public function create()
     {
-        $topics = Topic::all();
+        $topics = Topic::pluck('name', 'id');
         $indicators = Indicator::all();
         $types = CensusTableTypeEnum::getTypes();
-        return view('manage.census-table.create', compact('topics', 'indicators', 'types'));
+        $censusTable = (new CensusTable());
+        return view('manage.census-table.create', compact('topics', 'indicators', 'types', 'censusTable'));
     }
 
     public function store(CensusTableRequest $request)

@@ -3,8 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Spatie\Translatable\HasTranslations;
 
 class Topic extends Model
@@ -14,28 +13,28 @@ class Topic extends Model
     protected $guarded = ['id'];
     public array $translatable = ['name', 'description'];
 
-    public function datasets(): HasMany
+    public function censusTables(): MorphToMany
     {
-        return $this->hasMany(Dataset::class);
+        return $this->morphedByMany(CensusTable::class, 'topicable');
     }
 
-    public function indicators(): HasMany
+    public function datasets(): MorphToMany
     {
-        return $this->hasMany(Indicator::class);
+        return $this->morphedByMany(Dataset::class, 'topicable');
     }
 
-    public function visualizations(): HasMany
+    public function indicators(): MorphToMany
     {
-        return $this->hasMany(Visualization::class);
+        return $this->morphedByMany(Indicator::class, 'topicable');
     }
 
-    public function stories(): HasMany
+    public function visualizations(): MorphToMany
     {
-        return $this->hasMany(Story::class);
+        return $this->morphedByMany(Visualization::class, 'topicable');
     }
 
-    public function censusTables(): BelongsToMany
+    public function stories(): MorphToMany
     {
-        return $this->belongsToMany(CensusTable::class);
+        return $this->morphedByMany(Story::class, 'topicable');
     }
 }

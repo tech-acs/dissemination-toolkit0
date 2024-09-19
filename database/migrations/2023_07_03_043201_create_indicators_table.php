@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->jsonb('name');
             $table->jsonb('description')->nullable();
-            $table->foreignId('topic_id');
             $table->timestamps();
         });
     }

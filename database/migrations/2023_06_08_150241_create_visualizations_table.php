@@ -17,7 +17,6 @@ return new class extends Migration {
             $table->jsonb('title')->nullable();
             $table->jsonb('description')->nullable();
             $table->boolean('published')->default(false);
-            $table->unsignedBigInteger('topic_id')->nullable();
             $table->foreignId('user_id');
 
             $table->string('livewire_component');
