@@ -40,7 +40,9 @@ class DimensionValueSeeder extends Seeder
                 ['code' => '70-74', 'name' => '70-74'],
                 ['code' => '75-79', 'name' => '75-79'],
                 ['code' => '80-84', 'name' => '80-84'],
-                ['code' => '85+', 'name' => '85+'],
+                ['code' => '85-89', 'name' => '85-89'],
+                ['code' => '90-94', 'name' => '90-94'],
+                ['code' => '95+', 'name' => '95+'],
             ],
             'ten_year_age_group' => [
                 ['code' => '_T', 'name' => 'Total'],

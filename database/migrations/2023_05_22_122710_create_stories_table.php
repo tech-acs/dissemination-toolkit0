@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('featured_image')->nullable();
             //$table->unsignedTinyInteger('rank')->nullable();
             $table->foreignId('user_id');
+            $table->boolean('is_filterable')->default(false);
 
             $table->timestamps();
         });
