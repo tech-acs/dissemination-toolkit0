@@ -22,10 +22,12 @@ return new class extends Migration {
 
             $table->string('livewire_component');
             $table->jsonb('data_params')->default('{}');
+
             $table->jsonb('data')->default('[]');
             $table->jsonb('layout')->default('{}');
-            $table->jsonb('options')->default('{}');
             $table->text('thumbnail')->nullable();
+
+            $table->jsonb('options')->default('{}');
 
             $table->timestamps();
         });
