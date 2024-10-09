@@ -15,6 +15,10 @@
             <a href="{{ route('manage.dimension.create') }}"><x-button>{{ __('Create new') }}</x-button></a>
         </div>
 
+        <x-message-display />
+
+        <x-error-display />
+
         <x-smart-table :$smartTableData custom-action-sub-view="manage.dimension.custom-action" />
 
         {{--<div class="mt-2 flex flex-col">

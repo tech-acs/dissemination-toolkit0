@@ -22,7 +22,7 @@ use Livewire\Component;
 
 class DataShaper extends Component
 {
-    use TopicTrait, IndicatorTrait, DatasetTrait, GeographyTrait, YearTrait, DimensionTrait, PivotingTrait;
+    use TopicTrait, DatasetTrait, IndicatorTrait, GeographyTrait, YearTrait, DimensionTrait, PivotingTrait;
 
     #[Url]
     public int|null $prefillIndicatorId = 0;
@@ -49,11 +49,13 @@ class DataShaper extends Component
     {
         $indicator = Indicator::find($id);
         if ($indicator) {
-            $this->selectedTopic = $indicator->topic->id;
+            $this->selectedTopic = $indicator->datasets->first()->topics->first()->id;
             $this->updatedSelectedTopic($this->selectedTopic);
+            $this->selectedDataset = $indicator->datasets->first()->id;
+            $this->updatedSelectedDataset($this->selectedDataset);
             $this->selectedIndicators[] = $indicator->id;
-            $this->updatedSelectedIndicators($indicator->id);
-            $this->nextSelection = 'dataset';
+            $this->updatedSelectedIndicators($this->selectedIndicators);
+            $this->nextSelection = 'geography';
         }
     }
 
@@ -61,13 +63,11 @@ class DataShaper extends Component
     {
         $dataset = Dataset::find($id);
         if ($dataset) {
-            $this->selectedTopic = $dataset->indicator->topic->id;
+            $this->selectedTopic = $dataset->topics->first()->id;
             $this->updatedSelectedTopic($this->selectedTopic);
-            $this->selectedIndicators[] = $dataset->indicator->id;
-            $this->updatedSelectedIndicators($dataset->indicator->id);
             $this->selectedDataset = $dataset->id;
             $this->updatedSelectedDataset($this->selectedDataset);
-            $this->nextSelection = 'geography';
+            $this->nextSelection = 'indicator';
         }
     }
 
@@ -179,7 +179,7 @@ class DataShaper extends Component
             $query = new QueryBuilder($queryParameters);
             //dump($queryParameters, $query->toSql());
             $this->dispatch(
-                "changeOccurred",
+                "dataShaperEvent",
                 rawData: Sorter::sort($query->get()),
                 indicatorName: $this->makeIndicatorName(),
                 dataParams: $queryParameters

@@ -159,10 +159,10 @@ class DatasetImporter extends Component
                         if (in_array(null, $entry, true)) {
                             $lineNo = self::CHUNK_SIZE * $chunkIndex + $rowIndexWithinAChunk + 2;
                             throw ValidationException::withMessages([
-                                'datafile' => "The data seems to contain invalid data at the following row (around line $lineNo).<br><br>" .
+                                'datafile' => "The data seems to contain invalid data (unknown dimension value, etc.) at the following row (around line $lineNo).<br><br>" .
                                     implode(', ', $row) .
                                     "<br><br>" .
-                                    "$inserted rows were imported. Please correct and reimport.<br>Remember to empty the dataset first to avoid duplicates."
+                                    "$inserted rows were imported. Please correct and re-import.<br>Remember to empty the dataset first to avoid duplicates."
                             ]);
                         } else {
                             array_push($entries, $entry);
@@ -184,6 +184,7 @@ class DatasetImporter extends Component
                 $inserted += $result;
 
             });
+            // ToDo: Exception: Method Livewire\Features\SupportRedirects\Redirector::withMessage does not exist.
             return redirect()->route('manage.dataset.index')->withMessage("$inserted observations imported for dataset");
 
         } catch (\Exception $exception) {

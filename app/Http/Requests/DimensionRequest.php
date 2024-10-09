@@ -22,8 +22,8 @@ class DimensionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required',
-            'table_name' => 'required|alpha_dash:ascii|lowercase',
+            'name' => 'required|regex:/^[A-Za-z ]+$/',
+            //'table_name' => 'required|alpha_dash:ascii|lowercase',
             'for' => 'required|min:1'
         ];
     }

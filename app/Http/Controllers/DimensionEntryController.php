@@ -5,13 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Dimension;
 use App\Services\DynamicDimensionModel;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class DimensionEntryController extends Controller
 {
     public function index(Dimension $dimension)
     {
-        $records = (new DynamicDimensionModel($dimension->table_name))->all();
+        $records = collect();
+        if ($dimension->table_exists) {
+            $records = (new DynamicDimensionModel($dimension->table_name))->all();
+        }
         return view('manage.dimension.entries.index', compact('dimension', 'records'));
     }
 

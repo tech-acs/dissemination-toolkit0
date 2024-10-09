@@ -76,15 +76,16 @@
                 </select>
                 <x-input-error for="years" class="mt-2" />
             </div>--}}
-            <div>
-                <x-label for="topics" value="{{ __('Topics') }} *" />
+
+            {{--<div>
+                <x-label for="topics" value="{{ __('Topics (inherited from indicators)') }} " />
                 <select size="5" multiple id="topics" name="topics[]" class="mt-1 p-2 text-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md">
                     @foreach($topics as $id => $topicName)
-                        <option class="p-1 mb-1 rounded" value="{{ $id }}" @selected(in_array($id, $dataset->topics->pluck('id')->all()))>{{ $topicName }}</option>
+                        <option class="p-1 mb-1 rounded" value="{{ $id }}" @selected(in_array($id, old('topics', $dataset->topics->pluck('id')->all())))>{{ $topicName }}</option>
                     @endforeach
                 </select>
                 <x-input-error for="topics" class="mt-2" />
-            </div>
+            </div>--}}
 
         </div>
     </div>

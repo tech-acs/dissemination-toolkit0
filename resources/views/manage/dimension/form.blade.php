@@ -3,39 +3,32 @@
         <div class="grid grid-cols-1 gap-6">
             <div>
                 <x-label for="name" value="{{ __('Name') }} *"/>
-                <x-multi-lang-input id="name" name="name" type="text"
-                                              value="{{ old('name', $dimension->name ?? null) }}"/>
+                <x-multi-lang-input id="name" name="name" type="text" value="{{ old('name', $dimension->name ?? null) }}"/>
                 <x-input-error for="name" class="mt-2"/>
             </div>
             <div>
                 <x-label for="description" value="{{ __('Description') }}" class="inline"/>
                 <x-locale-display/>
-                <x-textarea name="description"
-                                      rows="3">{{ old('description', $dimension->description ?? null) }}</x-textarea>
+                <x-textarea name="description" rows="3">{{ old('description', $dimension->description ?? null) }}</x-textarea>
                 <x-input-error for="description" class="mt-2"/>
             </div>
-            <div>
+            {{--<div>
                 <x-label for="table_name" value="{{ __('Table name') }} *"/>
                 @if (! ($dimension->table_created_at ?? null))
-                    <x-input id="table_name" name="table_name" type="text"
-                             value="{{ old('table_name', $dimension->table_name ?? null) }}"/>
+                    <x-input id="table_name" name="table_name" type="text" value="{{ old('table_name', $dimension->table_name ?? null) }}"/>
                 @else
-                    <x-input id="table_name" name="table_name" type="hidden"
-                             value="{{ old('table_name', $dimension->table_name ?? null) }}"/>
-                    <div
-                        class="border p-2 mt-2 w-fit pr-16 bg-gray-100 text-gray-500 border-gray-300 rounded-md shadow-sm">{{ $dimension->table_name }}</div>
+                    <x-input id="table_name" name="table_name" type="hidden" value="{{ old('table_name', $dimension->table_name ?? null) }}"/>
+                    <div class="border p-2 mt-2 w-fit pr-16 bg-gray-100 text-gray-500 border-gray-300 rounded-md shadow-sm">{{ $dimension->table_name }}</div>
                 @endif
                 <x-input-error for="table_name" class="mt-2"/>
-            </div>
+            </div>--}}
             <div>
                 <x-label for="sorting_type" value="{{ __('Value sorting type') }}"/>
                 <select id="sorting_type" name="sorting_type"
                         class="mt-1 pr-10 space-y-1 text-base p-1 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm">
                     @foreach(\App\Enums\SortingTypeEnum::cases() ?? [] as $sortingType)
                         <option class="p-2 rounded-md" value="{{ $sortingType->value }}"
-                        @if($dimension ?? null)
-                            @selected($dimension->sorting_type == $sortingType->value)
-                            @endif
+                            @selected(old('sorting_type', $dimension->sorting_type) == $sortingType->value)
                         >
                             {{ $sortingType->name }}
                         </option>
@@ -49,9 +42,7 @@
                     @foreach($factTables as $tableName => $label)
                         <div class="relative flex items-start">
                             <div class="flex h-6 items-center">
-                                <input id="{{ $tableName }}" name="for[]" value="{{ $tableName }}"
-                                       @checked(in_array($tableName, $dimension->for ?? [])) type="checkbox"
-                                       class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                                <input id="{{ $tableName }}" name="for[]" value="{{ $tableName }}" @checked(in_array($tableName, old('for', $dimension->for ?? []))) type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
                             </div>
                             <div class="ml-3 text-sm leading-6">
                                 <label for="{{ $tableName }}" class="text-gray-900">{{ $label }}</label>

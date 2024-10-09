@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\CreateDimensionAction;
+use App\Actions\RemoveDimensionAction;
 use App\Http\Requests\DimensionRequest;
 use App\Models\Dimension;
 use App\Services\SmartTableColumn;
 use App\Services\SmartTableData;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class DimensionController extends Controller
 {
@@ -35,16 +36,27 @@ class DimensionController extends Controller
     public function create()
     {
         $factTables = config('dissemination.fact_tables', []);
-        return view('manage.dimension.create', compact('factTables'));
+        $dimension = new Dimension();
+        return view('manage.dimension.create', compact('factTables', 'dimension'));
+    }
+
+    private function makeTableName(string $dimensionName): string
+    {
+        return str($dimensionName)->lower()->snake()->toString();
     }
 
     public function store(DimensionRequest $request)
     {
-        if (! $request->has('for')) {
-            $request->merge(['for' => []]);
+        $request->merge(['table_name' => $this->makeTableName($request->get('name'))]);
+        $dimension = Dimension::create($request->only(['name', 'description', 'table_name', 'sorting_type', 'for']));
+        if ($dimension) {
+            $successful = (new CreateDimensionAction)->handle($dimension);
+            if (! $successful) {
+                $dimension->delete();
+                return redirect()->route('manage.dimension.index')->withErrors('Could not create the dimension');
+            }
         }
-        Dimension::create($request->only(['name', 'description', 'table_name', 'sorting_type', 'for']));
-        return redirect()->route('manage.dimension.index')->withMessage('Record created');
+        return redirect()->route('manage.dimension.index')->withMessage('Dimension created');
     }
 
     public function edit(Dimension $dimension)
@@ -55,15 +67,22 @@ class DimensionController extends Controller
 
     public function update(Dimension $dimension, DimensionRequest $request)
     {
-        $dimension->update($request->only(['name', 'description', 'table_name', 'sorting_type', 'for']));
-        return redirect()->route('manage.dimension.index')->withMessage('Record updated');
+        $dimension->update($request->only(['name', 'description', 'sorting_type', 'for']));
+        return redirect()->route('manage.dimension.index')->withMessage('Dimension updated');
     }
 
     public function destroy(Dimension $dimension)
     {
         if (is_null($dimension->table_created_at)) {
             $dimension->delete();
+        } else {
+            if ($dimension->datasets()->count() > 0) {
+                return redirect()->route('manage.dimension.index')->withErrors('Dimension is used in a dataset');
+            }
+            if (! (new RemoveDimensionAction)->handle($dimension)) {
+                return redirect()->route('manage.dimension.index')->withErrors('Could not remove the dimension');
+            }
         }
-        return redirect()->route('manage.dimension.index')->withMessage('Record deleted');
+        return redirect()->route('manage.dimension.index')->withMessage('Dimension removed');
     }
 }

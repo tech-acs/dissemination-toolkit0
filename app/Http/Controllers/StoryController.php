@@ -30,6 +30,7 @@ class StoryController extends Controller
             ])
             ->searchable(['title'])
             ->sortBy('updated_at')
+            ->sortDesc()
             ->view('manage.story.index');
     }
 

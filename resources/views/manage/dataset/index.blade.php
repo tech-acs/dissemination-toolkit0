@@ -47,7 +47,8 @@
                             @forelse($records as $record)
                                 <tr>
                                     <td class="w-2/5 px-6 py-4 text-sm font-medium text-gray-900">
-                                        {{ $record->name }}
+                                        {{ $record->name }}<br />
+                                        <div class="text-xs text-gray-600 mt-1">Topics: <span class="font-normal text-gray-500">{{ $record->topics->pluck('name')->join(', ') }}</span></div>
                                     </td>
                                     <td class="px-6 py-4 text-left text-xs font-medium text-gray-900">
                                         {{ $record->indicators->pluck('name')->join(', ') }}
@@ -56,7 +57,7 @@
                                         {{ $record->dimensions->pluck('name')->join(', ') }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-900">
-                                        {{ $record->observations() }}
+                                        {{ $record->observationsCount() }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-900">
                                         <a href="{{ route('manage.dataset.edit', $record) }}" class="text-indigo-600 hover:text-indigo-900">{{ __('Edit') }}</a>
@@ -64,7 +65,7 @@
                                         <a href="{{ route('manage.dataset.destroy', $record) }}" x-on:click.prevent="confirmThenDelete($el)" class="text-red-600">{{ __('Delete') }}</a>
                                         <span class="text-gray-400 px-1">|</span>
                                         <a href="{{ route('manage.dataset.import.create', $record) }}" class="text-indigo-600 hover:text-indigo-900">{{ __('Import') }}</a>
-                                        @if($record->observations())
+                                        @if($record->observationsCount())
                                             <span class="text-gray-400 px-1">|</span>
                                             <a href="{{ route('manage.dataset.truncate', $record) }}" class="text-red-600 hover:text-red-900">{{ __('Empty') }}</a>
                                         @endif

@@ -1,11 +1,11 @@
 <div class="shadow sm:rounded-md sm:overflow-hidden">
     <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
         <div class="grid grid-cols-1 gap-6">
-            <div>
+            {{--<div>
                 <x-label for="name" value="{{ __('Name') }}" />
                 <x-input id="name" name="name" type="text" class="mt-1 block w-full" value="{{ old('name', $visualization->name ?? null) }}" />
                 <x-input-error for="name" class="mt-2" />
-            </div>
+            </div>--}}
             <div class="mt-1">
                 <x-label for="title" value="{{ __('Title') }} *" />
                 <x-multi-lang-input id="title" name="title" value="{{ old('title', $visualization->title ?? null) }}" />
@@ -22,7 +22,7 @@
                     <x-label for="topics" value="{{ __('Topics') }} *" />
                     <select size="5" multiple id="topics" name="topics[]" class="mt-1 p-2 text-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md">
                         @foreach($topics as $id => $topicName)
-                            <option class="p-1 mb-1 rounded" value="{{ $id }}" @selected(in_array($id, $visualization->topics->pluck('id')->all()))>{{ $topicName }}</option>
+                            <option class="p-1 mb-1 rounded" value="{{ $id }}" @selected(in_array($id, old('$topics', $visualization->topics->pluck('id')->all())))>{{ $topicName }}</option>
                         @endforeach
                     </select>
                     <x-input-error for="topics" class="mt-2" />

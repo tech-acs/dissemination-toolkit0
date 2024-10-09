@@ -22,6 +22,11 @@ class DynamicDimensionModel
         return $this->builder->find($id);
     }
 
+    public function findMany(array $ids): object
+    {
+        return $this->builder->whereIn('id', $ids)->get();
+    }
+
     public function all(): Collection
     {
         return $this->builder->get();

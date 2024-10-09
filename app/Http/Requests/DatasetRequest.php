@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Dimension;
+use Closure;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class DatasetRequest extends FormRequest
 {
@@ -24,10 +27,18 @@ class DatasetRequest extends FormRequest
         return [
             'name' => 'required|string|min:5',
             'indicators' => 'required|exists:indicators,id',
-            'dimensions' => 'required|exists:dimensions,id',
+            'dimensions' => [
+                'required', 'array',
+                function (string $attribute, mixed $value, Closure $fail) {
+                    $yearDimension = Dimension::firstWhere('table_name', 'year');
+                    if (! in_array($yearDimension->id, $value)) {
+                        $fail("The year dimension is mandatory");
+                    }
+                },
+            ],
             'fact_table' => 'required',
             'max_area_level' => 'required',
-            'topics' => 'required|array|min:1'
+            //'topics' => 'required|array|min:1'
         ];
     }
 
@@ -36,7 +47,7 @@ class DatasetRequest extends FormRequest
         return [
             'indicators.required' => 'You must select at least one indicator.',
             'dimensions.required' => 'You must select at least one dimension.',
-            'topics.required' => 'You must select at least one topic.',
+            //'topics.required' => 'You must select at least one topic.',
         ];
     }
 

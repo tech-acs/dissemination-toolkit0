@@ -34,7 +34,7 @@
                     @endforeach
                 </select>
             @else
-                <div class="text-gray-500 mt-2 border rounded-md p-4 py-2">{{ __('Select topic to see available indicators') }}</div>
+                <div class="text-gray-500 mt-2 border rounded-md p-4 py-2">{{ __('Select dataset to see available indicators') }}</div>
             @endif
         </div>
     </div>

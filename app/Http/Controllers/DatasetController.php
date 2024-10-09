@@ -7,7 +7,6 @@ use App\Models\Dataset;
 use App\Models\Dimension;
 use App\Models\Indicator;
 use App\Models\Topic;
-use App\Models\Year;
 use App\Services\AreaTree;
 use Illuminate\Http\Request;
 
@@ -15,7 +14,7 @@ class DatasetController extends Controller
 {
     public function index()
     {
-        $records = Dataset::with('indicators', 'dimensions')->orderByDesc('updated_at')->get();
+        $records = Dataset::with('indicators', 'dimensions', 'topics')->orderByDesc('updated_at')->get();
         return view('manage.dataset.index', compact('records'));
     }
 
@@ -23,12 +22,11 @@ class DatasetController extends Controller
     {
         $indicators = Indicator::orderBy('name')->get();
         $dimensions = Dimension::orderBy('name')->get();
-        $topics = Topic::pluck('name', 'id');
+        //$topics = Topic::pluck('name', 'id');
         $factTables = config('dissemination.fact_tables');
         $areaLevels = (new AreaTree())->hierarchies;
-        //$years = Year::pluck('name', 'id');
         $dataset = new Dataset();
-        return view('manage.dataset.create', compact('dataset', 'indicators', 'dimensions', 'factTables', 'areaLevels', 'topics'));
+        return view('manage.dataset.create', compact('dataset', 'indicators', 'dimensions', 'factTables', 'areaLevels'));
     }
 
     public function store(DatasetRequest $request)
@@ -36,7 +34,8 @@ class DatasetController extends Controller
         $dataset = Dataset::create($request->only(['fact_table', 'max_area_level', 'name', 'description']));
         $dataset->indicators()->sync($request->indicators);
         $dataset->dimensions()->sync($request->dimensions);
-        $dataset->topics()->sync($request->topics);
+        $inheritedTopics = $dataset->indicators->pluck('topics')->flatten()->pluck('id')->unique();
+        $dataset->topics()->sync($inheritedTopics);
         return redirect()->route('manage.dataset.index')->withMessage('Record created');
     }
 
@@ -44,10 +43,10 @@ class DatasetController extends Controller
     {
         $indicators = Indicator::orderBy('name')->get();
         $dimensions = Dimension::orderBy('name')->get();
-        $topics = Topic::pluck('name', 'id');
+        //$topics = Topic::pluck('name', 'id');
         $factTables = config('dissemination.fact_tables');
         $areaLevels = (new AreaTree())->hierarchies;
-        return view('manage.dataset.edit', compact('dataset', 'indicators', 'dimensions', 'factTables', 'areaLevels', 'topics'));
+        return view('manage.dataset.edit', compact('dataset', 'indicators', 'dimensions', 'factTables', 'areaLevels'));
     }
 
     public function update(Dataset $dataset, DatasetRequest $request)
@@ -55,7 +54,8 @@ class DatasetController extends Controller
         $dataset->update($request->only(['fact_table', 'max_area_level', 'name', 'description']));
         $dataset->indicators()->sync($request->indicators);
         $dataset->dimensions()->sync($request->dimensions);
-        $dataset->topics()->sync($request->topics);
+        $inheritedTopics = $dataset->indicators->pluck('topics')->flatten()->pluck('id')->unique();
+        $dataset->topics()->sync($inheritedTopics);
         return redirect()->route('manage.dataset.index')->withMessage('Record updated');
     }
 
@@ -63,7 +63,7 @@ class DatasetController extends Controller
     {
         $warning = "The dataset contains data and therefore should not be deleted.
                     If you want to remove the dataset along with the data and other references, visit this url: " . url()->route('manage.dataset.remove', $dataset);
-        if ($dataset->observations() > 0) {
+        if ($dataset->observationsCount() > 0) {
             return redirect()->route('manage.dataset.index')->withErrors($warning);
         }
         $dataset->delete();

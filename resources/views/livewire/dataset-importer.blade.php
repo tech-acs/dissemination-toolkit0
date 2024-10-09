@@ -9,7 +9,7 @@
                     </svg>
                 </div>
                 <div class="ml-3  text-sm text-red-700">
-                    <p class="mb-1 font-semibold">{{ $importError }}</p>
+                    <p class="mb-1 font-semibold">{!! $importError !!}</p>
                 </div>
             </div>
         </div>

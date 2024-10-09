@@ -30,7 +30,8 @@ class IndicatorController extends Controller
     public function create()
     {
         $topics = Topic::pluck('name', 'id');
-        return view('manage.indicator.create', compact('topics'));
+        $indicator = new Indicator();
+        return view('manage.indicator.create', compact('topics', 'indicator'));
     }
 
     public function store(IndicatorRequest $request)
