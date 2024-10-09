@@ -2,7 +2,7 @@
     <div class="flex flex-wrap items-center justify-between w-full lg:w-auto">
         <a href="/">
             <div class="flex items-center space-x-2 text-2xl font-medium text-indigo-500">
-                <img class="h-12" title="{{ $org?->name }}" alt="{{ $org?->name }}" src="{{ asset(empty($org?->logo_path) ? 'images/placeholder-logo.png' : $org->logo_path) }}">
+                <img class="h-16" title="{{ $org?->name }}" alt="{{ $org?->name }}" src="{{ asset(empty($org?->logo_path) ? 'images/placeholder-logo.png' : $org->logo_path) }}">
                 {{--<span>{{ $org?->name }}</span>--}}
             </div>
         </a>
@@ -25,9 +25,7 @@
             <a class="w-full px-4 py-2 -ml-4 text-gray-500 rounded-md hover:text-indigo-500 focus:text-indigo-500 focus:bg-indigo-100 focus:outline-none"
                href="{{ route('census-table.index') }}">{{ __('Tables & Reports') }}</a>
             <a class="w-full px-4 py-2 -ml-4 text-gray-500 rounded-md hover:text-indigo-500 focus:text-indigo-500 focus:bg-indigo-100 focus:outline-none"
-               href="{{ route('about') }}">{{ __('About') }}</a>
-            <a class="w-full px-4 py-2 -ml-4 text-gray-500 rounded-md hover:text-indigo-500 focus:text-indigo-500 focus:bg-indigo-100 focus:outline-none"
-               href="{{ route('contact') }}">{{ __('Contact') }}</a>
+               href="{{ route('about') }}">{{ __('Datasets') }}</a>
             @guest
                 <a class="px-6 py-2 mt-3 text-center text-white bg-indigo-600 rounded-md lg:ml-5"
                    href="{{ route('login') }}">Login</a>
@@ -102,7 +100,19 @@
                     {{ __('Tables & Reports') }}
                 </a>
             </li>
-            <li class="mr-3"><a href="{{ route('map-visualization.index') }}"
+
+            <li class="mr-3"><a href="{{ route('dataset.index') }}"
+                                class="{{ request()->routeIs('dataset.*') ? 'border border-indigo-300 bg-indigo-50' : '' }} group inline-block px-4 py-2 text-base font-normal text-gray-800 no-underline rounded-md hover:bg-indigo-500 hover:text-white focus:text-indigo-500 focus:bg-indigo-100 focus:outline-none">
+                    <div class="flex justify-center">
+                        <svg  xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-indigo-500 group-hover:bg-indigo-500 group-hover:text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 4l-8 4l8 4l8 -4l-8 -4" /><path d="M4 12l8 4l8 -4" /><path d="M4 16l8 4l8 -4" />
+                        </svg>
+                    </div>
+                    {{ __('Datasets') }}
+                </a>
+            </li>
+
+            {{--<li class="mr-3"><a href="{{ route('map-visualization.index') }}"
                                 class="{{ request()->routeIs('map-visualization.*') ? 'border border-indigo-300 bg-indigo-50' : '' }} group inline-block px-4 py-2 text-base font-normal text-gray-800 no-underline rounded-md hover:bg-indigo-500 hover:text-white focus:text-indigo-500 focus:bg-indigo-100 focus:outline-none">
                     <div class="flex justify-center">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-indigo-500 group-hover:bg-indigo-500 group-hover:text-white" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -117,7 +127,7 @@
                     {{ __('Maps') }}
                 </a>
             </li>
-            {{--<li class="mr-3"><a href="{{ route('about') }}"
+            <li class="mr-3"><a href="{{ route('about') }}"
                                 class="{{ request()->routeIs('about') ? 'border border-indigo-300 bg-indigo-50' : '' }} group inline-block px-4 py-2 text-base font-normal text-gray-800 no-underline rounded-md hover:bg-indigo-500 hover:text-white focus:text-indigo-500 focus:bg-indigo-100 focus:outline-none">
                     <div class="flex justify-center">
                         <svg class="w-6 h-6 text-indigo-500 group-hover:bg-indigo-500 group-hover:text-white" fill="none" stroke="currentColor" stroke-width="1.5"

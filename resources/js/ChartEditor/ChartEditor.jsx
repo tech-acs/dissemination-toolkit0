@@ -22,6 +22,7 @@ function ChartEditor({dataSources, initialData, initialLayout, config, vizId, in
         setFrames(frames);
 
         writeToTransporterFormElements();
+        //Livewire.dispatch('chartDesignerStateChanged', { data: stripData(data), layout })
     };
 
     const stripData = (original) => {
@@ -39,23 +40,12 @@ function ChartEditor({dataSources, initialData, initialLayout, config, vizId, in
 
     const writeToTransporterFormElements = () => {
         console.log(data, layout)
-        //const dataStrippedData = stripData(data)
+        const dataStrippedData = stripData(data)
         const chartData = document.getElementById('chart-data')
-        chartData.value = JSON.stringify(data);
+        chartData.value = JSON.stringify(dataStrippedData);
         const chartLayout = document.getElementById('chart-layout')
         chartLayout.value = JSON.stringify(layout);
     };
-
-    const save = async () => {
-        const dataStrippedData = stripData(data);
-        const response = await axios.post('/manage/viz-builder-wizard/api/put', { data: dataStrippedData, layout }, {validateStatus: () => true});
-        console.log({dataStrippedData, layout, responseStatus: response.status, responseData: response.data});
-    };
-
-    const reset = () => {
-        setLayout(JSON.parse(defaultLayout));
-        setData([]);
-    }
 
     if (config.locale === 'fr') {
         plotly.register(fr);
@@ -109,19 +99,7 @@ function ChartEditor({dataSources, initialData, initialLayout, config, vizId, in
     return (
         <>
             {/*<div className="flex justify-between w-full bg-gray-50">
-                <div className="text-gray-600 text-xl font-medium items-center p-3 w-1/4 xl:w-1/3 2xl:w-1/2 truncate">{indicatorTitle}</div>
-                <div className="flex justify-end gap-x-4 p-3">
-                    <div className="flex items-center text-nowrap font-medium mr-8"
-                         style={{color: notification.color}}>{notification.icon?.()} {notification?.text}</div>
-
-                    <Button label="Reset" clickHandler={reset} icon={ResetIcon}
-                            colorClasses="bg-red-600 hover:bg-red-500 focus:ring-red-500"/>
-                    <Button label="Cancel" clickHandler={() => window.history.back()} icon={CancelIcon} />
-                    <DataViewer data={dataSources}/>
-                    <TemplateSaver layout={layout} data={data} />
-                    <Button label="Save" clickHandler={save} icon={SaveIcon}
-                            colorClasses="bg-teal-600 hover:bg-teal-500 focus:ring-teal-500"/>
-                </div>
+                <div className="text-gray-600 text-xl font-medium items-center p-3 w-1/4 xl:w-1/3 2xl:w-1/2 truncate">ahem</div>
             </div>*/}
 
             <PlotlyEditor

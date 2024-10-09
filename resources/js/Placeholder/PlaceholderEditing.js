@@ -22,7 +22,7 @@ export default class PlaceholderEditing extends Plugin {
         );
 
         this.editor.config.define( 'placeholderConfig', {
-            types: [ 'date', 'first name', 'surname' ]
+            types: [ 'Area name', 'date']
         } );
     }
 
@@ -59,7 +59,17 @@ export default class PlaceholderEditing extends Plugin {
         conversion.for( 'editingDowncast' ).elementToElement( {
             model: 'placeholder',
             view: ( modelItem, { writer: viewWriter } ) => {
-                const widgetElement = createPlaceholderView( modelItem, viewWriter );
+                //const widgetElement = createPlaceholderView( modelItem, viewWriter );
+
+                const name = modelItem.getAttribute( 'name' );
+
+                const widgetElement = viewWriter.createContainerElement( 'span', {
+                    class: 'placeholder'
+                } );
+
+                // Insert the placeholder name (as a text).
+                const innerText = viewWriter.createText( '{+' + name + '}' );
+                viewWriter.insert( viewWriter.createPositionAt( widgetElement, 0 ), innerText );
 
                 // Enable widget handling on a placeholder element inside the editing view.
                 return toWidget( widgetElement, viewWriter );
@@ -68,7 +78,21 @@ export default class PlaceholderEditing extends Plugin {
 
         conversion.for( 'dataDowncast' ).elementToElement( {
             model: 'placeholder',
-            view: ( modelItem, { writer: viewWriter } ) => createPlaceholderView( modelItem, viewWriter )
+            view: ( modelItem, { writer: viewWriter } ) => {
+                const name = modelItem.getAttribute( 'name' );
+
+                const placeholderView = viewWriter.createRawElement( 'span', {
+                    'class': 'placeholder',
+                    'id': 'myud',
+                    'x-init': 'someShit()'
+                } );
+
+                // Insert the placeholder name (as a text).
+                const innerText = viewWriter.createText( '{' + name + '}' );
+                viewWriter.insert( viewWriter.createPositionAt( placeholderView, 0 ), innerText );
+
+                return placeholderView;
+            }
         } );
 
         // Helper method for both downcast converters.

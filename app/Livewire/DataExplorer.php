@@ -17,7 +17,7 @@ class DataExplorer extends Component
     public bool $hasData = false;
     public array $dataShaperSelections = [];
 
-    #[On('changeOccurred')]
+    #[On('dataShaperEvent')]
     public function dataShaperUpdated(array $rawData, string $indicatorName, array $dataParams)
     {
         $this->data = $rawData;

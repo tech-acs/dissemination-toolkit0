@@ -59,6 +59,17 @@ export default class PlotlyChart {
             Plotly.newPlot(this.rootElement, this.data, this.layout, this.config);
             this.registerLivewireEventListeners(this.filterable);
         }
+
+        const shouldCaptureThumbnail = document.getElementById('should-capture-thumbnail')?.value
+        if (shouldCaptureThumbnail) {
+            console.log('Capturing and sending thumbnail...', this.vizId);
+            Plotly.toImage(this.id, { format: 'png', width: 600, height: 400 })
+                .then((imageData) => {
+                    console.log({imageData});
+                    Livewire.dispatch('thumbnailCaptured', {imageData})
+                })
+                .catch((error) => console.error('Error converting plot to image:', error));
+        }
     }
 
     registerLivewireEventListeners(filterable) {
@@ -69,11 +80,12 @@ export default class PlotlyChart {
 
         if (filterable) {
             Livewire.on(`filterChanged`, (filter) => {
-                let filterPath
-                [filterPath] = filter
+                let filterPath, areaName
+                [filterPath, areaName] = filter
+                //console.log(areaName)
                 this.fetchData(this.vizId, filterPath)
                     .then(() => {
-                        console.log({Path: filterPath, Filtered: this.data});
+                        //console.log({Path: filterPath, Filtered: this.data});
                         if (! this.data.length) {
                             Plotly.react(this.rootElement, this.data, this.emptyLayout);
                         } else {

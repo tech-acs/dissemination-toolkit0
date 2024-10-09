@@ -33,6 +33,8 @@
                         .then(e => {
                             this.editor = e
                             e.setData(this.storyHtml)
+
+                            //CKEditorInspector.attach( e );
                         })
                         .catch( error => {
                             console.error( error.stack )

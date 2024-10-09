@@ -7,7 +7,7 @@ import { Heading } from '@ckeditor/ckeditor5-heading';
 import { Link, LinkImage } from '@ckeditor/ckeditor5-link';
 import { List } from '@ckeditor/ckeditor5-list';
 import { Paragraph } from '@ckeditor/ckeditor5-paragraph';
-import {Table, TableCellProperties, TableColumnResize, TableProperties, TableToolbar} from "@ckeditor/ckeditor5-table";
+import { Table, TableCellProperties, TableColumnResize, TableProperties, TableToolbar } from "@ckeditor/ckeditor5-table";
 import { MediaEmbed } from "@ckeditor/ckeditor5-media-embed";
 import { Indent, IndentBlock } from "@ckeditor/ckeditor5-indent";
 import {

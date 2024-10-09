@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\VisualizationRequest;
 use App\Models\Tag;
 use App\Models\Topic;
 use App\Services\SmartTableColumn;
 use App\Services\SmartTableData;
 use Illuminate\Http\Request;
 use App\Models\Visualization;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class VisualizationController extends Controller
 {
@@ -18,9 +17,11 @@ class VisualizationController extends Controller
     {
         return (new SmartTableData(Visualization::query(), $request))
             ->columns([
-                SmartTableColumn::make('title')->sortable(),
+                SmartTableColumn::make('title')->sortable()
+                    ->setBladeTemplate('{{ $row->title }}<br /><div class="text-xs text-gray-600 mt-1">Topics: <span class="font-normal text-gray-500">{{ $row->topics->pluck("name")->join(", ") }}</span></div>'),
                 SmartTableColumn::make('type')
-                    ->setBladeTemplate('{{ ucfirst($row->type) }} @if ($row->is_filterable) <span class="text-green-700" title="Filterable by geography"><x-icon.filter /></span> @endif'),
+                    ->setBladeTemplate('{{ ucfirst($row->type) }} @if ($row->is_filterable) <span class="text-green-700" title="Filterable by geography"><x-icon.filter /></span> @endif')
+                    ->tdClasses('whitespace-nowrap'),
                 SmartTableColumn::make('published_at')->setLabel(__('Published'))
                     ->setBladeTemplate('<x-yes-no value="{{ $row->published }}" />'),
                 SmartTableColumn::make('author')
@@ -41,7 +42,7 @@ class VisualizationController extends Controller
         return view("manage.visualization.edit", compact('visualization', 'tags', 'topics'));
     }
 
-    public function update(Request $request, Visualization $visualization)
+    public function update(VisualizationRequest $request, Visualization $visualization)
     {
         $visualization->update($request->only(['title', 'description', 'published', 'is_filterable']));
         $updatedTags = Tag::prepareForSync($request->get('tags', ''));

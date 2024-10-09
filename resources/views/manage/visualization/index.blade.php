@@ -12,8 +12,23 @@
     <div class="flex flex-col max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
 
         <div class="flex justify-end gap-4">
-            <a href="{{ route('manage.viz-builder-wizard.show.{currentStep}', 1) }}"><x-button>{{ __('Create New') }}</x-button></a>
+            {{--<a href="{{ route('manage.viz-builder.chart.prepare-data') }}"><x-button>{{ __('Create New') }}</x-button></a>--}}
+
+            <x-dropdown align="right" class="48" contentClasses="py-0 bg-white overflow-hidden">
+                <x-slot name="trigger">
+                    <x-button>{{ __('Create New') }}</x-button>
+                </x-slot>
+                <x-slot name="content" class="overflow-hidden py-0">
+                    <x-dropdown-link class="px-6 tracking-wide" href="{{ route('manage.viz-builder.chart.prepare-data') }}">{{ __('Chart Visualization') }}</x-dropdown-link>
+                    <x-dropdown-link class="px-6 tracking-wide" href="{{ route('manage.viz-builder.table.prepare-data') }}">{{ __('Table Visualization') }}</x-dropdown-link>
+                    <x-dropdown-link class="px-6 tracking-wide" href="#">{{ __('Map Visualization') }}</x-dropdown-link>
+                </x-slot>
+            </x-dropdown>
         </div>
+
+        <x-message-display />
+
+        <x-error-display />
 
         <x-smart-table :$smartTableData custom-action-sub-view="manage.visualization.custom-action" />
 

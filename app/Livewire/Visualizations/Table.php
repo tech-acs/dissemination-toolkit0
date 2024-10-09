@@ -9,6 +9,9 @@ use Livewire\Attributes\On;
 class Table extends Visualization
 {
     public const DEFAULT_OPTIONS = [
+        'defaultColDef' => [
+            'width' => 100,
+        ],
         'columnTypes' => [
             'rangeColumn' => [
                 'width' => 150
@@ -99,11 +102,18 @@ class Table extends Visualization
         $this->options['columnDefs'] = $this->makeColumnDefs(collect($rawData));
     }
 
-    #[On('changeOccurred')]
+    #[On('dataShaperEvent')]
     public function reactToChanges(array $rawData, string $indicatorName, array $dataParams): void
     {
         //$this->options = array_replace_recursive($this::DEFAULT_OPTIONS, $this->options, []);
         $this->preparePayload($rawData);
+        $this->dispatch("updateTable.$this->htmlId", $this->options);
+    }
+
+    #[On('tableOptionsShaperEvent')]
+    public function applyOptions(array $options): void
+    {
+        $this->options = array_replace_recursive($this->options, $options);
         $this->dispatch("updateTable.$this->htmlId", $this->options);
     }
 

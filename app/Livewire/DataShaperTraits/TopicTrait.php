@@ -20,9 +20,10 @@ trait TopicTrait {
             'geographyLevels', 'geographies', 'selectedGeographies', 'years', 'selectedYears',
             'dimensions', 'selectedDimensions', 'selectedDimensionValues', 'pivotableDimensions', 'pivotColumn', 'pivotRow', 'nestingPivotColumn');
         $topic = Topic::find($topicId);
-        //$this->indicators = $topic?->indicators->pluck('name', 'id')->all() ?? [];
-        $this->datasets = $topic?->datasets->pluck('name', 'id')->all() ?? [];
-        //$this->nextSelection = 'indicator';
+        //$this->datasets = $topic?->datasets->pluck('name', 'id')->all() ?? [];
+        $this->datasets = $topic?->datasets->mapWithKeys(function ($dataset) {
+            return [$dataset->id => $dataset->info()];
+        })->all();
         $this->nextSelection = 'dataset';
 
         $this->dispatch('dataShaperSelectionMade', $this->makeReadableDataParams('topic', $topic->name));

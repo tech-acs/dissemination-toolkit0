@@ -38,7 +38,7 @@ class VizBuilderWizardController extends Controller
         session()->forget([
             'step1.data', 'step1.indicatorName', 'step1.dataParams', 'step1.dataSources',
             'step2.data', 'step2.layout', 'step2.options', 'step2.vizType',
-            'step3.description', 'step3.topicId', 'step3.filterable',
+            'step3.description', 'step3.topicIds', 'step3.filterable',
         ]);
     }
 
@@ -61,7 +61,7 @@ class VizBuilderWizardController extends Controller
                 session()->put('step2.layout', $viz->layout);
             }
             session()->put('step3.description', $viz->title);
-            session()->put('step3.topicId', $viz->topic_id);
+            session()->put('step3.topicIds', $viz->topicIds);
             session()->put('step3.filterable', $viz->is_filterable);
         }
         $steps = [
@@ -69,7 +69,7 @@ class VizBuilderWizardController extends Controller
             2 => 'Visualize',
             3 => 'Review & save',
         ];
-        $topics = Topic::all();
+        $topics = Topic::pluck('name', 'id');
         if ($this->canShowStep($currentStep)) {
             return view("manage.viz-builder.$currentStep", compact('steps', 'topics', 'currentStep'));
         } else {
@@ -102,7 +102,7 @@ class VizBuilderWizardController extends Controller
         } elseif ($currentStep === 3) {
             $title = $request->get('title');
             $description = $request->get('description');
-            $topicId = $request->get('topicId');
+            $topicIds = $request->get('topicIds');
             $dataParams = session('step1.dataParams');
             $data = collect(session('step2.data'))
                 ->map(function ($trace) {
@@ -129,14 +129,14 @@ class VizBuilderWizardController extends Controller
             $validator = Validator::make(
                 [
                     'title' => $title,
-                    'topicId' => $topicId,
+                    'topicIds' => $topicIds,
                     'dataParams' => $dataParams,
                     'data' => $data,
                     'layout' => $layout,
                 ],
                 [
                     'title' => 'required',
-                    'topicId' => 'required',
+                    'topicIds' => 'required|array|min:1',
                     'dataParams' => 'required|array',
                     'layout' => Rule::requiredIf(session('step2.vizType') == Chart::class),
                     'data' => Rule::requiredIf(session('step2.vizType') == Chart::class),
@@ -155,7 +155,7 @@ class VizBuilderWizardController extends Controller
                         'title' => $title,
                         'slug' => str($title)->slug()->toString(),
                         'description' => $description,
-                        'topic_id' => $topicId,
+                        'topicIds' => $topicIds,
                         'type' => 'No longer needed. Drop this column',
                         'data_params' => $dataParams,
                         'data' => $data,
@@ -191,7 +191,7 @@ class VizBuilderWizardController extends Controller
 
     public function ajaxGetChart(Request $request)
     {
-        $dataSources = session('step1.dataSources');
+        $dataSources = session('step1.dataSources', []);
         $data = session('step2.data');
         $layout = session('step2.layout');
         return [

@@ -11,12 +11,12 @@ trait IndicatorTrait {
     public array $indicators = [];
     public array $selectedIndicators = [];
 
-    public function updatedSelectedIndicators($value, $index): void
+    public function updatedSelectedIndicators($indicatorIds): void
     {
         $this->reset('selectedGeographyLevels', 'geographyLevels', 'geographies', 'selectedGeographies',
             'years', 'selectedYears', 'dimensions', 'selectedDimensions', 'selectedDimensionValues', 'pivotableDimensions', 'pivotColumn', 'pivotRow', 'nestingPivotColumn');
 
-        $indicators = Indicator::findMany($this->selectedIndicators);
+        $indicators = Indicator::findMany($indicatorIds);
         $dataset = Dataset::find($this->selectedDataset);
         $allLevels = (new AreaTree())->hierarchies;
         $this->geographyLevels = $dataset ? array_slice($allLevels, 0,$dataset->max_area_level + 1) : $allLevels;
@@ -36,11 +36,14 @@ trait IndicatorTrait {
             $this->selectedGeographies[$level] = [];
         }
 
-        $this->dimensions = $dataset->dimensions->map(function ($dimension) {
+        $this->dimensions = $dataset->dimensions->map(function ($dimension) use ($dataset) {
+            $values = ($dimension->name == 'Year') ?
+                $dataset->availableValuesForDimension($dimension)->map(fn ($v) => ['id' => $v->id, 'name' => $v->name])->all() :
+                $dimension->values()->map(fn ($v) => ['id' => $v->id, 'name' => $v->name])->all();
             return [
                 'id' => $dimension->id,
                 'label' => $dimension->name,
-                'values' => $dimension->values()->map(fn ($v) => ['id' => $v->id, 'name' => $v->name])->all(),
+                'values' => $values,
             ];
         })->all();
 

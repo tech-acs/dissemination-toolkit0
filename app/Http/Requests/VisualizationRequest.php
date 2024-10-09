@@ -14,14 +14,16 @@ class VisualizationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'topics' => 'required|array|min:1'
+            'title' => 'required',
+            'description' => 'required',
+            //'topics' => 'required|array|min:1'
         ];
     }
 
-    public function messages(): array
+   /* public function messages(): array
     {
         return [
             'topics.required' => 'You must select at least one topic.',
         ];
-    }
+    }*/
 }

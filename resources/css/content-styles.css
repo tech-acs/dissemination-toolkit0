@@ -509,7 +509,7 @@
 /* @ckeditor/ckeditor5-horizontal-line/theme/horizontalline.css */
 .ck-content hr {
     margin: 15px 0;
-    height: 4px;
+    height: 1px;
     background: hsl(0, 0%, 87%);
     border: 0;
 }

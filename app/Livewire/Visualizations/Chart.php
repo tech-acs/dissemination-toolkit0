@@ -61,7 +61,7 @@ class Chart extends Visualization
         $this->data = $this->makeTraces(collect($rawData));
     }
 
-    #[On('changeOccurred')]
+    #[On('dataShaperEvent')]
     public function reactToChanges(array $rawData, string $indicatorName, array $dataParams): void
     {
         //$this->layout = array_replace_recursive($this::DEFAULT_OPTIONS, $this->layout, []);
