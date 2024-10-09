@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthHomeController;
 use App\Http\Controllers\DimensionTableCreationController;
 use App\Http\Controllers\Guest\CensusTableController;
 use App\Http\Controllers\Guest\DataExplorerController;
+use App\Http\Controllers\Guest\DatasetController;
 use App\Http\Controllers\Guest\LandingController;
 use App\Http\Controllers\Guest\MapVisualizationController;
 use App\Http\Controllers\Guest\RendererController;
@@ -33,6 +34,8 @@ Route::middleware(['web'])->group(function () {
     Route::get('census-table', [CensusTableController::class, 'index'])->name('census-table.index');
     Route::get('census-table/{id}', [CensusTableController::class, 'show'])->name('census-table.show');
     Route::get('census-table/download/{censusTable}', [CensusTableController::class, 'download'])->name('census-table.download');
+    Route::get('dataset', [DatasetController::class, 'index'])->name('dataset.index');
+
     Route::view('about', 'guest.about')->name('about');
     Route::view('contact', 'guest.contact')->name('contact');
     Route::get('renderer/visualization/{visualization}', RendererController::class);
@@ -45,7 +48,7 @@ Route::middleware(['web'])->group(function () {
         Route::resource('topic', TopicController::class);
         Route::resource('indicator', IndicatorController::class);
         Route::get('dimension/create-table', DimensionTableCreationController::class)->name('dimension.create-table');
-        Route::delete('dimension/delete-table', \App\Http\Controllers\DimensionTableDeletionController::class)->name('dimension.delete-table');
+        //Route::delete('dimension/delete-table', \App\Http\Controllers\DimensionTableDeletionController::class)->name('dimension.delete-table');
         Route::resource('dimension', \App\Http\Controllers\DimensionController::class);
         Route::resource('year', \App\Http\Controllers\YearController::class);
         Route::resource('dimension.entries', \App\Http\Controllers\DimensionEntryController::class);
@@ -55,34 +58,46 @@ Route::middleware(['web'])->group(function () {
         Route::resource('dataset.import', \App\Http\Controllers\DatasetImportController::class)->only(['create', 'store']);
         Route::resource('visualization', \App\Http\Controllers\VisualizationController::class)->except(['create', 'show']);
         Route::post('upload-visualization/{visualization}', [\App\Http\Controllers\VisualizationController::class, 'upload'])->name('visualization.upload');
-        Route::get('visualization-builder', \App\Http\Controllers\VisualizationBuilderController::class)->name('visualization-builder');
-        Route::get('visualization-deriver', \App\Http\Controllers\VisualizationDeriverController::class)->name('visualization-deriver');
+        //Route::get('visualization-builder', \App\Http\Controllers\VisualizationBuilderController::class)->name('visualization-builder');
+        //Route::get('visualization-deriver', \App\Http\Controllers\VisualizationDeriverController::class)->name('visualization-deriver');
         Route::get('story/{story}/duplicate', \App\Http\Controllers\StoryDuplicationController::class)->name('story.duplicate');
         Route::resource('story', \App\Http\Controllers\StoryController::class);
 
-        Route::controller(VizBuilderWizardController::class)->group(function () {
+        /*Route::controller(VizBuilderWizardController::class)->group(function () {
             Route::get('viz-builder-wizard/{currentStep}', 'show')
                 ->whereIn('currentStep', [1, 2, 3])
                 ->name('viz-builder-wizard.show.{currentStep}');
             Route::post('viz-builder-wizard/{currentStep}', 'update')
                 ->whereIn('currentStep', [1, 2, 3])
                 ->name('viz-builder-wizard.update.{currentStep}');
+        });*/
+
+        Route::controller(\App\Http\Controllers\VizBuilder\ChartWizardController::class)->group(function () {
+            Route::get('viz-builder/chart/prepare-data', 'prepareData')->name('viz-builder.chart.prepare-data');
+            Route::get('viz-builder/chart/design', 'design')->name('viz-builder.chart.design');
+            Route::get('viz-builder/chart/{viz}/edit', 'edit')->name('viz-builder.chart.edit');
+            Route::post('viz-builder/chart/create', 'create')->name('viz-builder.chart.create');
+            Route::post('viz-builder/chart', 'save')->name('viz-builder.chart.save');
         });
 
-        Route::post('viz-builder-wizard/api/put', [VizBuilderWizardController::class, 'ajaxSaveChart']);
-        Route::get('viz-builder-wizard/api/get', [VizBuilderWizardController::class, 'ajaxGetChart']);
+        Route::controller(\App\Http\Controllers\VizBuilder\TableWizardController::class)->group(function () {
+            Route::get('viz-builder/table/prepare-data', 'prepareData')->name('viz-builder.table.prepare-data');
+            Route::get('viz-builder/table/design', 'design')->name('viz-builder.table.design');
+            Route::get('viz-builder/table/{viz}/edit', 'edit')->name('viz-builder.table.edit');
+            Route::get('viz-builder/table/create', 'create')->name('viz-builder.table.create');
+            Route::post('viz-builder/table', 'save')->name('viz-builder.table.save');
+        });
+
+        /*Route::get('viz-builder-wizard/api/get', [VizBuilderWizardController::class, 'ajaxGetChart']);
+        Route::post('viz-builder-wizard/api/put', [VizBuilderWizardController::class, 'ajaxSaveChart']);*/
+        Route::get('viz-builder/chart/api/get', [\App\Http\Controllers\VizBuilder\ChartWizardController::class, 'ajaxGetChart']);
+        //Route::post('viz-builder/chart/api/put', [VizBuilderWizardController::class, 'ajaxSaveChart']);
+
 
         /*Route::get('viz-builder-wizard/{step}', \App\Http\Controllers\VizBuilderWizardController::class)
             ->whereIn('step', ['step1-data', 'step2-viz', 'step3-save']);*/
 
         Route::resource('story-builder', \App\Http\Controllers\StoryBuilderController::class)->parameters(['story-builder' => 'story'])->only(['edit', 'update']);
-
-        /*Route::get('story/builder/{story}/edit', [\App\Http\Controllers\StoryBuilderController::class, 'edit'])->name('story.builder.edit');
-        Route::patch('story/builder/{id}', [\App\Http\Controllers\StoryBuilderController::class, 'update'])->name('story.builder.update');
-        Route::post('story/builder/upload/image', [\App\Http\Controllers\StoryBuilderController::class, 'uploadImage'])->name('story.builder.upload.image');
-        Route::post('story/builder/upload/file', [\App\Http\Controllers\StoryBuilderController::class, 'uploadFile'])->name('story.builder.upload.file');
-        Route::get('story/builder/artifacts/{topic_id}', [\App\Http\Controllers\StoryBuilderController::class, 'getArtifacts'])->name('story.builder.artifacts');
-        Route::get('story/builder/topics', [\App\Http\Controllers\StoryBuilderController::class, 'getTopics'])->name('story.builder.topics');*/
 
         Route::resource('announcement', AnnouncementController::class)->only(['index', 'create', 'store']);
         //Route::get('usage_stats', UsageStatsController::class)->name('usage_stats');
@@ -100,7 +115,7 @@ Route::middleware(['web'])->group(function () {
             Route::patch('organization/{organization}', [\App\Http\Controllers\OrganizationController::class, 'update'])->name('organization.update');
             Route::resource('tag', \App\Http\Controllers\TagController::class)->only(['index', 'edit', 'update']);
             Route::name('templates.')->group(function () {
-                Route::resource('templates/visualization', \App\Http\Controllers\VisualizationTemplateController::class)->only(['index', 'destroy']);
+                //Route::resource('templates/visualization', \App\Http\Controllers\VisualizationTemplateController::class)->only(['index', 'destroy']);
                 Route::resource('templates/story', \App\Http\Controllers\StoryTemplateController::class)->only(['index', 'destroy']);
             });
         });
