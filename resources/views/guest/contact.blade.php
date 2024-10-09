@@ -17,7 +17,7 @@
                                     <div>
                                         <dt class="sr-only">Postal address</dt>
                                         <dd>
-                                            {!! $org->address !!}
+                                            {!! str($org->address)->markdown() !!}
                                         </dd>
                                     </div>
                                 </dl>

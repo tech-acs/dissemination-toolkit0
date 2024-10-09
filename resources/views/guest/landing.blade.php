@@ -10,9 +10,9 @@
                         <h1 class="text-4xl font-bold leading-snug tracking-tight text-indigo-800 lg:text-4xl lg:leading-tight xl:text-6xl xl:leading-tight">
                             {{ $org?->slogan ?? "Making data accessible to everyone." }}
                         </h1>
-                        <p class="py-5 text-xl leading-normal font-base text-gray-500 lg:text-xl xl:text-2xl">
-                            {!! $org?->blurb !!}
-                        </p>
+                        <div class="py-5 text-xl leading-normal font-base text-gray-500 lg:text-xl xl:text-2xl">
+                            {!! str($org?->blurb)->markdown() !!}
+                        </div>
                     </div>
                 </div>
                 <div class="flex items-center justify-center w-full lg:w-1/2">
@@ -90,7 +90,7 @@
                             <div class="text-lg space-y-4 py-2">
                                 {!! $story->description !!}
                             </div>
-                            <a href="{{ route('story.show', $story) }}" class="p-2 rounded-md text-sm font-semibold leading-6 text-indigo-900 hover:ring-1 ring-indigo-500">Read more <span aria-hidden="true">→</span></a>
+                            <a href="{{ route('story.show', $story) }}" class="py-2 rounded-md text-sm font-semibold leading-6 text-indigo-900 hover:ring-1 ring-indigo-500">Read more <span aria-hidden="true">→</span></a>
                         </div>
                     </div>
                     <div class="flex items-center justify-center w-full lg:w-1/2 @if($loop->odd) lg:order-1 @endif">

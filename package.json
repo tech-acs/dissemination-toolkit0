@@ -45,6 +45,7 @@
         "alpinejs": "^3.14.1",
         "autoprefixer": "^10.4.16",
         "axios": "^1.7.4",
+        "easymde": "^2.18.0",
         "laravel-vite-plugin": "^1.0",
         "lodash": "^4.17.21",
         "plotly.js-dist": "^2.33.0",

@@ -8,7 +8,7 @@
                     </a>
                 </div>
                 <div class="max-w-md mt-4 text-gray-500">
-                    {!! $org?->blurb !!}
+                    {!! str($org?->blurb)->markdown() !!}
                 </div>
             </div>
             {{--ToDo: link the links--}}
