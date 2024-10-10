@@ -5,7 +5,7 @@
             {{ __('Dimensions') }}
         </h3>
         <p class="mt-2 max-w-7xl text-sm text-gray-500">
-            {{ __('Create dimension') }}
+            {{ __('Edit existing dimension') }}
         </p>
     </x-slot>
 
@@ -29,9 +29,10 @@
             </div>
         @endif
 
-        <form action="{{ route('manage.dimension.entries.store', $dimension) }}" method="POST">
+        <form action="{{ route('manage.dimension.values.update', ['dimension' => $dimension->id, 'entry' => $entry->id]) }}" method="POST">
+            @method('PATCH')
             @csrf
-            @include('manage.dimension.entries.form')
+            @include('manage.dimension.values.form')
         </form>
 
     </div>

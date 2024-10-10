@@ -12,8 +12,8 @@
 <div class="flex flex-col max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
 
 <div class="text-right">
-    <a class="mr-4"><x-button class="opacity-25">{{ __('Import') }}</x-button></a>
-    <a href="{{ route('manage.dimension.entries.create', $dimension) }}"><x-button>{{ __('Create new') }}</x-button></a>
+    <a href="{{ route('manage.dimension.import-values.create', $dimension) }}" class="mr-4"><x-button>{{ __('Import') }}</x-button></a>
+    <a href="{{ route('manage.dimension.values.create', $dimension) }}"><x-button>{{ __('Create new') }}</x-button></a>
 </div>
 @if (session('message'))
 <div class="rounded-md p-4 py-3 mt-4 mb-4 border bg-blue-50 border-blue-300">
@@ -70,18 +70,18 @@
                 </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                @forelse($records as $entry)
+                @forelse($records as $value)
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                            {{ $entry->name }}
+                            {{ $value->name }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                            {{ $entry->code }}
+                            {{ $value->code }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <a href="{{route('manage.dimension.entries.edit', ['dimension' => $dimension->id, 'entry' => $entry->id])}}" class="text-indigo-600 hover:text-indigo-900">{{ __('Edit') }}</a>
+                            <a href="{{route('manage.dimension.values.edit', ['dimension' => $dimension->id, 'value' => $value->id])}}" class="text-indigo-600 hover:text-indigo-900">{{ __('Edit') }}</a>
                             <span class="text-gray-400 px-1">|</span>
-                            <a href="{{ route('manage.dimension.entries.destroy', ['dimension' => $dimension->id, 'entry' => $entry->id]) }}" x-on:click.prevent="confirmThenDelete($el)" class="text-red-600">{{ __('Delete') }}</a>
+                            <a href="{{ route('manage.dimension.values.destroy', ['dimension' => $dimension->id, 'value' => $value->id]) }}" x-on:click.prevent="confirmThenDelete($el)" class="text-red-600">{{ __('Delete') }}</a>
                         </td>
                     </tr>
                 @empty
