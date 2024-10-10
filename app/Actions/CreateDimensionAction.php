@@ -31,7 +31,7 @@ class CreateDimensionAction
         $columns = [
             'code' => [
                 'type' => 'string',
-                'parameters' => ['length' => 25],
+                'parameters' => ['length' => 25, 'unique' => true],
             ],
             'name' => [
                 'type' => 'string',

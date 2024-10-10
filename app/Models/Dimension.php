@@ -15,6 +15,7 @@ class Dimension extends Model
     protected $guarded = ['id'];
     public array $translatable = ['name', 'description'];
     protected $casts = ['for' => 'array'];
+    protected $appends = ['foreign_key'];
 
     public function datasets(): BelongsToMany
     {

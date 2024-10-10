@@ -37,14 +37,14 @@ class Dataset extends Model
         return $this->belongsToMany(Year::class);
     }
 
-    public function observationsCount()
+    public function observationsCount(): ?int
     {
         try {
             return DB::table($this->fact_table)
                 ->where('dataset_id', $this->id)
                 ->count();
         } catch (\Exception $exception) {
-            return 0;
+            return null;
         }
     }
 
@@ -52,6 +52,7 @@ class Dataset extends Model
     {
         try {
             return DB::table($this->fact_table)
+                ->select(['indicator_id', 'area_id', ...$this->dimensions->pluck('foreign_key')->toArray(), 'value'])
                 ->where('dataset_id', $this->id)
                 ->get();
         } catch (\Exception $exception) {
@@ -65,7 +66,7 @@ class Dataset extends Model
         return (new DynamicDimensionModel($dimension->table_name))->findMany($ids);
     }
 
-    public function info()
+    public function info(): array
     {
         $hierarchies = AreaHierarchy::orderBy('index')->pluck('name', 'index')->all();
         $yearDimension = $this->dimensions->filter(fn($dimension) => $dimension->table_name == 'year')->first();
