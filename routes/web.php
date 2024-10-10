@@ -8,6 +8,7 @@ use App\Http\Controllers\DimensionTableCreationController;
 use App\Http\Controllers\Guest\CensusTableController;
 use App\Http\Controllers\Guest\DataExplorerController;
 use App\Http\Controllers\Guest\DatasetController;
+use App\Http\Controllers\Guest\DatasetDownloadController;
 use App\Http\Controllers\Guest\LandingController;
 use App\Http\Controllers\Guest\MapVisualizationController;
 use App\Http\Controllers\Guest\RendererController;
@@ -35,6 +36,7 @@ Route::middleware(['web'])->group(function () {
     Route::get('census-table/{id}', [CensusTableController::class, 'show'])->name('census-table.show');
     Route::get('census-table/download/{censusTable}', [CensusTableController::class, 'download'])->name('census-table.download');
     Route::get('dataset', [DatasetController::class, 'index'])->name('dataset.index');
+    Route::get('dataset/{dataset}/download', DatasetDownloadController::class)->name('dataset.download');
 
     Route::view('about', 'guest.about')->name('about');
     Route::view('contact', 'guest.contact')->name('contact');
@@ -51,7 +53,8 @@ Route::middleware(['web'])->group(function () {
         //Route::delete('dimension/delete-table', \App\Http\Controllers\DimensionTableDeletionController::class)->name('dimension.delete-table');
         Route::resource('dimension', \App\Http\Controllers\DimensionController::class);
         Route::resource('year', \App\Http\Controllers\YearController::class);
-        Route::resource('dimension.entries', \App\Http\Controllers\DimensionEntryController::class);
+        Route::resource('dimension.values', \App\Http\Controllers\DimensionValueController::class);
+        Route::resource('dimension.import-values', \App\Http\Controllers\DimensionValueImportController::class)->only(['create', 'store']);
         Route::get('dataset/{dataset}/remove', \App\Http\Controllers\DatasetRemovalController::class)->name('dataset.remove');
         Route::get('dataset/{dataset}/truncate', \App\Http\Controllers\DatasetTruncationController::class)->name('dataset.truncate');
         Route::resource('dataset', \App\Http\Controllers\DatasetController::class);
