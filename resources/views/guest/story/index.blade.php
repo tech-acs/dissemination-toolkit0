@@ -14,7 +14,6 @@
                     <div class="basis-1/5">
                         <label for="topic" class="sr-only">Topic</label>
                         <select id="topic" name="topic" x-data x-on:change="$event.target.form.submit()"
-                                autocomplete="topic-name"
                                 class="relative block w-full  rounded-none rounded-r-md border-0 bg-transparent py-1.5 pt-2 text-gray-700 ring-1 ring-inset ring-indigo-300 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-8">
                             <option value>All topics</option>
                             @foreach($topics ?? [] as $topic)
@@ -25,9 +24,9 @@
                         </select>
                     </div>
                 </form>
-                <div class="flex flex-wrap pt-4">
+                <div class="grid grid-cols-2 gap-4">
                     @forelse($records as $record)
-                        <div class="w-full md:w-1/2 py-3">
+                        <div class="col-span-1 py-3">
                             <a href="{{ route('story.show', $record->id) }}">
                                 <div
                                     class="flex ring-1 ring-indigo-200 shadow-md rounded-md hover:ring-2 hover:ring-indigo-500 overflow-hidden">
@@ -47,7 +46,7 @@
                             </a>
                         </div>
                     @empty
-                        <div class="w-full flex justify-center items-center py-6 mb-8">
+                        <div class="col-span-2 justify-center items-center py-6 mb-8">
                             <div class="text-center text-3xl p-4 text-gray-500">
                                 {{ __('There are no published stories to display at the moment') }}
                             </div>

@@ -18,7 +18,7 @@ class StoryController extends Controller
                 $query->where("title->{$locale}", 'ilike', '%' . $request->get('keyword') . '%');
             })
             ->when(! empty($request->get('topic')), function (Builder $query) use ($request) {
-                $query->where('topic_id', $request->get('topic'));
+                $query->whereRelation('topics', 'topic_id', '=', $request->get('topic'));
             })
             ->get()->sortByDesc('updated_at');
         $topics = Topic::all();

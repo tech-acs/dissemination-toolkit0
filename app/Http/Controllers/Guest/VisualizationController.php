@@ -12,14 +12,13 @@ class VisualizationController extends Controller
 {
     public function index(Request $request)
     {
-        //order by desc updated_at
         $records = Visualization::published()
             ->when($request->has('keyword'), function (Builder $query) use ($request) {
                 $locale = app()->getLocale();
                 $query->where("title->{$locale}", 'ilike', '%' . $request->get('keyword') . '%');
             })
             ->when(! empty($request->get('topic')), function (Builder $query) use ($request) {
-                $query->where('topic_id', $request->get('topic'));
+                $query->whereRelation('topics', 'topic_id', '=', $request->get('topic'));
             })
             ->get()->sortByDesc('updated_at');
         $topics = Topic::all();
