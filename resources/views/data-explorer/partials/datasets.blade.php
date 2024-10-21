@@ -16,7 +16,7 @@
         >
             <label class="block text-lg font-medium leading-6 text-gray-900">
                 {{ __('Datasets') }}
-                <a class="text-gray-500 text-sm font-base">({{ __('double click entries for detail') }})</a>
+                <a class="text-gray-500 text-sm font-base">({{ __('double click entries for details') }})</a>
             </label>
             <x-animation.bouncing-left-pointer :class="$nextSelection === 'dataset' ? '' : 'hidden'" />
             <span x-show="expanded" class="ml-4" x-cloak>&minus;</span>

@@ -12,7 +12,7 @@ class DatasetDownloadController extends Controller
     public function __invoke(Dataset $dataset)
     {
         $datasetRows = (new BuildDatasetAction($dataset))->handle();
-        $filename = 'Dataset.xlsx';
+        $filename = "{$dataset->name}.xlsx";
         SimpleExcelWriter::streamDownload($filename)
             ->addRows($datasetRows)
             ->toBrowser();
