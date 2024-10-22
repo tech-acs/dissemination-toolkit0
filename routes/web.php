@@ -66,39 +66,30 @@ Route::middleware(['web'])->group(function () {
         Route::get('story/{story}/duplicate', \App\Http\Controllers\StoryDuplicationController::class)->name('story.duplicate');
         Route::resource('story', \App\Http\Controllers\StoryController::class);
 
-        /*Route::controller(VizBuilderWizardController::class)->group(function () {
-            Route::get('viz-builder-wizard/{currentStep}', 'show')
-                ->whereIn('currentStep', [1, 2, 3])
-                ->name('viz-builder-wizard.show.{currentStep}');
-            Route::post('viz-builder-wizard/{currentStep}', 'update')
-                ->whereIn('currentStep', [1, 2, 3])
-                ->name('viz-builder-wizard.update.{currentStep}');
-        });*/
-
         Route::controller(\App\Http\Controllers\VizBuilder\ChartWizardController::class)->group(function () {
-            Route::get('viz-builder/chart/prepare-data', 'prepareData')->name('viz-builder.chart.prepare-data');
-            Route::get('viz-builder/chart/design', 'design')->name('viz-builder.chart.design');
+            Route::get('viz-builder/chart/step1', 'step1')->name('viz-builder.chart.step1');
+            Route::get('viz-builder/chart/step2', 'step2')->name('viz-builder.chart.step2');
+            Route::post('viz-builder/chart/step3', 'step3')->name('viz-builder.chart.step3');
             Route::get('viz-builder/chart/{viz}/edit', 'edit')->name('viz-builder.chart.edit');
-            Route::post('viz-builder/chart/create', 'create')->name('viz-builder.chart.create');
-            Route::post('viz-builder/chart', 'save')->name('viz-builder.chart.save');
+            Route::post('viz-builder/chart', 'store')->name('viz-builder.chart.store');
         });
+        Route::get('viz-builder/chart/api/get', [\App\Http\Controllers\VizBuilder\ChartWizardController::class, 'ajaxGetChart']);
 
         Route::controller(\App\Http\Controllers\VizBuilder\TableWizardController::class)->group(function () {
-            Route::get('viz-builder/table/prepare-data', 'prepareData')->name('viz-builder.table.prepare-data');
-            Route::get('viz-builder/table/design', 'design')->name('viz-builder.table.design');
+            Route::get('viz-builder/table/step1', 'step1')->name('viz-builder.table.step1');
+            Route::get('viz-builder/table/step2', 'step2')->name('viz-builder.table.step2');
+            Route::get('viz-builder/table/step3', 'step3')->name('viz-builder.table.step3');
             Route::get('viz-builder/table/{viz}/edit', 'edit')->name('viz-builder.table.edit');
-            Route::get('viz-builder/table/create', 'create')->name('viz-builder.table.create');
-            Route::post('viz-builder/table', 'save')->name('viz-builder.table.save');
+            Route::post('viz-builder/table', 'store')->name('viz-builder.table.store');
         });
 
-        /*Route::get('viz-builder-wizard/api/get', [VizBuilderWizardController::class, 'ajaxGetChart']);
-        Route::post('viz-builder-wizard/api/put', [VizBuilderWizardController::class, 'ajaxSaveChart']);*/
-        Route::get('viz-builder/chart/api/get', [\App\Http\Controllers\VizBuilder\ChartWizardController::class, 'ajaxGetChart']);
-        //Route::post('viz-builder/chart/api/put', [VizBuilderWizardController::class, 'ajaxSaveChart']);
-
-
-        /*Route::get('viz-builder-wizard/{step}', \App\Http\Controllers\VizBuilderWizardController::class)
-            ->whereIn('step', ['step1-data', 'step2-viz', 'step3-save']);*/
+        Route::controller(\App\Http\Controllers\VizBuilder\MapWizardController::class)->group(function () {
+            Route::get('viz-builder/map/step1', 'step1')->name('viz-builder.map.step1');
+            Route::get('viz-builder/map/step2', 'step2')->name('viz-builder.map.step2');
+            Route::post('viz-builder/map/step3', 'step3')->name('viz-builder.map.step3');
+            Route::get('viz-builder/map/{viz}/edit', 'edit')->name('viz-builder.map.edit');
+            Route::post('viz-builder/map', 'store')->name('viz-builder.map.store');
+        });
 
         Route::resource('story-builder', \App\Http\Controllers\StoryBuilderController::class)->parameters(['story-builder' => 'story'])->only(['edit', 'update']);
 
@@ -134,17 +125,3 @@ Route::middleware(['web'])->group(function () {
         return redirect()->route('landing');
     });
 });
-
-/*Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
-});*/
