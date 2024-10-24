@@ -1,7 +1,7 @@
 @props([
     'name' => null,
 ])
-@pushonce('scripts')
+@pushonce('styles')
     @vite(['resources/css/markdown-editor.css'])
 @endpushonce
 <div>

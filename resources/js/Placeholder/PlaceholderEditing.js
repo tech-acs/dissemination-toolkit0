@@ -22,7 +22,7 @@ export default class PlaceholderEditing extends Plugin {
         );
 
         this.editor.config.define( 'placeholderConfig', {
-            types: [ 'Area name', 'date']
+            types: [ 'date', 'first name', 'surname']
         } );
     }
 
@@ -36,78 +36,59 @@ export default class PlaceholderEditing extends Plugin {
             inheritAllFrom: '$inlineObject',
 
             // The placeholder can have many types, like date, name, surname, etc:
-            allowAttributes: [ 'name' ]
+            allowAttributes: [ 'name', 'x-init' ]
         } );
     }
 
     _defineConverters() {
-        const conversion = this.editor.conversion;
+        const editor = this.editor;
 
-        conversion.for( 'upcast' ).elementToElement( {
+        editor.conversion.for( 'upcast' ).elementToElement( {
             view: {
-                name: 'span',
-                classes: [ 'placeholder' ]
+                name: 'div',
+                attributes: ['x-init']
             },
-            model: ( viewElement, { writer: modelWriter } ) => {
-                // Extract the "name" from "{name}".
-                const name = viewElement.getChild( 0 ).data.slice( 1, -1 );
-
-                return modelWriter.createElement( 'placeholder', { name } );
-            }
-        } );
-
-        conversion.for( 'editingDowncast' ).elementToElement( {
-            model: 'placeholder',
-            view: ( modelItem, { writer: viewWriter } ) => {
-                //const widgetElement = createPlaceholderView( modelItem, viewWriter );
-
-                const name = modelItem.getAttribute( 'name' );
-
-                const widgetElement = viewWriter.createContainerElement( 'span', {
-                    class: 'placeholder'
+            model: ( viewElement, { writer } ) => {
+                return writer.createElement( 'placeholder', {
+                    'name': 'area'
                 } );
-
-                // Insert the placeholder name (as a text).
-                const innerText = viewWriter.createText( '{+' + name + '}' );
-                viewWriter.insert( viewWriter.createPositionAt( widgetElement, 0 ), innerText );
-
-                // Enable widget handling on a placeholder element inside the editing view.
-                return toWidget( widgetElement, viewWriter );
             }
         } );
 
-        conversion.for( 'dataDowncast' ).elementToElement( {
+        editor.conversion.for( 'dataDowncast' ).elementToElement( {
             model: 'placeholder',
-            view: ( modelItem, { writer: viewWriter } ) => {
-                const name = modelItem.getAttribute( 'name' );
+            view: ( modelElement, { writer } ) => {
+                let name = modelElement.getAttribute('name')
 
-                const placeholderView = viewWriter.createRawElement( 'span', {
-                    'class': 'placeholder',
-                    'id': 'myud',
-                    'x-init': 'someShit()'
+                let init = `new DynamicText('${name}')`
+
+                return writer.createEmptyElement( 'div', {
+                    'name': name,
+                    'x-init': init
                 } );
-
-                // Insert the placeholder name (as a text).
-                const innerText = viewWriter.createText( '{' + name + '}' );
-                viewWriter.insert( viewWriter.createPositionAt( placeholderView, 0 ), innerText );
-
-                return placeholderView;
             }
         } );
 
-        // Helper method for both downcast converters.
-        function createPlaceholderView( modelItem, viewWriter ) {
-            const name = modelItem.getAttribute( 'name' );
+        editor.conversion.for( 'editingDowncast' ).elementToElement( {
+            model: 'placeholder',
+            view: ( modelElement, { writer } ) => {
+                let name = modelElement.getAttribute('name')
 
-            const placeholderView = viewWriter.createContainerElement( 'span', {
-                class: 'placeholder'
-            } );
+                let init = `new DynamicText('${name}')`
 
-            // Insert the placeholder name (as a text).
-            const innerText = viewWriter.createText( '{' + name + '}' );
-            viewWriter.insert( viewWriter.createPositionAt( placeholderView, 0 ), innerText );
+                const vizRootElement = writer.createRawElement(
+                    'div',
+                    {name: name}
+                );
 
-            return placeholderView;
-        }
+                const vizContainer = writer.createContainerElement(
+                    'div',
+                    {'x-init': init},
+                    vizRootElement
+                );
+
+                return toWidget( vizContainer, writer);
+            }
+        } );
     }
 }

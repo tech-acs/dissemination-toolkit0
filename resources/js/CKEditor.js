@@ -46,6 +46,9 @@ ClassicEditor.builtinPlugins = [
 ];
 
 ClassicEditor.defaultConfig = {
+    placeholderConfig: {
+        types: [ 'date', 'color', 'first name', 'surname' ]
+    },
     toolbar: {
         items: [
             'undo', 'redo',

@@ -1,12 +1,8 @@
-## Deployment instructions
+## Installation
 
-The first step is to clone this repository and cd into the directory. Then run the following
-commands.
-
-### Install all required PHP packages
-
-```composer install```
-
+```bash
+composer create-project uneca/dissemination-toolkit your-project-name
+```
 
 ### Set environment variables
 
@@ -25,78 +21,23 @@ DB_PASSWORD=postgres-password
 
 ```php artisan migrate --seed```
 
+
 ### Create admin account
 
 ```php artisan adminify```
 
-### Seed some sample data
 
-```
-php artisan db:seed --class=WorkingDataSeeder
-php artisan data:create-dimensions
-php artisan db:seed --class=DimensionValueSeeder
-```
+### Start development server
 
-**Area**
+```php artisan serve```
 
-Import the areas. The csv file is located in the sample-data folder located in the root directory.
+Once you have started the Artisan development server, your application will be accessible in your web browser at http://localhost:8000. 
+Next, you're ready to start taking your next steps into creating your data dissemination website.
 
-Finally, create the following datasets and import the data for each one from the respective files
+Some of the things you will have to do are:
 
-**Namibia population, hhs, avg. hh size for 1991 - 2023 censuses**
-
-- Indicators
-    - Average household size
-    - Households
-    - Population
-- Dimensions
-    - Year
-- Fact table
-    - Population facts
-- Data geographic granularity
-    - Country
-
-**Population by sex and 5 year age group**
-
-- Indicators
-    - Population
-- Dimensions
-    - Five year age group
-    - Sex
-    - Year
-- Fact table
-    - Population facts
-- Data geographic granularity
-    - Country
-- Topic
-    - Population
-
-**Population density, hh pop, hhs, and avg hh size by constituency, Namibia 2023 census**
-
-- Indicators
-    - Average household size
-    - Household population
-    - Households
-    - Population density
-- Dimensions
-    - Year
-- Fact table
-    - Population facts
-- Data geographic granularity
-    - Constituency
-- Topic
-    - Population
-
-**Population by Constituency and Sex, Namibia 2023**
-
-- Indicators
-    - Population
-- Dimensions
-    - Year
-    - Sex
-- Fact table
-    - Population facts
-- Data geographic granularity
-    - Constituency
-- Topic
-    - Population
+- Create dimensions
+- Create indicators
+- Import geographic areas
+- Create/import dimension values
+- Create and import datasets

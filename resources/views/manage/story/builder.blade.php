@@ -7,9 +7,14 @@
 
         <div class="col-span-3 bg-white" x-cloak x-data="storyEditor()">
 
-            <div class="col-span-3 flex justify-end gap-x-4 bg-gray-100 py-4">
-                <x-danger-button x-on:click="reset()">Reset</x-danger-button>
-                <x-button x-on:click="save()">Save</x-button>
+            <div class="col-span-3 flex justify-between gap-x-4 bg-gray-100 py-4">
+                <div>
+                    <span class="text-xl">{{ $story->title }}</span>
+                </div>
+                <div>
+                    <x-danger-button x-on:click="reset()">Reset</x-danger-button>
+                    <x-button x-on:click="save()">Save</x-button>
+                </div>
             </div>
 
             <div id="story-editor" class="h-full"></div>
@@ -34,7 +39,7 @@
                             this.editor = e
                             e.setData(this.storyHtml)
 
-                            //CKEditorInspector.attach( e );
+                            CKEditorInspector.attach( e );
                         })
                         .catch( error => {
                             console.error( error.stack )

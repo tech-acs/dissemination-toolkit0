@@ -11,10 +11,10 @@ export default class DynamicText {
     }
 
     registerLivewireEventListeners() {
-        Livewire.on(`filterChanged`, (filter) => {
+        Livewire.on(`filterChanged`, ({filter}) => {
             let filterPath, areaName
-            [filterPath, areaName] = filter
-            console.log({name: areaName, me: this.id})
+            //[filterPath, areaName] = filter
+            console.log({filter, me: this.id})
         });
     }
 }

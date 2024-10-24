@@ -6,4 +6,4 @@
     <a href="{{ route('manage.dimension.create-table', ['id' => $row->id]) }}" class="text-green-600 hover:text-green-900">{{ __('Create Table') }}</a>
 @endif
 <span class="text-gray-400 px-1">|</span>
-<a href="{{ route('manage.dimension.destroy', $row) }}" x-on:click.prevent="confirmThenDelete($el)" class="text-red-600">{{ __('Remove') }}</a>
+<a href="{{ route('manage.dimension.destroy', $row) }}" x-on:click.prevent="confirmThenDelete($el)" class="text-red-600">{{ __('Delete') }}</a>
