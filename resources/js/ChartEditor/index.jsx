@@ -10,11 +10,26 @@ if (rootElement) {
     console.log('Fetched initial:', response.data);
 
     let data = response.data.initialData ?? [];
-    // ToDo: Do this for all traces and even for z... axis. Also, it breaks when there are multi-columns on same axis
-    if (data && has(data[0], 'meta.columnNames')) {
-        data[0].x = response.data.dataSources[data[0].xsrc];
-        data[0].y = response.data.dataSources[data[0].ysrc];
-    }
+    /*if (data && has(data[0], 'meta.columnNames')) {
+        if (data[0].type === 'pie') {
+            data[0].value = response.data.dataSources[data[0].valuessrc];
+            data[0].values = response.data.dataSources[data[0].valuessrc];
+            data[0].label = response.data.dataSources[data[0].labelssrc];
+            data[0].labels = response.data.dataSources[data[0].labelssrc];
+        } else {
+            // ToDo: Do this for all traces and even for z... axis. Also, it breaks when there are multi-columns on same axis
+            data[0].x = response.data.dataSources[data[0].xsrc];
+            data[0].y = response.data.dataSources[data[0].ysrc];
+        }
+    }*/
+    data.forEach((trace, index) => {
+        if (has(trace, 'meta.columnNames')) {
+            console.log({trace})
+            Object.keys(trace.meta.columnNames).forEach((key) => {
+                data[index][key] = response.data.dataSources[data[index][`${key}src`]];
+            })
+        }
+    })
 
     ReactDOM.render(<ChartEditor
         dataSources={response.data.dataSources}

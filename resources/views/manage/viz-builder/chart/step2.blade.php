@@ -21,7 +21,7 @@
             </div>
 
             <footer class="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 pt-5 sm:px-8">
-                <form action="{{ route('manage.viz-builder.chart.create') }}" method="post">
+                <form action="{{ route('manage.viz-builder.chart.step3') }}" method="post">
                     @csrf
                     <input type="hidden" name="data" id="chart-data" value="{{ json_encode($resource->data) }}" />
                     <input type="hidden" name="layout" id="chart-layout" value="{{ json_encode($resource->layout) }}" />

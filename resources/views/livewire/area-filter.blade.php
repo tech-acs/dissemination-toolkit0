@@ -3,7 +3,7 @@
         <div class="p-4">
             <div class="flex justify-between">
                 <h3 class="text-lg leading-6 font-medium text-gray-900">
-                    {{ __('Filter the data based on geographic area') }}
+                    {{ __('Filter relevant visualizations based on geographic area') }}
                 </h3>
             </div>
 

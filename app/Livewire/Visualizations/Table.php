@@ -9,19 +9,24 @@ use Livewire\Attributes\On;
 class Table extends Visualization
 {
     public const DEFAULT_OPTIONS = [
-        'defaultColDef' => [
+        /*'defaultColDef' => [
             'width' => 100,
         ],
         'columnTypes' => [
             'rangeColumn' => [
                 'width' => 150
             ]
-        ],
+        ],*/
         'columnDefs' => [],
         'rowData' => [],
         'autoSizeStrategy' => [
             'type' => 'fitGridWidth'
         ],
+
+        'suppressMovableColumns' => false,
+        'unSortIcon' => false,
+        'columnHoverHighlight' => false,
+        'pagination' => false,
     ];
 
     private function makeColumnDefs($data): array
@@ -46,6 +51,9 @@ class Table extends Visualization
                                 $colDef = [
                                     'headerName' => $c['child'],
                                     'field' => $c['field'],
+                                    'filter' => false,
+                                    'hide' => false,
+                                    'sortable' => true,
                                 ];
                                 if (str($c['child'])->endsWith(QueryBuilder::VALUE_COLUMN_INVISIBLE_MARKER)){
                                     /*$colDef['hozAlign'] = 'right';
@@ -66,7 +74,9 @@ class Table extends Visualization
                     $colDef = [
                         'headerName' => str($column)->replace('_', ' ')->ucfirst()->toString(),
                         'field' => $column,
-                        'filter' => true
+                        'filter' => false,
+                        'hide' => false,
+                        'sortable' => true,
                         //'sorter' => 'string',
                         //'frozen' => true
                     ];
@@ -99,7 +109,9 @@ class Table extends Visualization
     {
         $this->options = array_replace_recursive($this::DEFAULT_OPTIONS, $this->options);
         $this->options['rowData'] = $rawData;
-        $this->options['columnDefs'] = $this->makeColumnDefs(collect($rawData));
+        $this->options['columnDefs'] = empty($this->options['columnDefs']) ?
+            $this->makeColumnDefs(collect($rawData)) :
+            $this->options['columnDefs'];
     }
 
     #[On('dataShaperEvent')]

@@ -56,6 +56,7 @@ export default class PlotlyChart {
             this.data = JSON.parse(this.rootElement.dataset['data'])
             this.layout = JSON.parse(this.rootElement.dataset['layout'])
             this.config = JSON.parse(this.rootElement.dataset['config'])
+            console.log({data: this.data, layout: this.layout, config: this.config});
             Plotly.newPlot(this.rootElement, this.data, this.layout, this.config);
             this.registerLivewireEventListeners(this.filterable);
         }

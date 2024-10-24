@@ -8,7 +8,6 @@ use App\Http\Resources\ChartDesignerResource;
 use App\Livewire\Visualizations\Chart;
 use App\Models\Indicator;
 use App\Models\Tag;
-use App\Models\Topic;
 use App\Models\Visualization;
 use App\Services\QueryBuilder;
 use App\Services\Sorter;
@@ -27,51 +26,24 @@ class ChartWizardController extends Controller
     ];
     private string $type = 'chart';
 
-    private function isStepValid($step): bool
-    {
-        $resource = session()->get('viz-wizard-resource');
-        return (! is_null($resource)) && (! empty($resource->dataSources));
-    }
-
-    public function prepareData()
+    public function step1()
     {
         $step = 1;
         $this->setupResource();
-        return view('manage.viz-builder.prepare-data')->with(['steps' => $this->steps, 'currentStep' => $step, 'type' => $this->type]);
+        return view('manage.viz-builder.step1')->with(['steps' => $this->steps, 'currentStep' => $step, 'type' => $this->type]);
     }
 
-    public function recordChartDesign(array $data, array $layout)
-    {
-        $resource = session()->get('viz-wizard-resource');
-        $resource->data = $data;
-        $resource->layout = $layout;
-        session()->put('viz-wizard-resource', $resource);
-    }
-
-    public function design()
+    public function step2()
     {
         $step = 2;
         if (! $this->isStepValid($step)) {
-            return redirect()->route('manage.viz-builder.chart.prepare-data');
+            return redirect()->route('manage.viz-builder.chart.step1');
         }
         $resource = session()->get('viz-wizard-resource');
-        return view('manage.viz-builder.chart.design')->with(['steps' => $this->steps, 'currentStep' => $step, 'resource' => $resource]);
+        return view('manage.viz-builder.chart.step2')->with(['steps' => $this->steps, 'currentStep' => $step, 'resource' => $resource]);
     }
 
-    public function edit(int $visualizationId)
-    {
-        $step = 2;
-        $visualization = Visualization::find($visualizationId);
-        // ToDo: if not found...redirect back to index with error message
-        $this->setupResource($visualization);
-        if (! $this->isStepValid($step)) {
-            return redirect()->route('manage.viz-builder.chart.prepare-data');
-        }
-        $resource = session()->get('viz-wizard-resource');
-        return view('manage.viz-builder.chart.design')->with(['steps' => $this->steps, 'currentStep' => $step, 'resource' => $resource]);
-    }
-
-    public function create(Request $request)
+    public function step3(Request $request)
     {
         $step = 3;
         $this->recordChartDesign(json_decode($request->get('data'), true), json_decode($request->get('layout'), true));
@@ -80,8 +52,7 @@ class ChartWizardController extends Controller
         }
         $resource = session()->get('viz-wizard-resource');
         $visualization = $resource?->vizId ? Visualization::find($resource->vizId) : new Visualization(['livewire_component' => Chart::class]);
-        //$topics = Topic::pluck('name', 'id');
-        return view('manage.viz-builder.form')
+        return view('manage.viz-builder.step3')
             ->with([
                 'steps' => $this->steps,
                 'currentStep' => 3,
@@ -92,7 +63,7 @@ class ChartWizardController extends Controller
             ]);
     }
 
-    public function save(VisualizationRequest $request)
+    public function store(VisualizationRequest $request)
     {
         $step = 3;
         if (! $this->isStepValid($step)) {
@@ -100,7 +71,6 @@ class ChartWizardController extends Controller
         }
         $title = $request->get('title');
         $description = $request->get('description');
-        //$topicIds = $request->get('topics');
         $isFilterable = $request->boolean('filterable');
         $isPublished = $request->boolean('published');
         $resource = session()->get('viz-wizard-resource');
@@ -138,9 +108,29 @@ class ChartWizardController extends Controller
         }
     }
 
-    public function ajaxGetChart(Request $request)
+    public function edit(int $visualizationId)
+    {
+        $step = 2;
+        $visualization = Visualization::find($visualizationId);
+        // ToDo: if not found...redirect back to index with error message
+        $this->setupResource($visualization);
+        if (! $this->isStepValid($step)) {
+            return redirect()->route('manage.visualization.index')
+                ->withMessage('The visualization is either broken or could not be located');
+        }
+        $resource = session()->get('viz-wizard-resource');
+        return view('manage.viz-builder.chart.step2')->with(['steps' => $this->steps, 'currentStep' => $step, 'resource' => $resource]);
+    }
+
+    public function ajaxGetChart()
     {
         return session('viz-wizard-resource');
+    }
+
+    private function isStepValid($step): bool
+    {
+        $resource = session()->get('viz-wizard-resource');
+        return (! is_null($resource)) && (! empty($resource->dataSources));
     }
 
     private function getConfig(): array
@@ -152,7 +142,15 @@ class ChartWizardController extends Controller
         ];
     }
 
-    private function setupResource(Visualization $visualization = null)
+    private function recordChartDesign(array $data, array $layout): void
+    {
+        $resource = session()->get('viz-wizard-resource');
+        $resource->data = $data;
+        $resource->layout = $layout;
+        session()->put('viz-wizard-resource', $resource);
+    }
+
+    private function setupResource(Visualization $visualization = null): void
     {
         if ($visualization) {
             $query = new QueryBuilder($visualization->data_params);
@@ -167,8 +165,9 @@ class ChartWizardController extends Controller
             );
         } else {
             $resource = new ChartDesignerResource(
+                //data: [['type' => 'choroplethmapbox', 'geojson']],
                 config: [...$this->getConfig(), 'editable' => true],
-                defaultLayout: self::DEFAULT_LAYOUT,
+                defaultLayout: self::DEFAULT_LAYOUT
             );
         }
         session()->put('viz-wizard-resource', $resource);

@@ -6,28 +6,20 @@ use Livewire\Component;
 
 class TableOptionsShaper extends Component
 {
-    public array $options = [
-        'pagination' => false,
-        'suppressMovableColumns' => false,
-        'unSortIcon' => false,
-        'columnHoverHighlight' => false
-    ];
+    public array $options = [];
 
     public array $optionLabels = [
-        'pagination' => 'Pagination',
-        'suppressMovableColumns' => 'Movable columns',
+        'pagination' => 'Enable pagination',
+        'suppressMovableColumns' => 'Disable movable columns',
         'unSortIcon' => 'Show unsort icon',
         'columnHoverHighlight' => 'Highlight columns on hover'
     ];
 
-    public function mount()
-    {
-
-    }
-
     public function apply()
     {
-        $this->dispatch('tableOptionsShaperEvent', options: $this->options);
+        $options = $this->options;
+        unset($options['rowData']);
+        $this->dispatch('tableOptionsShaperEvent', options: $options);
     }
 
     public function render()

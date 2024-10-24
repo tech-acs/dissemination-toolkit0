@@ -14,6 +14,7 @@ export default defineConfig({
 
                 'resources/css/content-styles.css',
                 'resources/css/grid.css',
+                'resources/css/markdown-editor.css',
 
                 'resources/js/ChartEditor/index.jsx',
             ],

@@ -19,9 +19,9 @@
                     <x-button>{{ __('Create New') }}</x-button>
                 </x-slot>
                 <x-slot name="content" class="overflow-hidden py-0">
-                    <x-dropdown-link class="px-6 tracking-wide" href="{{ route('manage.viz-builder.chart.prepare-data') }}">{{ __('Chart Visualization') }}</x-dropdown-link>
-                    <x-dropdown-link class="px-6 tracking-wide" href="{{ route('manage.viz-builder.table.prepare-data') }}">{{ __('Table Visualization') }}</x-dropdown-link>
-                    <x-dropdown-link class="px-6 tracking-wide" href="#">{{ __('Map Visualization') }}</x-dropdown-link>
+                    <x-dropdown-link class="px-6 tracking-wide" href="{{ route('manage.viz-builder.chart.step1') }}">{{ __('Chart Visualization') }}</x-dropdown-link>
+                    <x-dropdown-link class="px-6 tracking-wide" href="{{ route('manage.viz-builder.table.step1') }}">{{ __('Table Visualization') }}</x-dropdown-link>
+                    {{--<x-dropdown-link class="px-6 tracking-wide" href="{{ route('manage.viz-builder.map.step1') }}">{{ __('Map Visualization') }}</x-dropdown-link>--}}
                 </x-slot>
             </x-dropdown>
         </div>

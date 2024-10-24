@@ -18,16 +18,6 @@ class StateRecorder extends Component
         session()->put('viz-wizard-resource', $resource);
     }
 
-    /*#[On('chartDesignerStateChanged')]
-    public function recordChartDesign(array $data, array $layout)
-    {
-        $resource = session()->get('viz-wizard-resource');
-        $resource->data = $data;
-        $resource->layout = $layout;
-        logger('state change', ['layout' => $layout]);
-        session()->put('viz-wizard-resource', $resource);
-    }*/
-
     #[On('thumbnailCaptured')]
     public function recordThumbnail(string $imageData)
     {
@@ -41,6 +31,15 @@ class StateRecorder extends Component
     {
         $resource = session()->get('viz-wizard-resource');
         $resource->options = array_replace_recursive($resource->options, $options);
+        //dump($options, $resource->options);
+        session()->put('viz-wizard-resource', $resource);
+    }
+
+    #[On('mapOptionsShaperEvent')]
+    public function recordDataAndLayout(array $data, array $layout): void
+    {
+        $resource = session()->get('viz-wizard-resource');
+        //$resource->options = array_replace_recursive($resource->options, $options);
         session()->put('viz-wizard-resource', $resource);
     }
 

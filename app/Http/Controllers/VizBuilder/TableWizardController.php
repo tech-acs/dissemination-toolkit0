@@ -8,12 +8,9 @@ use App\Http\Resources\TableDesignerResource;
 use App\Livewire\Visualizations\Table;
 use App\Models\Indicator;
 use App\Models\Tag;
-use App\Models\Topic;
 use App\Models\Visualization;
 use App\Services\QueryBuilder;
 use App\Services\Sorter;
-use App\Traits\PlotlyDefaults;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class TableWizardController extends Controller
@@ -41,55 +38,25 @@ class TableWizardController extends Controller
     ];
     private string $type = 'table';
 
-    private function isStepValid($step): bool
-    {
-        $resource = session()->get('viz-wizard-resource');
-        return (! is_null($resource)) && (! empty($resource->dataSources));
-    }
-
-    public function prepareData()
+    public function step1()
     {
         $step = 1;
         $this->setupResource();
-        return view('manage.viz-builder.prepare-data')->with(['steps' => $this->steps, 'currentStep' => $step, 'type' => $this->type]);
+        return view('manage.viz-builder.step1')->with(['steps' => $this->steps, 'currentStep' => $step, 'type' => $this->type]);
     }
 
-    public function makeOptions($resource, $visualization = null)
-    {
-        $table = new Table();
-        $table->vizId = $visualization?->id;
-        $table->preparePayload($resource->rawData);
-        return $table->options;
-    }
-
-    public function design()
+    public function step2()
     {
         $step = 2;
         if (! $this->isStepValid($step)) {
-            return redirect()->route('manage.viz-builder.table.prepare-data');
+            return redirect()->route('manage.viz-builder.table.step1');
         }
         $resource = session()->get('viz-wizard-resource');
         $options = $this->makeOptions($resource);
-        //dd($options);
-        return view('manage.viz-builder.table.design')->with(['steps' => $this->steps, 'currentStep' => $step, 'resource' => $resource, 'options' => $options]);
+        return view('manage.viz-builder.table.step2')->with(['steps' => $this->steps, 'currentStep' => $step, 'resource' => $resource, 'options' => $options]);
     }
 
-    public function edit(int $visualizationId)
-    {
-        $step = 2;
-        $visualization = Visualization::find($visualizationId);
-        // ToDo: if not found...redirect back to index with error message
-        $this->setupResource($visualization);
-        if (! $this->isStepValid($step)) {
-            return redirect()->route('manage.viz-builder.table.prepare-data');
-        }
-        $resource = session()->get('viz-wizard-resource');
-        $options = $this->makeOptions($resource, $visualization);
-        //dd($options);
-        return view('manage.viz-builder.table.design')->with(['steps' => $this->steps, 'currentStep' => $step, 'resource' => $resource, 'options' => $options]);
-    }
-
-    public function create()
+    public function step3()
     {
         $step = 3;
         if (! $this->isStepValid($step)) {
@@ -98,7 +65,7 @@ class TableWizardController extends Controller
         $resource = session()->get('viz-wizard-resource');
         $visualization = $resource?->vizId ? Visualization::find($resource->vizId) : new Visualization(['livewire_component' => Table::class, 'title' => $resource->indicatorTitle]);
         //$topics = Topic::pluck('name', 'id');
-        return view('manage.viz-builder.form')
+        return view('manage.viz-builder.step3')
             ->with([
                 'steps' => $this->steps,
                 'currentStep' => 3,
@@ -109,7 +76,7 @@ class TableWizardController extends Controller
             ]);
     }
 
-    public function save(VisualizationRequest $request)
+    public function store(VisualizationRequest $request)
     {
         $step = 3;
         if (! $this->isStepValid($step)) {
@@ -117,17 +84,13 @@ class TableWizardController extends Controller
         }
         $title = $request->get('title');
         $description = $request->get('description');
-        //$topicIds = $request->get('topics');
         $isFilterable = $request->boolean('filterable');
         $isPublished = $request->boolean('published');
         $resource = session()->get('viz-wizard-resource');
-//dump($resource);
         $vizInfo = [
             'title' => $title,
             'slug' => str($title)->slug()->toString(),
             'description' => $description,
-            //'data' => $resource->data,
-            //'layout' => $resource->layout,
             'is_filterable' => $isFilterable,
             'published' => $isPublished,
             'options' => $resource->options,
@@ -158,9 +121,33 @@ class TableWizardController extends Controller
         }
     }
 
-    public function ajaxGetChart(Request $request)
+    public function edit(int $visualizationId)
     {
-        return session('viz-wizard-resource');
+        $step = 2;
+        $visualization = Visualization::find($visualizationId);
+        // ToDo: if not found...redirect back to index with error message
+        $this->setupResource($visualization);
+        if (! $this->isStepValid($step)) {
+            return redirect()->route('manage.viz-builder.table.prepare-data');
+        }
+        $resource = session()->get('viz-wizard-resource');
+        $options = $this->makeOptions($resource, $visualization);
+        //dd($options);
+        return view('manage.viz-builder.table.step2')->with(['steps' => $this->steps, 'currentStep' => $step, 'resource' => $resource, 'options' => $options]);
+    }
+
+    private function isStepValid($step): bool
+    {
+        $resource = session()->get('viz-wizard-resource');
+        return (! is_null($resource)) && (! empty($resource->dataSources));
+    }
+
+    private function makeOptions($resource, $visualization = null)
+    {
+        $table = new Table();
+        $table->vizId = $visualization?->id;
+        $table->preparePayload($resource->rawData);
+        return $table->options;
     }
 
     private function setupResource(Visualization $visualization = null)

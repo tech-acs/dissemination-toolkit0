@@ -22,7 +22,7 @@
 
                 <div class="w-1/2 pr-12">
                     {{--<div class="w-10/12 mx-auto -mb-4"><x-error-display /></div>--}}
-                    <form id="viz_info" action="{{ route("manage.viz-builder.$type.save") }}" method="post" class="w-10/12 mx-auto space-y-4 py-6">
+                    <form id="viz_info" action="{{ route("manage.viz-builder.$type.store") }}" method="post" class="w-10/12 mx-auto space-y-4 py-6">
                         @csrf
                         <div>
                             <x-label for="title" value="{{ __('Title') }} *" />
