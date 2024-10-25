@@ -68,8 +68,6 @@ Finally, create the following datasets and import the data for each one from the
     - Population facts
 - Data geographic granularity
     - Country
-- Topic
-    - Population
 
 **Population density, hh pop, hhs, and avg hh size by constituency, Namibia 2023 census**
 
@@ -84,8 +82,6 @@ Finally, create the following datasets and import the data for each one from the
     - Population facts
 - Data geographic granularity
     - Constituency
-- Topic
-    - Population
 
 **Population by Constituency and Sex, Namibia 2023**
 
@@ -98,5 +94,3 @@ Finally, create the following datasets and import the data for each one from the
     - Population facts
 - Data geographic granularity
     - Constituency
-- Topic
-    - Population

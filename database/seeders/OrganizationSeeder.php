@@ -19,7 +19,7 @@ class OrganizationSeeder extends Seeder
             'email' => 'support@example.org',
             'logo_path' => '',
             'slogan' => 'Making data accessible to everyone.',
-            'blurb' => "Our goal is to help you <strong>find</strong> the data you need, <strong>explore</strong> it in depth, and create <strong>visualizations</strong> that help you to understand the data.",
+            'blurb' => "Our goal is to help you **find** the data you need, **explore** it in depth, and create **visualizations** that help you to understand the data.",
             'hero_image_path' => 'images/hero.svg',
             'social_media' => [
                 'twitter' => 'https://twitter.com/my_org',
@@ -27,7 +27,11 @@ class OrganizationSeeder extends Seeder
                 'instagram' => 'https://instagram.com/my_org',
                 'linkedin' => 'https://linkedin.com/my_org',
             ],
-            'address' => "742 Evergreen Terrace<br>Good Stats Drive<br>Tel: +251 123345679",
+            'address' => "742 Evergreen Terrace
+
+Good Stats Drive
+
+Tel: +251 123345679",
         ]);
     }
 }

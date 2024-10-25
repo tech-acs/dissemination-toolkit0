@@ -22,6 +22,7 @@ trait PlotlyDefaults
             "tickmode" => "auto",
             "automargin" => true,
         ],
+        "height" => 550,
         "margin" => [
             "l" => 60,
             "r" => 10,

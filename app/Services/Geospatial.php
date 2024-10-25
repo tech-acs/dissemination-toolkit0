@@ -20,7 +20,7 @@ class Geospatial
                             'geometry',   ST_AsGeoJSON(ST_ForcePolygonCW(filtered_areas.geom))::json,
                             'properties', json_build_object(
                                 'code', code,
-                                'name', name,
+                                'name', name->>'en',
                                 'path', path
                             )
                         )
@@ -33,11 +33,11 @@ class Geospatial
             SELECT areas.name, areas.code, areas.level, areas.path, ST_SimplifyPreserveTopology(ST_GeomFromWKB(areas.geom), area_hierarchies.simplification_tolerance) AS geom
             FROM areas
             join area_hierarchies on area_hierarchies.index = areas.level
-            WHERE areas.level == $level AND areas.geom IS NOT NULL
+            WHERE areas.level = $level AND areas.geom IS NOT NULL
         ) AS filtered_areas
     ";
         try {
-            dump($sql);
+            //dump($sql);
             $result = DB::select($sql);
         } catch (\Exception $exception) {
             logger('Query error in getGeoJson()', ['exception' => $exception->getMessage()]);

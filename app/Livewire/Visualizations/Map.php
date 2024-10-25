@@ -26,6 +26,7 @@ abstract class Map extends Visualization
     public array $traces = [];
 
     abstract protected function makeTraces(): array;
+
     protected function getGeoJson($locations)
     {
         $locationList = implode("','", $locations);
