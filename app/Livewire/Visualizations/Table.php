@@ -109,9 +109,10 @@ class Table extends Visualization
     {
         $this->options = array_replace_recursive($this::DEFAULT_OPTIONS, $this->options);
         $this->options['rowData'] = $rawData;
-        $this->options['columnDefs'] = empty($this->options['columnDefs']) ?
+        $this->options['columnDefs'] = $this->makeColumnDefs(collect($rawData));
+        /*$this->options['columnDefs'] = empty($this->options['columnDefs']) ?
             $this->makeColumnDefs(collect($rawData)) :
-            $this->options['columnDefs'];
+            $this->options['columnDefs'];*/
     }
 
     #[On('dataShaperEvent')]

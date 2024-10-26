@@ -5,9 +5,10 @@ export default class AgGridTable {
     rootElement;
     table;
     options;
+    baseurl;
 
     async fetchData(vizId) {
-        const response = await axios.get(`/api/visualization/${vizId}`);
+        const response = await axios.get(`${this.baseurl}/api/visualization/${vizId}`);
         console.log('Fetched table via axios:', response.data);
         this.options = response.data.options;
     }
@@ -15,6 +16,8 @@ export default class AgGridTable {
     constructor(htmlId) {
         this.id = htmlId
         this.rootElement = document.getElementById(htmlId)
+        this.baseurl = this.rootElement.dataset['baseurl']
+
         this.rootElement.classList.add(...['ag-theme-quartz', 'w-full', 'h-[calc(60vh)]']);
         const vizId = this.rootElement.getAttribute('viz-id')
 

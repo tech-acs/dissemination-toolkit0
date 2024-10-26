@@ -6,6 +6,7 @@
         data-data='@json($data)'
         data-layout='@json($layout)'
         data-config='@json($config)'
+        data-baseurl="{{ config('app.url') }}"
         wire:ignore
     >
         <div class="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 py-32 text-center focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">

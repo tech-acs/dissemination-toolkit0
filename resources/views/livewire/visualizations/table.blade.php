@@ -10,6 +10,7 @@
         x-on:resize.window="table.resize()"
         class="ag-theme-quartz w-full h-[calc(60vh)]"
         data-options='@json($options)'
+        data-baseurl="{{ config('app.url') }}"
         wire:ignore
     >
         <div class="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 py-32 text-center focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
