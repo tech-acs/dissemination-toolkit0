@@ -47,9 +47,18 @@ class User extends Authenticatable
         ];
     }
 
-    public function ratings(): HasMany
+    public function reviews(): HasMany
     {
-        return $this->hasMany(Rating::class);
+        return $this->hasMany(Review::class);
+    }
+
+    public function hasAlreadyReviewed(string $reviewableType, int $reviewableId): bool
+    {
+        return Review::query()
+            ->where('user_id', $this->id)
+            ->where('reviewable_type', $reviewableType)
+            ->where('reviewable_id', $reviewableId)
+            ->exists();
     }
 
     public function visualizations(): HasMany

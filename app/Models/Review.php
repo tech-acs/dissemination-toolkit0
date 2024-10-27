@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
-class Rating extends Model
+class Review extends Model
 {
     protected $guarded = ['id'];
 
-    public function rateable(): MorphTo
+    public function reviewable(): MorphTo
     {
         return $this->morphTo();
     }

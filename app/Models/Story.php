@@ -22,9 +22,9 @@ class Story extends Model
         return $this->morphToMany(Tag::class, 'taggable');
     }
 
-    public function ratings(): MorphMany
+    public function reviews(): MorphMany
     {
-        return $this->morphMany(Rating::class, 'rateable');
+        return $this->morphMany(Review::class, 'reviewable');
     }
 
     public function topics(): MorphToMany

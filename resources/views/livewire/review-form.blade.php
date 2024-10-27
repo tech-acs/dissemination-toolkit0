@@ -1,4 +1,5 @@
-<div x-data="rater()">
+<div x-cloak x-data="rater()" class="relative">
+    <div x-show="reviewed" class="absolute bg-gray-50/50 w-full h-full"></div>
     <div class="flex justify-between pt-8">
         <label class="text-lg">Your overall rating</label>
         <div class="flex items-center mb-1 text-gray-50 stroke-stone-500 cursor-pointer space-x-1 rtl:space-x-reverse" x-ref="starBag" @mouseleave="if (! rated) position = 0">
@@ -18,15 +19,19 @@
                 <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
             </svg>
         </div>
+
     </div>
-    <form class="pt-6">
+    <x-input-error for="rating" class="mt-2" />
+    <form wire:submit="rate" class="pt-6">
         <div class="space-y-4">
-            <input type="hidden" x-ref="rating" value="">
+            {{--<input type="hidden" wire:model="rating" x-ref="rating" value="">--}}
             <div>
-                <input name="headline" placeholder="Your review headline" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                <input name="headline" wire:model="headline" placeholder="Your review headline" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                <x-input-error for="headline" class="mt-2" />
             </div>
             <div>
-                <textarea name="detailed_review" placeholder="Your detailed review" rows="6" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
+                <textarea name="detailedReview" wire:model="detailedReview" placeholder="Your detailed review" rows="6" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
+                <x-input-error for="detailedReview" class="mt-2" />
             </div>
             <div>
                 <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Submit review</button>
@@ -40,6 +45,7 @@
     <script>
         function rater() {
             return {
+                reviewed: @json($alreadyReviewed),
                 rated: false,
                 position: 0,
                 init() {
@@ -51,7 +57,8 @@
                     this.$refs.starBag.addEventListener('click', (event) => {
                         if (['path', 'svg'].includes(event.target.tagName)) {
                             this.rated = true
-                            this.$refs.rating.value = this.position
+                            //this.$refs.rating.value = this.position
+                            this.$wire.rating = this.position
                         }
                     });
                 },
