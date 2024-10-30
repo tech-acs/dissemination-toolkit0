@@ -1,0 +1,50 @@
+{
+  "_main.esm-lQv4b4jE.js": {
+    "file": "assets/main.esm-lQv4b4jE.js",
+    "name": "main.esm"
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-eLVLVrCn.css",
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/css/content-styles.css": {
+    "file": "assets/content-styles-D_jptox5.css",
+    "src": "resources/css/content-styles.css",
+    "isEntry": true
+  },
+  "resources/css/grid.css": {
+    "file": "assets/grid-Co_Yt-hy.css",
+    "src": "resources/css/grid.css",
+    "isEntry": true
+  },
+  "resources/css/markdown-editor.css": {
+    "file": "assets/markdown-editor-DbhMsuce.css",
+    "src": "resources/css/markdown-editor.css",
+    "isEntry": true
+  },
+  "resources/js/ChartEditor/index.jsx": {
+    "file": "assets/index-WOgJ28QP.js",
+    "name": "index",
+    "src": "resources/js/ChartEditor/index.jsx",
+    "isEntry": true,
+    "imports": [
+      "_main.esm-lQv4b4jE.js"
+    ],
+    "css": [
+      "assets/index-Cyekfjkp.css"
+    ]
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-DUSlirYn.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true,
+    "imports": [
+      "_main.esm-lQv4b4jE.js"
+    ],
+    "css": [
+      "assets/app-xe4-bl31.css"
+    ]
+  }
+}
