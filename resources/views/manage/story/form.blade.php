@@ -7,7 +7,7 @@
                 <x-input-error for="title" class="mt-2" />
             </div>
             <div>
-                <x-label for="description" value="{{ __('Description') }}" class="inline" /><x-locale-display />
+                <x-label for="description" value="{{ __('Description') }} *" class="inline" /><x-locale-display />
                 <x-textarea name="description" rows="3">{{old('description', $story->description ?? null)}}</x-textarea>
                 <x-input-error for="description" class="mt-2" />
             </div>

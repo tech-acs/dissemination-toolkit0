@@ -23,7 +23,7 @@
             <a class="w-full px-4 py-2 -ml-4 text-gray-500 rounded-md hover:text-indigo-500 focus:text-indigo-500 focus:bg-indigo-100 focus:outline-none"
                href="{{ route('story.index') }}">{{ __('Data Stories') }}</a>
             <a class="w-full px-4 py-2 -ml-4 text-gray-500 rounded-md hover:text-indigo-500 focus:text-indigo-500 focus:bg-indigo-100 focus:outline-none"
-               href="{{ route('census-table.index') }}">{{ __('Tables & Reports') }}</a>
+               href="{{ route('census-table.index') }}">{{ __('Documents') }}</a>
             <a class="w-full px-4 py-2 -ml-4 text-gray-500 rounded-md hover:text-indigo-500 focus:text-indigo-500 focus:bg-indigo-100 focus:outline-none"
                href="{{ route('about') }}">{{ __('Datasets') }}</a>
             @guest
@@ -97,7 +97,7 @@
                             <path d="M15 17v-3"></path>
                         </svg>
                     </div>
-                    {{ __('Tables & Reports') }}
+                    {{ __('Documents') }}
                 </a>
             </li>
 

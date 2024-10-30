@@ -1,4 +1,4 @@
-## Deployment instructions (Namibia Dissemination)
+## Deployment instructions
 
 The first step is to clone this repository and cd into the directory. Then run the following
 commands.
@@ -29,68 +29,18 @@ DB_PASSWORD=postgres-password
 
 ```php artisan adminify```
 
-### Seed some sample data
+### Seed with data
+Login with the admin account just created and seed the application with basic data
 
-```
-php artisan db:seed --class=WorkingDataSeeder
-php artisan data:create-dimensions
-php artisan db:seed --class=DimensionValueSeeder
-```
-
-**Area**
-
-Import the areas. The csv file is located in the sample-data folder located in the root directory.
-
-Finally, create the following datasets and import the data for each one from the respective files
-
-**Namibia population, hhs, avg. hh size for 1991 - 2023 censuses**
-
+- Area hierarchies
+- Areas
+- Topics
 - Indicators
-    - Average household size
-    - Households
-    - Population
-- Dimensions
-    - Year
-- Fact table
-    - Population facts
-- Data geographic granularity
-    - Country
+- Dimensions (also create the dimension tables)
+- Dimension values
+- Datasets
+- Import datasets
 
-**Population by sex and 5 year age group**
-
-- Indicators
-    - Population
-- Dimensions
-    - Five year age group
-    - Sex
-    - Year
-- Fact table
-    - Population facts
-- Data geographic granularity
-    - Country
-
-**Population density, hh pop, hhs, and avg hh size by constituency, Namibia 2023 census**
-
-- Indicators
-    - Average household size
-    - Household population
-    - Households
-    - Population density
-- Dimensions
-    - Year
-- Fact table
-    - Population facts
-- Data geographic granularity
-    - Constituency
-
-**Population by Constituency and Sex, Namibia 2023**
-
-- Indicators
-    - Population
-- Dimensions
-    - Year
-    - Sex
-- Fact table
-    - Population facts
-- Data geographic granularity
-    - Constituency
+### Create content
+- Visualizations 
+- Stories

@@ -24,13 +24,13 @@
     <x-input-error for="rating" class="mt-2" />
     <form wire:submit="rate" class="pt-6">
         <div class="space-y-4">
-            {{--<input type="hidden" wire:model="rating" x-ref="rating" value="">--}}
             <div>
                 <input name="headline" wire:model="headline" placeholder="Your review headline" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                 <x-input-error for="headline" class="mt-2" />
             </div>
             <div>
-                <textarea name="detailedReview" wire:model="detailedReview" placeholder="Your detailed review" rows="6" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
+                {{--<x-easy-mde name="detailedReview" wire:model="detailedReview" placeholder="Your detailed review"></x-easy-mde>--}}
+                <textarea name="detailedReview" wire:model="detailedReview" rows="6" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
                 <x-input-error for="detailedReview" class="mt-2" />
             </div>
             <div>

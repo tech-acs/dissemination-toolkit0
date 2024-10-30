@@ -18,5 +18,4 @@
     </div>
     @include('partials.footer-end')
 
-
 </x-guest-layout>

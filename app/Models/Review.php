@@ -19,4 +19,9 @@ class Review extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function scopeApproved($query)
+    {
+        return $query->whereNotNull('approved_at');
+    }
 }

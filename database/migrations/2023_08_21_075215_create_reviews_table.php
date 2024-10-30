@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedTinyInteger('rating');
             $table->string('headline');
             $table->text('detailed_review');
+            $table->timestamp('approved_at')->nullable();
             $table->timestamps();
         });
     }

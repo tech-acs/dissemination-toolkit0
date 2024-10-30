@@ -26,7 +26,8 @@ export default class PlotlyChart {
     }
 
     async fetchData(vizId, filterPath = '') {
-        const response = await axios.get(`${this.baseurl}/api/visualization/${vizId}?path=${filterPath}`);
+        //console.log({URL:`${this.baseurl}/api/visualization/${vizId}?path=${filterPath}`});
+        const response = await axios.get(`/api/visualization/${vizId}?path=${filterPath}`);
         console.log('Fetched chart via axios:', response.data);
         this.data = response.data.data;
         this.layout = response.data.layout;

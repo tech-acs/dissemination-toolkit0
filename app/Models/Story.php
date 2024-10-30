@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\Reviewable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,6 +14,7 @@ use Spatie\Translatable\HasTranslations;
 class Story extends Model
 {
     use HasTranslations;
+    use Reviewable;
 
     protected $guarded = ['id'];
     public $translatable = ['title', 'description'];
@@ -20,11 +22,6 @@ class Story extends Model
     public function tags(): MorphToMany
     {
         return $this->morphToMany(Tag::class, 'taggable');
-    }
-
-    public function reviews(): MorphMany
-    {
-        return $this->morphMany(Review::class, 'reviewable');
     }
 
     public function topics(): MorphToMany
@@ -67,7 +64,7 @@ class Story extends Model
         return $query->whereFeatured(true);
     }
 
-    public function getAverageRatingAttribute(): float
+    /*public function getAverageRatingAttribute(): float
     {
         return round(num: $this->ratings()->avg('value'), precision: 2);
     }
@@ -75,7 +72,7 @@ class Story extends Model
     public function getRatedAttribute(): bool
     {
         return $this->ratings()->where('user_id', auth()->id())->exists();
-    }
+    }*/
 
     protected static function booted()
     {

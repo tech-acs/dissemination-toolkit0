@@ -172,12 +172,12 @@
                         <h3 class="text-sm font-medium text-gray-900">
                             <a href="{{route('manage.census-table.index')}}" class="focus:outline-none">
                                 <span class="absolute inset-0" aria-hidden="true"></span>
-                                <span>Manage Census tables</span>
+                                <span>Manage Documents</span>
                                 <span aria-hidden="true"> &rarr;</span>
                             </a>
                         </h3>
                         <p class="mt-1 text-sm text-gray-500">
-                            Manage census tables. Our application simplifies the management of census tables by allowing you to upload tables along with metadata following the Dublin Core standard.
+                            Manage Documents. Our application simplifies the management of documents by allowing you to upload tables along with metadata following the Dublin Core standard.
                         </p>
                     </div>
                 </div>

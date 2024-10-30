@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Story;
 use App\Models\Visualization;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -12,10 +13,10 @@ class ReviewForm extends Component
     public int $rating = 0;
     #[Validate('required|string|min:5')]
     public string $headline = '';
-    #[Validate('required|string|min:5')]
+    /*#[Validate('required|string|min:5')]*/
     public string $detailedReview = '';
     #[Validate('required')]
-    public Visualization $subject;
+    public Visualization|Story $subject;
 
     public bool $alreadyReviewed;
 
@@ -27,6 +28,7 @@ class ReviewForm extends Component
 
     public function rate()
     {
+        //dump($this->rating, $this->headline, $this->detailedReview);
         $this->validate();
         $this->subject->reviews()->create([
             'user_id' => auth()->id(),

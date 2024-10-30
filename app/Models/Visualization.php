@@ -5,13 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Spatie\Translatable\HasTranslations;
+use App\Traits\Reviewable;
 
 class Visualization extends Model
 {
     use HasTranslations;
+    use Reviewable;
 
     protected $guarded = ['id'];
     public array $translatable = ['title', 'description'];
@@ -33,11 +34,6 @@ class Visualization extends Model
     public function tags(): MorphToMany
     {
         return $this->morphToMany(Tag::class, 'taggable');
-    }
-
-    public function reviews(): MorphMany
-    {
-        return $this->morphMany(Review::class, 'reviewable');
     }
 
     public function topics(): MorphToMany
