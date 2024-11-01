@@ -83,10 +83,9 @@ export default class PlotlyChart {
         });
 
         if (filterable) {
-            Livewire.on(`filterChanged`, (filter) => {
-                let filterPath, areaName
-                [filterPath, areaName] = filter
-                //console.log(areaName)
+            Livewire.on(`filterChanged`, ({filter}) => {
+                console.log({filter})
+                const [areaName, filterPath] = Object.entries(filter)[0] ?? '';
                 this.fetchData(this.vizId, filterPath)
                     .then(() => {
                         //console.log({Path: filterPath, Filtered: this.data});

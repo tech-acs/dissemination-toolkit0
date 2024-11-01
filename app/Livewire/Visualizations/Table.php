@@ -41,7 +41,7 @@ class Table extends Visualization
                 })
                 ->groupBy('parent')
                 ->map(function ($children, $parent) {
-                    return (object)[
+                    return [
                         'headerName' => $parent,
                         //'headerHozAlign' => 'center',
                         'order' => min($children->pluck('order')->all()),
@@ -61,7 +61,7 @@ class Table extends Visualization
                                     $colDef['formatter'] = 'money';*/
                                     $colDef['type'] = 'numericColumn';
                                 }
-                                return (object)$colDef;
+                                return $colDef;
                             })
                             ->values()
                             ->all(),
@@ -97,7 +97,7 @@ class Table extends Visualization
             return $nested
                 ->concat($notNested)
                 ->sortBy('order')
-                ->map(fn ($header) => (object)$header)
+                //->map(fn ($header) => $header)
                 ->values()
                 ->all();
         }

@@ -19,15 +19,19 @@ class TableOptionsShaper extends Component
     public function mount()
     {
         $this->sortColumn = collect($this->options['columnDefs'])->reduce(function ($carry, $columnDef, $index) {
-            //dump($columnDef, $index);
-            return property_exists($columnDef, 'sort') ? $index : $carry;
+            return key_exists('sort', $columnDef) && ! is_null($columnDef['sort']) ? $index : $carry;
         });
     }
 
     public function apply()
     {
-        if ($this->sortColumn) {
-            $this->options['columnDefs'][$this->sortColumn]->sort = $this->sortDirection;
+        if (! is_null($this->sortColumn)) {
+            foreach ($this->options['columnDefs'] as $index => $columnDef) {
+                if ($columnDef['sort'] ?? null) {
+                    $this->options['columnDefs'][$index]['sort'] = null;
+                }
+            }
+            $this->options['columnDefs'][$this->sortColumn]['sort'] = $this->sortDirection;
         }
         $options = $this->options;
         unset($options['rowData']);

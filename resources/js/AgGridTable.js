@@ -47,9 +47,9 @@ export default class AgGridTable {
             this.rootElement.innerHTML = ''
 
             options.columnDefs = options.columnDefs.map(colDef => {
-                /*if (colDef?.type === 'numericColumn') {
+                if (colDef?.type === 'numericColumn') {
                     colDef.valueFormatter = params => new Intl.NumberFormat().format(params.value)
-                }*/
+                }
                 if (colDef?.type === 'rangeColumn') {
                     colDef.comparator = (valueA, valueB, nodeA, nodeB, isDescending) => parseInt(valueA) - parseInt(valueB)
                 }

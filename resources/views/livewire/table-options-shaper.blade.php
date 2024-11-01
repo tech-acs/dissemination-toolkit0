@@ -19,7 +19,7 @@
                     :aria-expanded="expanded"
                     class="flex w-full items-center justify-between px-4 py-2"
                 >
-                    <span>{{ $columnDef->headerName }}</span>
+                    <span>{{ $columnDef['headerName'] }}</span>
                     <span x-show="expanded" aria-hidden="true" class="ml-4">
                         <svg class="size-3 shrink-0 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
@@ -59,10 +59,10 @@
             <div>
                 {{ __('Sort by') }}
                 <select wire:model="sortColumn" class="mt-1 mx-1 pr-10 space-y-1 text-sm p-1 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm">
-                    <option value></option>
+                    <option value>-</option>
                     @foreach($options['columnDefs'] as $index => $columnDef)
                         <option class="p-1 rounded" value="{{ $index }}">
-                            {{ $columnDef->headerName }}
+                            {{ $columnDef['headerName'] }}
                         </option>
                     @endforeach
                 </select>

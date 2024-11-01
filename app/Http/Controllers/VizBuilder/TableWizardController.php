@@ -53,6 +53,7 @@ class TableWizardController extends Controller
         }
         $resource = session()->get('viz-wizard-resource');
         $options = $this->makeOptions($resource);
+        //dd($options);
         return view('manage.viz-builder.table.step2')->with(['steps' => $this->steps, 'currentStep' => $step, 'resource' => $resource, 'options' => $options]);
     }
 
@@ -133,8 +134,9 @@ class TableWizardController extends Controller
             return redirect()->route('manage.viz-builder.table.prepare-data');
         }
         $resource = session()->get('viz-wizard-resource');
-        $options = $this->makeOptions($resource, $visualization);
-        //dump($options);
+        //$options = $this->makeOptions($resource, $visualization);
+        $options = $resource->options;
+        //dump('In edit', $resource, $options);
         return view('manage.viz-builder.table.step2')->with(['steps' => $this->steps, 'currentStep' => $step, 'resource' => $resource, 'options' => $options]);
     }
 
