@@ -2,20 +2,13 @@
 
 namespace App\Livewire;
 
-use App\Jobs\ImportAreaSpreadsheetJob;
 use App\Models\Area;
 use App\Models\Dataset;
 use App\Models\Dimension;
-use App\Models\Year;
-use App\Notifications\TaskCompletedNotification;
-use App\Notifications\TaskFailedNotification;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Number;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Livewire\Component;
@@ -100,47 +93,16 @@ class DatasetImporter extends Component
     public function import()
     {
         $lookups = $this->makeLookupTables();
-        //dump($this->columnMapping, $lookups);
         $this->validate();
-        //dump($result);
 
         $this->importError = '';
         try {
             $dataFile = SimpleExcelReader::create($this->filePath);//->formatHeadersUsing(fn($header) => strtolower(trim($header)));
             $rows = $dataFile->getRows();
-
-
-            /*$dimensionsInCsv = collect($headers)->mapWithKeys(function ($header) use ($locale) {
-                return [$header => Dimension::where("name->{$locale}", 'ilike', $header)->first()];
-            })->filter();
-            $dataset->dimensions()->sync($dimensionsInCsv->pluck('id')->all());
-
-            $lookups = $this->dimensions->map(function ($model) {
-                return [
-                    'table' => $model->table_name,
-                    'fk' => str($model->name)->lower()->snake()->append('_id')->toString(),
-                    'lookup' => DB::table($model->table_name),
-                ];
-            });
-            $lookups['geography'] = [
-                'table' => 'areas',
-                'fk' => 'area_id',
-                'lookup' => Area::query(),
-            ];
-            $lookups['year'] = [
-                'table' => 'years',
-                'fk' => 'year_id',
-                'lookup' => Year::query(),
-            ];*/
-
-
             $inserted = 0;
-
             $rows->chunk(self::CHUNK_SIZE)->each(function ($chunk, $chunkIndex) use (&$inserted, $lookups) {
-
                 $entries = [];
                 $chunk->each(function(array $row, $rowIndexWithinAChunk) use ($chunkIndex, $inserted, &$entries, $lookups) {
-
                     $commonForMultipleIndicators = ['dataset_id' => $this->dataset->id];
                     foreach ($this->columnMapping['dimensions'] as $dimensionId => $dimensionColumn) {
                         list($foreignKeyCol, $valueId) = $this->lookItUp($row[$dimensionColumn], $dimensionId, $lookups);
@@ -152,7 +114,6 @@ class DatasetImporter extends Component
                     }
                     foreach ($this->columnMapping['indicators'] as $indicatorId => $valueColumn) {
                         $entry = [...$commonForMultipleIndicators];
-
                         $entry['indicator_id'] = $indicatorId;
                         $entry['value'] = (float)$row[$valueColumn];
 
@@ -167,18 +128,7 @@ class DatasetImporter extends Component
                         } else {
                             array_push($entries, $entry);
                         }
-                        //logger('looping', ['chunk' => $chunkIndex, 'chunk-row' => $rowIndexWithinAChunk, 'i-id' => $indicatorId, 'col' => $valueColumn, 'val' => $row[$valueColumn]]);
                     }
-
-                    /*$entry = [...$common];
-                    foreach ($lookups as $col => $lookup) {
-                        $query = $lookup['lookup']->clone();
-                        $dimension = $query->where('code', 'ilike', trim($row[$col]))->first();
-                        $entry[$lookup['fk']] = $dimension->id ?? null;
-                    }
-                    $entry['value'] = $row['value'];*/
-
-                    //logger('loop', ['entries' => $entries]);
                 });
                 $result = DB::table($this->dataset->fact_table)->insertOrIgnore($entries);
                 $inserted += $result;

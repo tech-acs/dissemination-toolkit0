@@ -60,7 +60,7 @@
                     <x-input-error for="spreadsheet" />
                 @else
                     <div class="text-xs text-gray-500 mt-1">
-                        You must upload a spreadsheet (.csv)
+                        You must upload a spreadsheet (csv or xlsx)
                     </div>
                 @endif
             </div>

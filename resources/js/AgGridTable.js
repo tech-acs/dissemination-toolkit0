@@ -8,7 +8,7 @@ export default class AgGridTable {
     baseurl;
 
     async fetchData(vizId) {
-        const response = await axios.get(`${this.baseurl}/api/visualization/${vizId}`);
+        const response = await axios.get(`/api/visualization/${vizId}`);
         console.log('Fetched table via axios:', response.data);
         this.options = response.data.options;
     }

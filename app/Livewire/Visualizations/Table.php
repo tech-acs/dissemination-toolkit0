@@ -22,7 +22,6 @@ class Table extends Visualization
         'autoSizeStrategy' => [
             'type' => 'fitGridWidth'
         ],
-
         'suppressMovableColumns' => false,
         'unSortIcon' => false,
         'columnHoverHighlight' => false,
@@ -107,9 +106,12 @@ class Table extends Visualization
 
     public function preparePayload(array $rawData = []): void
     {
-        $this->options = array_replace_recursive($this::DEFAULT_OPTIONS, $this->options);
-        $this->options['rowData'] = $rawData;
-        $this->options['columnDefs'] = $this->makeColumnDefs(collect($rawData));
+        //$this->options = array_replace_recursive($this::DEFAULT_OPTIONS, $this->options);
+        $options['rowData'] = $rawData;
+        $options['columnDefs'] = $this->makeColumnDefs(collect($rawData));
+        //dump($options, $this->options);
+        $this->options = array_replace_recursive($this::DEFAULT_OPTIONS, $options, $this->options);
+        //dump($this->options);
         /*$this->options['columnDefs'] = empty($this->options['columnDefs']) ?
             $this->makeColumnDefs(collect($rawData)) :
             $this->options['columnDefs'];*/

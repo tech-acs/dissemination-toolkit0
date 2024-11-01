@@ -40,17 +40,40 @@
                         Hide
                     </div>
                     <div class="flex">
-                        <input wire:model="options.columnDefs.{{ $index }}.sortable" type="checkbox" class="h-4 w-4 mr-2 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
-                        Sortable
-                    </div>
-                    <div class="flex">
                         <input wire:model="options.columnDefs.{{ $index }}.filter" type="checkbox" class="h-4 w-4 mr-2 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
                         Filterable
+                    </div>
+                    <div class="flex">
+                        <input wire:model="options.columnDefs.{{ $index }}.sortable" type="checkbox" class="h-4 w-4 mr-2 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                        Sortable
                     </div>
                 </div>
             </div>
         </div>
         @endforeach
+    </div>
+
+    <h4 class="text-lg pb-2">Default sorting</h4>
+    <div class="space-y-3 mb-8 pl-2">
+        <div class="text-sm leading-6">
+            <div>
+                {{ __('Sort by') }}
+                <select wire:model="sortColumn" class="mt-1 mx-1 pr-10 space-y-1 text-sm p-1 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm">
+                    <option value></option>
+                    @foreach($options['columnDefs'] as $index => $columnDef)
+                        <option class="p-1 rounded" value="{{ $index }}">
+                            {{ $columnDef->headerName }}
+                        </option>
+                    @endforeach
+                </select>
+                column in
+                <select wire:model="sortDirection" class="mt-1 mx-1 pr-10 space-y-1 text-sm p-1 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm">
+                    <option class="p-1 rounded" value="asc">ascending</option>
+                    <option class="p-1 rounded" value="desc">descending</option>
+                </select>
+                order
+            </div>
+        </div>
     </div>
 
     <h4 class="text-lg pb-2">Other options</h4>

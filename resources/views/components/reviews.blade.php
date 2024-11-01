@@ -3,9 +3,9 @@
 
         <div x-show="! open" x-on:click="open = !open" class="flex justify-center">
             <div class="text-center space-y-3">
-                <p class="text-sm">Share your thoughts with other users</p>
+                <p class="text-sm">Share your thoughts with other users and read theirs</p>
                 <button type="button" class="rounded-full bg-white px-3.5 py-2 text-base font-medium text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                    Write a review
+                    {{ __('Show') }}
                 </button>
             </div>
         </div>
@@ -32,18 +32,13 @@
                             <h3 class="text-sm font-semibold text-gray-900 dark:text-white">{{ $review->headline }}</h3>
                             <div class="flex justify-between">
                                 <x-rating-star-display :rating="$review->rating" />
-
-
                                 <div class="mb-5 text-sm text-gray-500 dark:text-gray-400"><p>Reviewed on {{ $review->reviewed_on }}</p></div>
                             </div>
                             <div class="text-sm mb-2">
                                 {!! str($review->detailed_review)->markdown() !!}
-                                {{--<p class="mb-2 text-gray-500 dark:text-gray-400">This is my third Invicta Pro Diver. They are just fantastic value for money. This one arrived yesterday and the first thing I did was set the time, popped on an identical strap from another Invicta and went in the shower with it to test the waterproofing.... No problems.</p>
-                                <p class="mb-3 text-gray-500 dark:text-gray-400">It is obviously not the same build quality as those very expensive watches. But that is like comparing a Citroën to a Ferrari. This watch was well under £100! An absolute bargain.</p>--}}
                             </div>
-                            <a href="#" class="block mb-5 text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">Read more</a>
+                            {{--<a href="#" class="block mb-5 text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">Read more</a>--}}
                         </article>
-                        {{--<hr class="w-full my-4" />--}}
 
                     @endforeach
                 </div>

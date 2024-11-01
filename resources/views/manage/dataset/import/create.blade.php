@@ -10,14 +10,7 @@
     </x-slot>
 
     <div class="flex flex-col max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
-
         <x-message-display />
-
-        {{--<form action="{{ route('manage.dataset.import.store', $dataset) }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            @include('manage.dataset.import.form')
-        </form>--}}
         <livewire:dataset-importer :dataset="$dataset" />
-
     </div>
 </x-app-layout>

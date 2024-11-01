@@ -64,12 +64,11 @@ class TableWizardController extends Controller
         }
         $resource = session()->get('viz-wizard-resource');
         $visualization = $resource?->vizId ? Visualization::find($resource->vizId) : new Visualization(['livewire_component' => Table::class, 'title' => $resource->indicatorTitle]);
-        //$topics = Topic::pluck('name', 'id');
+        //dump($resource);
         return view('manage.viz-builder.step3')
             ->with([
                 'steps' => $this->steps,
                 'currentStep' => 3,
-                //'topics' => $topics,
                 'resource' => $resource,
                 'visualization' => $visualization,
                 'type' => $this->type
@@ -85,6 +84,7 @@ class TableWizardController extends Controller
         $title = $request->get('title');
         $description = $request->get('description');
         $isFilterable = $request->boolean('filterable');
+        $isReviewable = $request->boolean('is_reviewable');
         $isPublished = $request->boolean('published');
         $resource = session()->get('viz-wizard-resource');
         $vizInfo = [
@@ -92,10 +92,12 @@ class TableWizardController extends Controller
             'slug' => str($title)->slug()->toString(),
             'description' => $description,
             'is_filterable' => $isFilterable,
+            'is_reviewable' => $isReviewable,
             'published' => $isPublished,
             'options' => $resource->options,
             //'thumbnail' => $resource?->thumbnail,
         ];
+
         if ($resource?->vizId) {
             $visualization = Visualization::find($resource->vizId);
             $visualization->update($vizInfo);
@@ -132,7 +134,7 @@ class TableWizardController extends Controller
         }
         $resource = session()->get('viz-wizard-resource');
         $options = $this->makeOptions($resource, $visualization);
-        //dd($options);
+        //dump($options);
         return view('manage.viz-builder.table.step2')->with(['steps' => $this->steps, 'currentStep' => $step, 'resource' => $resource, 'options' => $options]);
     }
 

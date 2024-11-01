@@ -72,6 +72,7 @@ class ChartWizardController extends Controller
         $title = $request->get('title');
         $description = $request->get('description');
         $isFilterable = $request->boolean('filterable');
+        $isReviewable = $request->boolean('is_reviewable');
         $isPublished = $request->boolean('published');
         $resource = session()->get('viz-wizard-resource');
 
@@ -82,6 +83,7 @@ class ChartWizardController extends Controller
             'data' => $resource->data,
             'layout' => $resource->layout,
             'is_filterable' => $isFilterable,
+            'is_reviewable' => $isReviewable,
             'published' => $isPublished,
             'thumbnail' => $resource->thumbnail,
         ];

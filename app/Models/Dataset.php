@@ -83,4 +83,9 @@ class Dataset extends Model
             'id' => $this->id,
         ];
     }
+
+    public function fileTemplate(): Collection
+    {
+
+    }
 }
