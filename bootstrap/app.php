@@ -16,6 +16,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'enforce_2fa' => RedirectIf2FAEnforced::class
         ]);
+        $middleware->appendToGroup('web', [
+            \App\Http\Middleware\Language::class
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
