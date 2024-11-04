@@ -17,7 +17,7 @@ class AreaFilter extends Component
     {
         $areaTree = new AreaTree();
         $selectionsFromSession = session()->get('area-filter', []);
-        $restrictions = ['Country' => Area::ofLevel(0)->first()->path]; //auth()->user()->areaRestrictionAsFilter();
+        $restrictions = ['Country' => Area::ofLevel(0)->first()?->path]; //auth()->user()->areaRestrictionAsFilter();
         $subject = null;
         $this->dropdowns = array_map(function ($level) use ($selectionsFromSession, $restrictions, $areaTree, &$subject) {
             $dropdown = ['list' => [], 'selected' => null, 'restricted' => null];
