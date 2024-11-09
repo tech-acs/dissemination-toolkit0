@@ -30,10 +30,11 @@ if (rootElement) {
             })
         }
     })
+    console.log({data})
 
     ReactDOM.render(<ChartEditor
         dataSources={response.data.dataSources}
-        initialData={response.data.initialData}
+        initialData={data}
         initialLayout={response.data.initialLayout}
         config={response.data.config}
         defaultLayout={response.data.defaultLayout}

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class QueryBuilder
 {
-    public const VALUE_COLUMN_INVISIBLE_MARKER = '­';
+    public const VALUE_COLUMN_INVISIBLE_MARKER = '';
     private Dataset $dataset;
     private Collection $indicators;
     private Collection $geographies;

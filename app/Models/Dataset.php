@@ -62,7 +62,12 @@ class Dataset extends Model
 
     public function availableValuesForDimension(Dimension $dimension): Collection
     {
-        $ids = $this->observations()->pluck($dimension->foreign_key)->unique()->all();
+        //$ids = $this->observations()->pluck($dimension->foreign_key)->unique()->all();
+        $ids = DB::table($this->fact_table)
+            ->selectRaw("DISTINCT $dimension->foreign_key")
+            ->where('dataset_id', $this->id)
+            ->pluck($dimension->foreign_key)
+            ->toArray();
         return (new DynamicDimensionModel($dimension->table_name))->findMany($ids);
     }
 

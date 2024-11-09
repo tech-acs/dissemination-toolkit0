@@ -119,6 +119,7 @@ class DatasetImporter extends Component
 
                         if (in_array(null, $entry, true)) {
                             $lineNo = self::CHUNK_SIZE * $chunkIndex + $rowIndexWithinAChunk + 2;
+                            logger("Dataset import error on line $lineNo", ['ENTRY' => $entry, 'ROW' => $row]);
                             throw ValidationException::withMessages([
                                 'datafile' => "The data seems to contain invalid data (unknown dimension value, etc.) at the following row (around line $lineNo).<br><br>" .
                                     implode(', ', $row) .

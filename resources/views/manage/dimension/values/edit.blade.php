@@ -2,10 +2,10 @@
 
     <x-slot name="header">
         <h3 class="text-lg leading-6 font-medium text-gray-900">
-            {{ __('Dimensions') }}
+            {{ __('Dimension value') }}
         </h3>
         <p class="mt-2 max-w-7xl text-sm text-gray-500">
-            {{ __('Edit existing dimension') }}
+            {{ __('Edit existing dimension value') }}
         </p>
     </x-slot>
 
@@ -29,7 +29,7 @@
             </div>
         @endif
 
-        <form action="{{ route('manage.dimension.values.update', ['dimension' => $dimension->id, 'entry' => $entry->id]) }}" method="POST">
+        <form action="{{ route('manage.dimension.values.update', ['dimension' => $dimension->id, 'value' => $entry->id]) }}" method="POST">
             @method('PATCH')
             @csrf
             @include('manage.dimension.values.form')
